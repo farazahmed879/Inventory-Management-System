@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Abp.Domain.Entities;
 
-namespace Planner.Types.Dto
+namespace InventoryManagementSystem.Types.Dto
 {
     public class CreateTypeDto :Entity<long>
     {

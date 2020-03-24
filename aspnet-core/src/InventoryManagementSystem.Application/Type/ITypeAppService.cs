@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
-using Planner.Types.Dto;
+using InventoryManagementSystem.Types.Dto;
 
 namespace InventoryManagementSystem.Types
 {

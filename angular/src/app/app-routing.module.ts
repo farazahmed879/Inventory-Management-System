@@ -9,6 +9,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { TypeComponent } from './type/type.component';
+import { ProductComponent } from './product/product.component';
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import { TypeComponent } from './type/type.component';
                     { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'type', component: TypeComponent,data: { permission: 'Pages.Type' }, canActivate: [AppRouteGuard] },
+                    { path: 'product', component: ProductComponent,data: { permission: 'Pages.Product' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },

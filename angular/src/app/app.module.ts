@@ -41,6 +41,10 @@ import { ResetPasswordDialogComponent } from './users/reset-password/reset-passw
 import { TypeComponent } from '@app/type/type.component';
 import { CreateTypeDialogComponent } from '@app/type/create-type/create-type-dialog.component';
 import { EditTypeDialogComponent } from '@app/type/edit-type/edit-type-dialog.component';
+// Type
+import { ProductComponent } from '@app/product/product.component';
+import { CreateProductDialogComponent } from '@app/product/create-product/create-product-dialog.component';
+import { EditProductDialogComponent } from '@app/product/edit-product/edit-product-dialog.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +74,11 @@ import { EditTypeDialogComponent } from '@app/type/edit-type/edit-type-dialog.co
     // type
     TypeComponent,
     CreateTypeDialogComponent,
-    EditTypeDialogComponent
+    EditTypeDialogComponent,
+    //Product
+    ProductComponent,
+    CreateProductDialogComponent,
+    EditProductDialogComponent
   ],
   imports: [
     CommonModule,
@@ -100,7 +108,11 @@ import { EditTypeDialogComponent } from '@app/type/edit-type/edit-type-dialog.co
     //Type
     TypeComponent,
     CreateTypeDialogComponent,
-    EditTypeDialogComponent
+    EditTypeDialogComponent,
+    //Product
+    ProductComponent,
+    CreateProductDialogComponent,
+    EditProductDialogComponent
   ]
 })
 export class AppModule {}

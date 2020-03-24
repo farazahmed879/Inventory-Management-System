@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using InventoryManagementSystem.Products;
-using Planner.Types.Dto;
 
-namespace Planner.Types.Dto
+namespace InventoryManagementSystem.Types.Dto
 {
     public class TypeProfile : Profile
     {
