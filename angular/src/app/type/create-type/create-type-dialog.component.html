@@ -1,0 +1,34 @@
+<form autocomplete="off" #createTypeForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{ "CreateNewType" | localize }}</h1>
+  <mat-dialog-content>
+    <div class="row-fluid">
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            name="type"
+            [placeholder]="'Type' | localize"
+            [(ngModel)]="Type.type"
+            required
+            minlength="2"
+            maxlength="64"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>
+    <button
+      mat-flat-button
+      type="submit"
+      flex="15"
+      color="primary"
+      [disabled]="!createTypeForm.form.valid || saving"
+    >
+      {{ "Save" | localize }}
+    </button>
+  </div>
+</form>
