@@ -6,9 +6,9 @@
         <mat-form-field>
           <input
             matInput
-            name="type"
-            [placeholder]="'Type' | localize"
-            [(ngModel)]="Type.type"
+            name="name"
+            [placeholder]="'Name' | localize"
+            [(ngModel)]="type.name"
             required
             minlength="2"
             maxlength="64"
@@ -26,8 +26,7 @@
       type="submit"
       flex="15"
       color="primary"
-      [disabled]="!createTypeForm.form.valid || saving"
-    >
+      [disabled]="!createTypeForm.form.valid || saving">
       {{ "Save" | localize }}
     </button>
   </div>

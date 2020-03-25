@@ -15,8 +15,12 @@ export class SideBarNavComponent extends AppComponentBase {
         new MenuItem(this.l('Users'), 'Pages.Users', 'people', '/app/users'),
         new MenuItem(this.l('Roles'), 'Pages.Roles', 'local_offer', '/app/roles'),
         new MenuItem(this.l('About'), '', 'info', '/app/about'),
-        new MenuItem(this.l('Type'), '', 'business', '/app/type'),
-        new MenuItem(this.l('Product'), '', 'business', '/app/product'),
+        new MenuItem(this.l('Type'), '','business', '/app/type'),
+        new MenuItem(this.l('SubType'), '','business', '/app/subType'),
+        new MenuItem(this.l('Product'), '','business', '/app/product'),
+        new MenuItem(this.l('Company'), '','business', '/app/company'),
+        new MenuItem(this.l('ShopProduct'), '','business', '/app/shopProduct'),
+        new MenuItem(this.l('ProductSell'), '','home', '/app/productSell'),
 
         new MenuItem(this.l('MultiLevelMenu'), '', 'menu', '', [
             new MenuItem('ASP.NET Boilerplate', '', '', '', [

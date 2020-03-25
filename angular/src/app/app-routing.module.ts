@@ -10,6 +10,10 @@ import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { TypeComponent } from './type/type.component';
 import { ProductComponent } from './product/product.component';
+import { CompanyComponent } from './company/company.component';
+import { ProductSellComponent } from './product-sell/product-sell.component';
+import { ShopProductComponent } from './shop-product/shop-product.component';
+import { SubTypeComponent } from './subType/subType.component';
 
 @NgModule({
     imports: [
@@ -20,8 +24,12 @@ import { ProductComponent } from './product/product.component';
                 children: [
                     { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
-                    { path: 'type', component: TypeComponent,data: { permission: 'Pages.Type' }, canActivate: [AppRouteGuard] },
-                    { path: 'product', component: ProductComponent,data: { permission: 'Pages.Product' }, canActivate: [AppRouteGuard] },
+                    { path: 'type', component: TypeComponent, canActivate: [AppRouteGuard] },
+                    { path: 'product', component: ProductComponent, canActivate: [AppRouteGuard] },
+                    { path: 'company', component: CompanyComponent, canActivate: [AppRouteGuard] },
+                    { path: 'productSell', component: ProductSellComponent, canActivate: [AppRouteGuard] },
+                    { path: 'shopProduct', component: ShopProductComponent, canActivate: [AppRouteGuard] },
+                    { path: 'subType', component: SubTypeComponent,canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },

@@ -2,7 +2,7 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card main-content">
       <div class="header">
-        <h2>{{ "Products" | localize }}</h2>
+        <h2>{{ "Product Sell"}}</h2>
         <ul class="header-dropdown m-r--5">
           <li>
             <button
@@ -41,14 +41,14 @@
         <table class="table table-hover table-striped" [busy]="isTableLoading">
           <thead>
             <tr>
-              <th>{{ "Product" | localize }}</th>
+              <th>{{ "Type" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
           <tbody>
             <tr
               *ngFor="
-                let product of (products
+                let type of (types
                   | paginate
                     : {
                         id: 'server',
@@ -58,17 +58,17 @@
                       })
               "
             >
-              <td>{{ product.product }}</td>
+              <td>{{ type.type }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>
                 </button>
                 <mat-menu #actionsMenu="matMenu">
-                  <button mat-menu-item (click)="editProduct(product)">
+                  <button mat-menu-item (click)="editType(type)">
                     <mat-icon>edit</mat-icon>
                     <span>{{ "Edit" | localize }}</span>
                   </button>
-                  <button mat-menu-item (click)="delete(product)">
+                  <button mat-menu-item (click)="delete(type)">
                     <mat-icon>delete</mat-icon>
                     <span>{{ "Delete" | localize }}</span>
                   </button>
@@ -91,7 +91,7 @@
           mat-mini-fab
           color="primary"
           class="pull-right"
-          (click)="createBookingProduct()"
+          (click)="createBookingType()"
         >
           <mat-icon>add</mat-icon>
         </button>

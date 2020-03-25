@@ -1,5 +1,5 @@
-<form autocomplete="off" #editTypeForm="ngForm" (ngSubmit)="save()">
-  <h1 mat-dialog-title>{{ "EditType" | localize }}</h1>
+<form autocomplete="off" #createTypeForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{ "CreateNewType" | localize }}</h1>
   <mat-dialog-content>
     <div class="row-fluid">
       <div class="col-md-12">
@@ -8,7 +8,7 @@
             matInput
             name="type"
             [placeholder]="'Type' | localize"
-            [(ngModel)]="type.name"
+            [(ngModel)]="Type.type"
             required
             minlength="2"
             maxlength="64"
@@ -26,7 +26,7 @@
       type="submit"
       flex="15"
       color="primary"
-      [disabled]="!editTypeForm.form.valid || saving"
+      [disabled]="!createTypeForm.form.valid || saving"
     >
       {{ "Save" | localize }}
     </button>

@@ -41,10 +41,27 @@ import { ResetPasswordDialogComponent } from './users/reset-password/reset-passw
 import { TypeComponent } from '@app/type/type.component';
 import { CreateTypeDialogComponent } from '@app/type/create-type/create-type-dialog.component';
 import { EditTypeDialogComponent } from '@app/type/edit-type/edit-type-dialog.component';
-// Type
+// Product
 import { ProductComponent } from '@app/product/product.component';
 import { CreateProductDialogComponent } from '@app/product/create-product/create-product-dialog.component';
 import { EditProductDialogComponent } from '@app/product/edit-product/edit-product-dialog.component';
+// Shop Product
+import { ShopProductComponent } from './shop-product/shop-product.component';
+import { EditShopProductDialogComponent } from './shop-product/edit-shop-product/edit-shop-product-dialog.component';
+import { CreateShopProductDialogComponent } from './shop-product/create-shop-product/create-shop-product-dialog.component';
+// Product Sell
+import { ProductSellComponent } from './product-sell/product-sell.component';
+import { CreateProductSellDialogComponent } from './product-sell/create-product-sell/create-product-sell-dialog.component';
+import { EditProductSellDialogComponent } from './product-sell/edit-product-sell/edit-product-sell-dialog.component';
+// Company
+import { CompanyComponent } from './company/company.component';
+import { CreateCompanyDialogComponent } from './company/create-company/create-company-dialog.component';
+import { EditCompanyDialogComponent } from './company/edit-company/edit-company-dialog.component';
+// Sub Type
+import { SubTypeComponent } from './subType/subType.component';
+import { CreateSubTypeDialogComponent } from './subType/create-subType/create-subType-dialog.component';
+import { EditSubTypeDialogComponent } from './subType/edit-subType/edit-subType-dialog.component';
+import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServiceServiceProxy, CompanyServiceServiceProxy, TypeServiceServiceProxy, ProductSellServiceServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @NgModule({
   declarations: [
@@ -75,10 +92,26 @@ import { EditProductDialogComponent } from '@app/product/edit-product/edit-produ
     TypeComponent,
     CreateTypeDialogComponent,
     EditTypeDialogComponent,
+    //SubType
+    SubTypeComponent,
+    CreateSubTypeDialogComponent,
+    EditSubTypeDialogComponent,
     //Product
     ProductComponent,
     CreateProductDialogComponent,
-    EditProductDialogComponent
+    EditProductDialogComponent,
+    //ShopProduct
+    ShopProductComponent,
+    CreateShopProductDialogComponent,
+    EditShopProductDialogComponent,
+    //ProductSell
+    ProductSellComponent,
+    CreateProductSellDialogComponent,
+    EditProductSellDialogComponent,
+    //Company
+    CompanyComponent,
+    CreateCompanyDialogComponent,
+    EditCompanyDialogComponent
   ],
   imports: [
     CommonModule,
@@ -93,7 +126,15 @@ import { EditProductDialogComponent } from '@app/product/edit-product/edit-produ
     SharedModule,
     NgxPaginationModule
   ],
-  providers: [],
+  providers: [
+    ShopProductServiceServiceProxy,
+    CompanyServiceServiceProxy,
+    TypeServiceServiceProxy,
+    SubTypeServiceServiceProxy,
+    ProductServiceServiceProxy,
+    ProductSellServiceServiceProxy,
+    
+  ],
   entryComponents: [
     // tenants
     CreateTenantDialogComponent,
@@ -109,10 +150,22 @@ import { EditProductDialogComponent } from '@app/product/edit-product/edit-produ
     TypeComponent,
     CreateTypeDialogComponent,
     EditTypeDialogComponent,
+    //SubType
+    SubTypeComponent,
+    CreateSubTypeDialogComponent,
+    EditSubTypeDialogComponent,
     //Product
     ProductComponent,
     CreateProductDialogComponent,
-    EditProductDialogComponent
+    EditProductDialogComponent,
+    //ShopProduct
+    ShopProductComponent,
+    CreateShopProductDialogComponent,
+    EditShopProductDialogComponent,
+    //ProductSell
+    ProductSellComponent,
+    CreateProductSellDialogComponent,
+    EditProductSellDialogComponent,
   ]
 })
-export class AppModule {}
+export class AppModule { }
