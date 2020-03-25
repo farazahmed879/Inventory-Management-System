@@ -6,39 +6,40 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using InventoryManagementSystem.Products;
-using InventoryManagementSystem.Types.Dto;
+using InventoryManagementSystem.ProductSells.Dto;
+using InventoryManagementSystem.Shop;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryManagementSystem.Types
+namespace InventoryManagementSystem.ProductSells
 {
-    public class TypeService : AbpServiceBase, ITypeService
+    public class ProductSellService : AbpServiceBase, IProductSellService
     {
-        private readonly IRepository<Type, long> _typeRepository;
-        public TypeService(IRepository<Type, long> typeRepository)
+        private readonly IRepository<ProductSell, long> _productSellRepository;
+        public ProductSellService(IRepository<ProductSell, long> productSellRepository)
         {
-            _typeRepository = typeRepository;
+            _productSellRepository = productSellRepository;
         }
 
 
-        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateTypeDto typeDto)
+        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateProductSellDto productSellDto)
         {
             ResponseMessagesDto result;
-            if (typeDto.Id == 0)
+            if (productSellDto.Id == 0)
             {
-                result = await CreateTypeAsync(typeDto);
+                result = await CreateProductSellAsync(productSellDto);
             }
             else
             {
-                result = await UpdateTypeAsync(typeDto);
+                result = await UpdateProductSellAsync(productSellDto);
             }
             return result;
         }
 
-        private async Task<ResponseMessagesDto> CreateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> CreateProductSellAsync(CreateProductSellDto productSellDto)
         {
-            var result = await _typeRepository.InsertAsync(new Type()
+            var result = await _productSellRepository.InsertAsync(new ProductSell()
             {
-                Name = typeDto.Name
+                Status = productSellDto.Status
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -62,12 +63,12 @@ namespace InventoryManagementSystem.Types
             };
         }
 
-        private async Task<ResponseMessagesDto> UpdateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> UpdateProductSellAsync(CreateProductSellDto productSellDto)
         {
-            var result = await _typeRepository.UpdateAsync(new Type()
+            var result = await _productSellRepository.UpdateAsync(new ProductSell()
             {
-                Id = typeDto.Id,
-                Name = typeDto.Name
+                Id = productSellDto.Id,
+                Status = productSellDto.Status
             });
 
             if (result != null)
@@ -88,66 +89,66 @@ namespace InventoryManagementSystem.Types
                 Error = true,
             };
         }
-        public async Task<TypeDto> GetById(long typeId)
+        public async Task<ProductSellDto> GetById(long productSellId)
         {
-            var result = await _typeRepository.GetAll()
-                .Where(i => i.Id == typeId)
+            var result = await _productSellRepository.GetAll()
+                .Where(i => i.Id == productSellId)
                 .Select(i =>
-                new TypeDto()
+                new ProductSellDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Status = i.Status
                 })
                 .FirstOrDefaultAsync();
             return result;
         }
 
 
-        public async Task<ResponseMessagesDto> DeleteAsync(long typeId)
+        public async Task<ResponseMessagesDto> DeleteAsync(long productSellId)
         {
-            await _typeRepository.DeleteAsync(new Type()
+            await _productSellRepository.DeleteAsync(new ProductSell()
             {
-                Id = typeId
+                Id = productSellId
             });
 
             return new ResponseMessagesDto()
             {
-                Id = typeId,
+                Id = productSellId,
                 SuccessMessage = AppConsts.SuccessfullyDeleted,
                 Success = true,
                 Error = false,
             };
         }
 
-        public async Task<List<TypeDto>> GetAll()
+        public async Task<List<ProductSellDto>> GetAll()
         {
-            var result = await _typeRepository.GetAll().Select(i => new TypeDto()
+            var result = await _productSellRepository.GetAll().Select(i => new ProductSellDto()
             {
                 Id = i.Id,
-                Name = i.Name,
+                Status = i.Status,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
             }).ToListAsync();
             return result;
         }
-        public async Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input)
+        public async Task<PagedResultDto<ProductSellDto>> GetPaginatedAllAsync(PagedProductSellResultRequestDto input)
         {
-            var filteredTypes = _typeRepository.GetAll()
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
+            var filteredProductSells = _productSellRepository.GetAll()
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
-            var pagedAndFilteredTypes = filteredTypes
-                .OrderBy(i => i.Name)
+            var pagedAndFilteredProductSells = filteredProductSells
+                .OrderBy(i => i.Status)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredTypes.CountAsync();
+            var totalCount = await pagedAndFilteredProductSells.CountAsync();
 
-            return new PagedResultDto<TypeDto>(
+            return new PagedResultDto<ProductSellDto>(
                 totalCount: totalCount,
-                items: await pagedAndFilteredTypes.Select(i => new TypeDto()
+                items: await pagedAndFilteredProductSells.Select(i => new ProductSellDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Status = i.Status
                 })
                     .ToListAsync());
         }

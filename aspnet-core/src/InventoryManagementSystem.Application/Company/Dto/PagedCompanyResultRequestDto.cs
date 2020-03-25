@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 using System.Text;
 using Abp.Application.Services.Dto;
 
-namespace InventoryManagementSystem.Types.Dto
+namespace InventoryManagementSystem.Companies.Dto
 {
-    public class PagedTypeResultRequestDto : PagedResultRequestDto
+    public class PagedCompanyResultRequestDto : PagedResultRequestDto
     {
         public string Name { get; set; }
     }

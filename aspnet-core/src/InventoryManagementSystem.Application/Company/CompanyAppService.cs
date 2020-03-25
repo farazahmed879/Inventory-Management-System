@@ -6,39 +6,38 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using InventoryManagementSystem.Products;
-using InventoryManagementSystem.Types.Dto;
+using InventoryManagementSystem.Companies.Dto;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryManagementSystem.Types
+namespace InventoryManagementSystem.Companies
 {
-    public class TypeService : AbpServiceBase, ITypeService
+    public class CompanyService : AbpServiceBase, ICompanyService
     {
-        private readonly IRepository<Type, long> _typeRepository;
-        public TypeService(IRepository<Type, long> typeRepository)
+        private readonly IRepository<Company, long> _companyRepository;
+        public CompanyService(IRepository<Company, long> companyRepository)
         {
-            _typeRepository = typeRepository;
+            _companyRepository = companyRepository;
         }
 
-
-        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateTypeDto typeDto)
+        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateCompanyDto companyDto)
         {
             ResponseMessagesDto result;
-            if (typeDto.Id == 0)
+            if (companyDto.Id == 0)
             {
-                result = await CreateTypeAsync(typeDto);
+                result = await CreateCompanyAsync(companyDto);
             }
             else
             {
-                result = await UpdateTypeAsync(typeDto);
+                result = await UpdateCompanyAsync(companyDto);
             }
             return result;
         }
 
-        private async Task<ResponseMessagesDto> CreateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> CreateCompanyAsync(CreateCompanyDto companyDto)
         {
-            var result = await _typeRepository.InsertAsync(new Type()
+            var result = await _companyRepository.InsertAsync(new Company()
             {
-                Name = typeDto.Name
+                Name = companyDto.Name
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -62,12 +61,12 @@ namespace InventoryManagementSystem.Types
             };
         }
 
-        private async Task<ResponseMessagesDto> UpdateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> UpdateCompanyAsync(CreateCompanyDto companyDto)
         {
-            var result = await _typeRepository.UpdateAsync(new Type()
+            var result = await _companyRepository.UpdateAsync(new Company()
             {
-                Id = typeDto.Id,
-                Name = typeDto.Name
+                Id = companyDto.Id,
+                Name = companyDto.Name
             });
 
             if (result != null)
@@ -88,12 +87,12 @@ namespace InventoryManagementSystem.Types
                 Error = true,
             };
         }
-        public async Task<TypeDto> GetById(long typeId)
+        public async Task<CompanyDto> GetById(long companyId)
         {
-            var result = await _typeRepository.GetAll()
-                .Where(i => i.Id == typeId)
+            var result = await _companyRepository.GetAll()
+                .Where(i => i.Id == companyId)
                 .Select(i =>
-                new TypeDto()
+                new CompanyDto()
                 {
                     Id = i.Id,
                     Name = i.Name
@@ -103,25 +102,25 @@ namespace InventoryManagementSystem.Types
         }
 
 
-        public async Task<ResponseMessagesDto> DeleteAsync(long typeId)
+        public async Task<ResponseMessagesDto> DeleteAsync(long companyId)
         {
-            await _typeRepository.DeleteAsync(new Type()
+            await _companyRepository.DeleteAsync(new Company()
             {
-                Id = typeId
+                Id = companyId
             });
 
             return new ResponseMessagesDto()
             {
-                Id = typeId,
+                Id = companyId,
                 SuccessMessage = AppConsts.SuccessfullyDeleted,
                 Success = true,
                 Error = false,
             };
         }
 
-        public async Task<List<TypeDto>> GetAll()
+        public async Task<List<CompanyDto>> GetAll()
         {
-            var result = await _typeRepository.GetAll().Select(i => new TypeDto()
+            var result = await _companyRepository.GetAll().Select(i => new CompanyDto()
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -131,20 +130,20 @@ namespace InventoryManagementSystem.Types
             }).ToListAsync();
             return result;
         }
-        public async Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input)
+        public async Task<PagedResultDto<CompanyDto>> GetPaginatedAllAsync(PagedCompanyResultRequestDto input)
         {
-            var filteredTypes = _typeRepository.GetAll()
+            var filteredCompanys = _companyRepository.GetAll()
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
-            var pagedAndFilteredTypes = filteredTypes
+            var pagedAndFilteredCompanys = filteredCompanys
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredTypes.CountAsync();
+            var totalCount = await pagedAndFilteredCompanys.CountAsync();
 
-            return new PagedResultDto<TypeDto>(
+            return new PagedResultDto<CompanyDto>(
                 totalCount: totalCount,
-                items: await pagedAndFilteredTypes.Select(i => new TypeDto()
+                items: await pagedAndFilteredCompanys.Select(i => new CompanyDto()
                 {
                     Id = i.Id,
                     Name = i.Name

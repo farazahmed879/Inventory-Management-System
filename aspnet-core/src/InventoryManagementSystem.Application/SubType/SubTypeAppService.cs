@@ -6,39 +6,39 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using InventoryManagementSystem.Products;
-using InventoryManagementSystem.Types.Dto;
+using InventoryManagementSystem.SubTypes.Dto;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryManagementSystem.Types
+namespace InventoryManagementSystem.SubTypes
 {
-    public class TypeService : AbpServiceBase, ITypeService
+    public class SubTypeService : AbpServiceBase, ISubTypeService
     {
-        private readonly IRepository<Type, long> _typeRepository;
-        public TypeService(IRepository<Type, long> typeRepository)
+        private readonly IRepository<SubType, long> _subTypeRepository;
+        public SubTypeService(IRepository<SubType, long> subTypeRepository)
         {
-            _typeRepository = typeRepository;
+            _subTypeRepository = subTypeRepository;
         }
 
 
-        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateTypeDto typeDto)
+        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateSubTypeDto subTypeDto)
         {
             ResponseMessagesDto result;
-            if (typeDto.Id == 0)
+            if (subTypeDto.Id == 0)
             {
-                result = await CreateTypeAsync(typeDto);
+                result = await CreateSubTypeAsync(subTypeDto);
             }
             else
             {
-                result = await UpdateTypeAsync(typeDto);
+                result = await UpdateSubTypeAsync(subTypeDto);
             }
             return result;
         }
 
-        private async Task<ResponseMessagesDto> CreateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> CreateSubTypeAsync(CreateSubTypeDto subTypeDto)
         {
-            var result = await _typeRepository.InsertAsync(new Type()
+            var result = await _subTypeRepository.InsertAsync(new SubType()
             {
-                Name = typeDto.Name
+                Name = subTypeDto.Name
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -62,12 +62,12 @@ namespace InventoryManagementSystem.Types
             };
         }
 
-        private async Task<ResponseMessagesDto> UpdateTypeAsync(CreateTypeDto typeDto)
+        private async Task<ResponseMessagesDto> UpdateSubTypeAsync(CreateSubTypeDto subTypeDto)
         {
-            var result = await _typeRepository.UpdateAsync(new Type()
+            var result = await _subTypeRepository.UpdateAsync(new SubType()
             {
-                Id = typeDto.Id,
-                Name = typeDto.Name
+                Id = subTypeDto.Id,
+                Name = subTypeDto.Name
             });
 
             if (result != null)
@@ -88,12 +88,12 @@ namespace InventoryManagementSystem.Types
                 Error = true,
             };
         }
-        public async Task<TypeDto> GetById(long typeId)
+        public async Task<SubTypeDto> GetById(long subTypeId)
         {
-            var result = await _typeRepository.GetAll()
-                .Where(i => i.Id == typeId)
+            var result = await _subTypeRepository.GetAll()
+                .Where(i => i.Id == subTypeId)
                 .Select(i =>
-                new TypeDto()
+                new SubTypeDto()
                 {
                     Id = i.Id,
                     Name = i.Name
@@ -103,25 +103,25 @@ namespace InventoryManagementSystem.Types
         }
 
 
-        public async Task<ResponseMessagesDto> DeleteAsync(long typeId)
+        public async Task<ResponseMessagesDto> DeleteAsync(long subTypeId)
         {
-            await _typeRepository.DeleteAsync(new Type()
+            await _subTypeRepository.DeleteAsync(new SubType()
             {
-                Id = typeId
+                Id = subTypeId
             });
 
             return new ResponseMessagesDto()
             {
-                Id = typeId,
+                Id = subTypeId,
                 SuccessMessage = AppConsts.SuccessfullyDeleted,
                 Success = true,
                 Error = false,
             };
         }
 
-        public async Task<List<TypeDto>> GetAll()
+        public async Task<List<SubTypeDto>> GetAll()
         {
-            var result = await _typeRepository.GetAll().Select(i => new TypeDto()
+            var result = await _subTypeRepository.GetAll().Select(i => new SubTypeDto()
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -131,20 +131,20 @@ namespace InventoryManagementSystem.Types
             }).ToListAsync();
             return result;
         }
-        public async Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input)
+        public async Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input)
         {
-            var filteredTypes = _typeRepository.GetAll()
+            var filteredSubTypes = _subTypeRepository.GetAll()
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
-            var pagedAndFilteredTypes = filteredTypes
+            var pagedAndFilteredTypes = filteredSubTypes
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
             var totalCount = await pagedAndFilteredTypes.CountAsync();
 
-            return new PagedResultDto<TypeDto>(
+            return new PagedResultDto<SubTypeDto>(
                 totalCount: totalCount,
-                items: await pagedAndFilteredTypes.Select(i => new TypeDto()
+                items: await pagedAndFilteredTypes.Select(i => new SubTypeDto()
                 {
                     Id = i.Id,
                     Name = i.Name
