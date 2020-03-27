@@ -49,7 +49,7 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
         request.keyword = this.keyword;
 
         this._productService
-            .getPaginatedAll(request.keyword, request.skipCount, request.maxResultCount)
+            .getPaginatedAll(request.keyword,undefined, request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();

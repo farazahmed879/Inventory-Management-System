@@ -1047,16 +1047,21 @@ export class ProductServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param subTypeId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, subTypeId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (subTypeId === null)
+            throw new Error("The parameter 'subTypeId' cannot be null.");
+        else if (subTypeId !== undefined)
+            url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -4303,6 +4308,7 @@ export interface IProductSellDtoPagedResultDto {
 
 export class CreateProductDto implements ICreateProductDto {
     name: string | undefined;
+    subTypeId: number;
     id: number;
 
     constructor(data?: ICreateProductDto) {
@@ -4317,6 +4323,7 @@ export class CreateProductDto implements ICreateProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.subTypeId = _data["subTypeId"];
             this.id = _data["id"];
         }
     }
@@ -4331,6 +4338,7 @@ export class CreateProductDto implements ICreateProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["subTypeId"] = this.subTypeId;
         data["id"] = this.id;
         return data; 
     }
@@ -4345,11 +4353,14 @@ export class CreateProductDto implements ICreateProductDto {
 
 export interface ICreateProductDto {
     name: string | undefined;
+    subTypeId: number;
     id: number;
 }
 
 export class ProductDto implements IProductDto {
     name: string | undefined;
+    subTypeId: number;
+    subTypeName: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4371,6 +4382,8 @@ export class ProductDto implements IProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.subTypeId = _data["subTypeId"];
+            this.subTypeName = _data["subTypeName"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4392,6 +4405,8 @@ export class ProductDto implements IProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["subTypeId"] = this.subTypeId;
+        data["subTypeName"] = this.subTypeName;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4413,6 +4428,8 @@ export class ProductDto implements IProductDto {
 
 export interface IProductDto {
     name: string | undefined;
+    subTypeId: number;
+    subTypeName: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

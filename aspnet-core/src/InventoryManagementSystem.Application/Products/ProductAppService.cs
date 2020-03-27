@@ -37,7 +37,8 @@ namespace InventoryManagementSystem.Products
         {
             var result = await _productRepository.InsertAsync(new Product()
             {
-                Name = productDto.Name
+                Name = productDto.Name,
+                ProductSubTypeId = productDto.SubTypeId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -66,7 +67,8 @@ namespace InventoryManagementSystem.Products
             var result = await _productRepository.UpdateAsync(new Product()
             {
                 Id = productDto.Id,
-                Name = productDto.Name
+                Name = productDto.Name,
+                ProductSubTypeId = productDto.SubTypeId
             });
 
             if (result != null)
@@ -95,7 +97,8 @@ namespace InventoryManagementSystem.Products
                 new ProductDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    SubTypeId = i.ProductSubTypeId.Value
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -124,6 +127,8 @@ namespace InventoryManagementSystem.Products
             {
                 Id = i.Id,
                 Name = i.Name,
+                SubTypeId = i.ProductSubTypeId.Value,
+                SubTypeName = i.ProductSubType.Name,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -146,7 +151,9 @@ namespace InventoryManagementSystem.Products
                 items: await pagedAndFilteredProducts.Select(i => new ProductDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    SubTypeId = i.ProductSubTypeId.Value,
+                    SubTypeName = i.ProductSubType.Name
                 })
                     .ToListAsync());
         }

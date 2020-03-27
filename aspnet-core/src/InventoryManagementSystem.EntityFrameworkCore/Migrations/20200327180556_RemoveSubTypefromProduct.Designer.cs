@@ -4,14 +4,16 @@ using InventoryManagementSystem.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemDbContext))]
-    partial class InventoryManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200327180556_RemoveSubTypefromProduct")]
+    partial class RemoveSubTypefromProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1540,12 +1542,7 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<long?>("ProductSubTypeId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductSubTypeId");
 
                     b.ToTable("Products");
                 });
@@ -1916,13 +1913,6 @@ namespace InventoryManagementSystem.Migrations
                     b.HasOne("InventoryManagementSystem.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Products.Product", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.Products.SubType", "ProductSubType")
-                        .WithMany()
-                        .HasForeignKey("ProductSubTypeId");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Products.SubType", b =>

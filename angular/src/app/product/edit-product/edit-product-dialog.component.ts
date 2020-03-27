@@ -3,7 +3,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    ProductDto, ProductServiceServiceProxy
+    ProductDto, 
+    ProductServiceServiceProxy,
+    SubTypeServiceServiceProxy,
+    SubTypeDto
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -23,10 +26,12 @@ export class EditProductDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   product: ProductDto = new ProductDto();
+  subTypes: SubTypeDto[];
 
   constructor(
     injector: Injector,
     public _productService: ProductServiceServiceProxy,
+    public _subTypeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
@@ -37,8 +42,13 @@ export class EditProductDialogComponent extends AppComponentBase
     this._productService.getById(this._id).subscribe((result: ProductDto) => {
       this.product = result;
     });
+    this.getAllProductType();
   }
-
+  getAllProductType() {
+    this._subTypeService.getAll().subscribe(result => {
+      this.subTypes = result;
+    });
+  }
   save(): void {
     this.saving = true;
 

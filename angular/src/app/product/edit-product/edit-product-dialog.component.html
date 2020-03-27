@@ -14,6 +14,12 @@
             maxlength="64"
           />
         </mat-form-field>
+        <mat-form-field>
+          <mat-select [placeholder]="l('Chooose Company')" [(ngModel)]="product.subTypeId" name="isActive">
+            <mat-option value="">{{ 'Choose Catagory' | localize }}</mat-option>
+            <mat-option *ngFor="let subType of subTypes" [value]="subType.id">{{ subType.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </mat-dialog-content>
