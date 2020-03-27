@@ -4,14 +4,16 @@ using InventoryManagementSystem.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemDbContext))]
-    partial class InventoryManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200327133912_removeType")]
+    partial class removeType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1583,12 +1585,7 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<long>("ProductTypeId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("SubTypes");
                 });
@@ -1923,15 +1920,6 @@ namespace InventoryManagementSystem.Migrations
                     b.HasOne("InventoryManagementSystem.Products.SubType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Products.SubType", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.Products.Type", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Shop.ProductSell", b =>

@@ -2193,16 +2193,21 @@ export class SubTypeServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param productType (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, productType: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (productType === null)
+            throw new Error("The parameter 'productType' cannot be null.");
+        else if (productType !== undefined)
+            url_ += "ProductType=" + encodeURIComponent("" + productType) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -2255,6 +2260,77 @@ export class SubTypeServiceServiceProxy {
             }));
         }
         return _observableOf<SubTypeDtoPagedResultDto>(<any>null);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllQuestionTypeForLookupTable(filter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeLookupTableDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAllQuestionTypeForLookupTable?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllQuestionTypeForLookupTable(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllQuestionTypeForLookupTable(<any>response_);
+                } catch (e) {
+                    return <Observable<TypeLookupTableDtoPagedResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TypeLookupTableDtoPagedResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllQuestionTypeForLookupTable(response: HttpResponseBase): Observable<TypeLookupTableDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TypeLookupTableDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TypeLookupTableDtoPagedResultDto>(<any>null);
     }
 }
 
@@ -5423,6 +5499,7 @@ export interface IShopProductDtoPagedResultDto {
 
 export class CreateSubTypeDto implements ICreateSubTypeDto {
     name: string | undefined;
+    productTypeId: number;
     id: number;
 
     constructor(data?: ICreateSubTypeDto) {
@@ -5437,6 +5514,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.productTypeId = _data["productTypeId"];
             this.id = _data["id"];
         }
     }
@@ -5451,6 +5529,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["productTypeId"] = this.productTypeId;
         data["id"] = this.id;
         return data; 
     }
@@ -5465,11 +5544,14 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 
 export interface ICreateSubTypeDto {
     name: string | undefined;
+    productTypeId: number;
     id: number;
 }
 
 export class SubTypeDto implements ISubTypeDto {
     name: string | undefined;
+    productTypeName: string | undefined;
+    productTypeId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5491,6 +5573,8 @@ export class SubTypeDto implements ISubTypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.productTypeName = _data["productTypeName"];
+            this.productTypeId = _data["productTypeId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -5512,6 +5596,8 @@ export class SubTypeDto implements ISubTypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["productTypeName"] = this.productTypeName;
+        data["productTypeId"] = this.productTypeId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5533,6 +5619,8 @@ export class SubTypeDto implements ISubTypeDto {
 
 export interface ISubTypeDto {
     name: string | undefined;
+    productTypeName: string | undefined;
+    productTypeId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5596,6 +5684,136 @@ export class SubTypeDtoPagedResultDto implements ISubTypeDtoPagedResultDto {
 export interface ISubTypeDtoPagedResultDto {
     totalCount: number;
     items: SubTypeDto[] | undefined;
+}
+
+export class TypeLookupTableDto implements ITypeLookupTableDto {
+    id: number;
+    name: string | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+
+    constructor(data?: ITypeLookupTableDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+        }
+    }
+
+    static fromJS(data: any): TypeLookupTableDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TypeLookupTableDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        return data; 
+    }
+
+    clone(): TypeLookupTableDto {
+        const json = this.toJSON();
+        let result = new TypeLookupTableDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITypeLookupTableDto {
+    id: number;
+    name: string | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+}
+
+export class TypeLookupTableDtoPagedResultDto implements ITypeLookupTableDtoPagedResultDto {
+    totalCount: number;
+    items: TypeLookupTableDto[] | undefined;
+
+    constructor(data?: ITypeLookupTableDtoPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(TypeLookupTableDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TypeLookupTableDtoPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TypeLookupTableDtoPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): TypeLookupTableDtoPagedResultDto {
+        const json = this.toJSON();
+        let result = new TypeLookupTableDtoPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITypeLookupTableDtoPagedResultDto {
+    totalCount: number;
+    items: TypeLookupTableDto[] | undefined;
 }
 
 export class CreateTenantDto implements ICreateTenantDto {
