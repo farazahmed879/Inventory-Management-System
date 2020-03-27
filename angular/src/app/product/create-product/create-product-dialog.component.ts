@@ -47,7 +47,7 @@ export class CreateProductDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
+        this.notify.success(this.l('SavedSuccessfully'));
         this.close(true);
       });
   }

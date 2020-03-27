@@ -133,7 +133,6 @@ import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServ
     SubTypeServiceServiceProxy,
     ProductServiceServiceProxy,
     ProductSellServiceServiceProxy,
-    
   ],
   entryComponents: [
     // tenants
