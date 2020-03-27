@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    ShopProductDto, ShopProductServiceServiceProxy
+    ShopProductDto, ShopProductServiceServiceProxy, ProductServiceServiceProxy, CompanyServiceServiceProxy, CompanyDto, ProductDto
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -23,10 +23,14 @@ export class EditShopProductDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   shopProduct: ShopProductDto = new ShopProductDto();
+  companies: CompanyDto[];
+  products: ProductDto[];
 
   constructor(
     injector: Injector,
     public _shopProductService: ShopProductServiceServiceProxy,
+    public _productService: ProductServiceServiceProxy,
+    public _companyService: CompanyServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditShopProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
@@ -37,8 +41,20 @@ export class EditShopProductDialogComponent extends AppComponentBase
     this._shopProductService.getById(this._id).subscribe((result: ShopProductDto) => {
       this.shopProduct = result;
     });
+    this.getAllCompany();
+    this.getAllProduct();
+  }
+  getAllCompany() {
+    this._companyService.getAll().subscribe(result => {
+      this.companies = result;
+    });
   }
 
+  getAllProduct() {
+    this._productService.getAll().subscribe(result => {
+      this.products = result;
+    });
+  }
   save(): void {
     this.saving = true;
 

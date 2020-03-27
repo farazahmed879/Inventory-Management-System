@@ -42,6 +42,10 @@
           <thead>
             <tr>
               <th>{{ "ShopProduct" | localize }}</th>
+              <th>{{ "Company" | localize }}</th>              
+              <th>{{ "Wholesale" | localize }}</th>
+              <th>{{ "Retail" | localize }}</th>
+              <th>{{ "Quantity" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
@@ -58,7 +62,11 @@
                       })
               "
             >
-              <td>{{ shopProduct.name }}</td>
+              <td>{{ shopProduct.productName }}</td>
+              <td>{{ shopProduct.companyName }}</td>
+              <td>{{ shopProduct.wholeSaleRate }}</td>
+              <td>{{ shopProduct.retailPrice }}</td>
+              <td>{{ shopProduct.quantity }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>

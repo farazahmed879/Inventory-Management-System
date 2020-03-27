@@ -1881,11 +1881,15 @@ export class ShopProductServiceServiceProxy {
      * @param quantity (optional) 
      * @param companyRate (optional) 
      * @param retailPrice (optional) 
+     * @param productId (optional) 
+     * @param companyId (optional) 
+     * @param productName (optional) 
+     * @param companyName (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, wholeSaleRate: number | undefined, quantity: number | undefined, companyRate: number | undefined, retailPrice: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, wholeSaleRate: number | undefined, quantity: number | undefined, companyRate: number | undefined, retailPrice: number | undefined, productId: number | undefined, companyId: number | undefined, productName: string | undefined, companyName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -1907,6 +1911,22 @@ export class ShopProductServiceServiceProxy {
             throw new Error("The parameter 'retailPrice' cannot be null.");
         else if (retailPrice !== undefined)
             url_ += "RetailPrice=" + encodeURIComponent("" + retailPrice) + "&"; 
+        if (productId === null)
+            throw new Error("The parameter 'productId' cannot be null.");
+        else if (productId !== undefined)
+            url_ += "ProductId=" + encodeURIComponent("" + productId) + "&"; 
+        if (companyId === null)
+            throw new Error("The parameter 'companyId' cannot be null.");
+        else if (companyId !== undefined)
+            url_ += "CompanyId=" + encodeURIComponent("" + companyId) + "&"; 
+        if (productName === null)
+            throw new Error("The parameter 'productName' cannot be null.");
+        else if (productName !== undefined)
+            url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
+        if (companyName === null)
+            throw new Error("The parameter 'companyName' cannot be null.");
+        else if (companyName !== undefined)
+            url_ += "CompanyName=" + encodeURIComponent("" + companyName) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -5314,6 +5334,8 @@ export class CreateShopProductDto implements ICreateShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    productId: number;
+    companyId: number | undefined;
     id: number;
 
     constructor(data?: ICreateShopProductDto) {
@@ -5331,6 +5353,8 @@ export class CreateShopProductDto implements ICreateShopProductDto {
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
             this.retailPrice = _data["retailPrice"];
+            this.productId = _data["productId"];
+            this.companyId = _data["companyId"];
             this.id = _data["id"];
         }
     }
@@ -5348,6 +5372,8 @@ export class CreateShopProductDto implements ICreateShopProductDto {
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
         data["retailPrice"] = this.retailPrice;
+        data["productId"] = this.productId;
+        data["companyId"] = this.companyId;
         data["id"] = this.id;
         return data; 
     }
@@ -5365,15 +5391,20 @@ export interface ICreateShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    productId: number;
+    companyId: number | undefined;
     id: number;
 }
 
 export class ShopProductDto implements IShopProductDto {
-    name: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    productId: number;
+    companyId: number | undefined;
+    productName: string | undefined;
+    companyName: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5394,11 +5425,14 @@ export class ShopProductDto implements IShopProductDto {
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
             this.wholeSaleRate = _data["wholeSaleRate"];
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
             this.retailPrice = _data["retailPrice"];
+            this.productId = _data["productId"];
+            this.companyId = _data["companyId"];
+            this.productName = _data["productName"];
+            this.companyName = _data["companyName"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -5419,11 +5453,14 @@ export class ShopProductDto implements IShopProductDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
         data["wholeSaleRate"] = this.wholeSaleRate;
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
         data["retailPrice"] = this.retailPrice;
+        data["productId"] = this.productId;
+        data["companyId"] = this.companyId;
+        data["productName"] = this.productName;
+        data["companyName"] = this.companyName;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5444,11 +5481,14 @@ export class ShopProductDto implements IShopProductDto {
 }
 
 export interface IShopProductDto {
-    name: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    productId: number;
+    companyId: number | undefined;
+    productName: string | undefined;
+    companyName: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

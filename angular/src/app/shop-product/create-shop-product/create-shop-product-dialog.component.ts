@@ -1,16 +1,20 @@
-import { Component, Injector,OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    ShopProductServiceServiceProxy,
-    CreateShopProductDto,
+  ShopProductServiceServiceProxy,
+  CreateShopProductDto,
+  CompanyServiceServiceProxy,
+  CompanyDto,
+  ProductServiceServiceProxy,
+  ProductDto
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
   templateUrl: 'create-shop-product-dialog.component.html',
-    styles: [
-            `
+  styles: [
+    `
             mat-form-field {
                 width: 100%;
             }
@@ -18,22 +22,39 @@ import {
                 padding-bottom: 5px;
             }
         `
-    ]
+  ]
 })
 export class CreateShopProductDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   shopProduct: CreateShopProductDto = new CreateShopProductDto();
+  companies: CompanyDto[];
+  products: ProductDto[];
 
   constructor(
     injector: Injector,
     public _shopProductService: ShopProductServiceServiceProxy,
+    public _productService: ProductServiceServiceProxy,
+    public _companyService: CompanyServiceServiceProxy,
     private _dialogRef: MatDialogRef<CreateShopProductDialogComponent>
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
+    this.getAllProduct();
+    this.getAllCompany();
+  }
+  getAllCompany() {
+    this._companyService.getAll().subscribe(result => {
+      this.companies = result;
+    });
+  }
+
+  getAllProduct() {
+    this._productService.getAll().subscribe(result => {
+      this.products = result;
+    });
   }
 
   save(): void {

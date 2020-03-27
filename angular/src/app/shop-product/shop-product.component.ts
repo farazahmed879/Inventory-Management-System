@@ -54,6 +54,10 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
                  undefined,
                  undefined,
                  undefined,
+                 undefined,
+                 undefined,
+                 undefined,
+                 undefined,
                  request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
@@ -68,7 +72,7 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
 
     delete(shopProduct: ShopProductDto): void {
         abp.message.confirm(
-            this.l('ShopProductDeleteWarningMessage', shopProduct.name),
+            this.l('ShopProductDeleteWarningMessage', shopProduct.productName),
             undefined,
             (result: boolean) => {
                 if (result) {

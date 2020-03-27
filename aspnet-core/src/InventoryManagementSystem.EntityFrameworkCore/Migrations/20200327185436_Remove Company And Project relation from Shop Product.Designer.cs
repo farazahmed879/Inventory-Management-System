@@ -4,14 +4,16 @@ using InventoryManagementSystem.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemDbContext))]
-    partial class InventoryManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200327185436_Remove Company And Project relation from Shop Product")]
+    partial class RemoveCompanyAndProjectrelationfromShopProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1406,44 +1408,6 @@ namespace InventoryManagementSystem.Migrations
                     b.ToTable("AbpUsers");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.Companies.Company", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Company");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1682,9 +1646,6 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("CompanyId")
-                        .HasColumnType("bigint");
-
                     b.Property<double?>("CompanyRate")
                         .HasColumnType("float");
 
@@ -1709,10 +1670,7 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<double?>("RetailPrice")
@@ -1722,10 +1680,6 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ShopProducts");
                 });
@@ -1939,19 +1893,6 @@ namespace InventoryManagementSystem.Migrations
                     b.HasOne("InventoryManagementSystem.Shop.ShopProduct", "ShopProduct")
                         .WithMany()
                         .HasForeignKey("ShopProductId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Shop.ShopProduct", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.Companies.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("InventoryManagementSystem.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>
