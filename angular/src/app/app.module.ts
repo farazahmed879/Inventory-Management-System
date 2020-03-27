@@ -61,7 +61,20 @@ import { EditCompanyDialogComponent } from './company/edit-company/edit-company-
 import { SubTypeComponent } from './subType/subType.component';
 import { CreateSubTypeDialogComponent } from './subType/create-subType/create-subType-dialog.component';
 import { EditSubTypeDialogComponent } from './subType/edit-subType/edit-subType-dialog.component';
-import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServiceServiceProxy, CompanyServiceServiceProxy, TypeServiceServiceProxy, ProductSellServiceServiceProxy } from '@shared/service-proxies/service-proxies';
+import { SubTypeTypeLookupTableModalComponent } from './subType/subType-type-lookup-modal/subType-type-lookup-table-modal.component';
+//PrimeNg
+
+import {DropdownModule} from 'primeng/dropdown';
+//Services
+import {
+  ShopProductServiceServiceProxy,
+  SubTypeServiceServiceProxy,
+  ProductServiceServiceProxy,
+  CompanyServiceServiceProxy,
+  TypeServiceServiceProxy,
+  ProductSellServiceServiceProxy
+} from '@shared/service-proxies/service-proxies';
+
 
 @NgModule({
   declarations: [
@@ -96,6 +109,7 @@ import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServ
     SubTypeComponent,
     CreateSubTypeDialogComponent,
     EditSubTypeDialogComponent,
+    //SubTypeTypeLookupTableModalComponent,
     //Product
     ProductComponent,
     CreateProductDialogComponent,
@@ -124,7 +138,8 @@ import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServ
     AppRoutingModule,
     ServiceProxyModule,
     SharedModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    DropdownModule
   ],
   providers: [
     ShopProductServiceServiceProxy,
@@ -166,6 +181,10 @@ import { ShopProductServiceServiceProxy, SubTypeServiceServiceProxy, ProductServ
     ProductSellComponent,
     CreateProductSellDialogComponent,
     EditProductSellDialogComponent,
+    //Company
+    CompanyComponent,
+    CreateCompanyDialogComponent,
+    EditCompanyDialogComponent
   ]
 })
 export class AppModule { }

@@ -58,7 +58,7 @@
                       })
               "
             >
-              <td>{{ shopProduct.shopProduct }}</td>
+              <td>{{ shopProduct.name }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>
@@ -91,7 +91,7 @@
           mat-mini-fab
           color="primary"
           class="pull-right"
-          (click)="createBookingShopProduct()"
+          (click)="createShopProduct()"
         >
           <mat-icon>add</mat-icon>
         </button>

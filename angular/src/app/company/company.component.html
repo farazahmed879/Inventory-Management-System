@@ -48,7 +48,7 @@
           <tbody>
             <tr
               *ngFor="
-                let company of (companys
+                let company of (companies
                   | paginate
                     : {
                         id: 'server',
@@ -58,7 +58,7 @@
                       })
               "
             >
-              <td>{{ company.company }}</td>
+              <td>{{ company.name }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>
@@ -91,7 +91,7 @@
           mat-mini-fab
           color="primary"
           class="pull-right"
-          (click)="createBookingCompany()"
+          (click)="createCompany()"
         >
           <mat-icon>add</mat-icon>
         </button>

@@ -29,7 +29,7 @@ class PagedCompanyRequestDto extends PagedRequestDto {
       ]
 })
 export class CompanyComponent extends PagedListingComponentBase<CompanyDto> {
-    companys: CompanyDto[] = [];
+    companies: CompanyDto[] = [];
     keyword = '';
 
     constructor(
@@ -56,7 +56,7 @@ export class CompanyComponent extends PagedListingComponentBase<CompanyDto> {
                 })
             )
             .subscribe((result: CompanyDtoPagedResultDto) => {
-                this.companys = result.items;
+                this.companies = result.items;
                 this.showPaging(result, pageNumber);
             });
     }

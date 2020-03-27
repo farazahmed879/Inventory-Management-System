@@ -14,9 +14,14 @@ namespace InventoryManagementSystem.SubTypes
     public class SubTypeService : AbpServiceBase, ISubTypeService
     {
         private readonly IRepository<SubType, long> _subTypeRepository;
-        public SubTypeService(IRepository<SubType, long> subTypeRepository)
+        private readonly IRepository<Type, long> _typeRepository;
+        public SubTypeService(
+            IRepository<SubType, long> subTypeRepository,
+            IRepository<Type, long> typeRepository
+            )
         {
             _subTypeRepository = subTypeRepository;
+            _typeRepository = typeRepository;
         }
 
 
@@ -38,7 +43,8 @@ namespace InventoryManagementSystem.SubTypes
         {
             var result = await _subTypeRepository.InsertAsync(new SubType()
             {
-                Name = subTypeDto.Name
+                Name = subTypeDto.Name,
+                ProductTypeId= subTypeDto.ProductTypeId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -67,7 +73,8 @@ namespace InventoryManagementSystem.SubTypes
             var result = await _subTypeRepository.UpdateAsync(new SubType()
             {
                 Id = subTypeDto.Id,
-                Name = subTypeDto.Name
+                Name = subTypeDto.Name,
+                ProductTypeId = subTypeDto.ProductTypeId
             });
 
             if (result != null)
@@ -96,7 +103,8 @@ namespace InventoryManagementSystem.SubTypes
                 new SubTypeDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    ProductTypeId = i.ProductTypeId
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -125,6 +133,7 @@ namespace InventoryManagementSystem.SubTypes
             {
                 Id = i.Id,
                 Name = i.Name,
+                ProductTypeId = i.ProductTypeId,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -147,9 +156,40 @@ namespace InventoryManagementSystem.SubTypes
                 items: await pagedAndFilteredTypes.Select(i => new SubTypeDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    ProductTypeId = i.ProductTypeId,
+                    ProductTypeName = i.ProductType.Name
                 })
                     .ToListAsync());
+        }
+
+        public async Task<PagedResultDto<TypeLookupTableDto>> GetAllQuestionTypeForLookupTable(GetAllForLookupTableInput input)
+        {
+            var query = _typeRepository.GetAll().WhereIf(
+                   !string.IsNullOrWhiteSpace(input.Filter),
+                  e => e.Name.ToString().Contains(input.Filter)
+               );
+
+            var totalCount = await query.CountAsync();
+
+            var typeList = await query
+                .PageBy(input)
+                .ToListAsync();
+
+            var lookupTableDtoList = new List<TypeLookupTableDto>();
+            foreach (var type in typeList)
+            {
+                lookupTableDtoList.Add(new TypeLookupTableDto
+                {
+                    Id = type.Id,
+                    Name = type.Name?.ToString()
+                });
+            }
+
+            return new PagedResultDto<TypeLookupTableDto>(
+                totalCount,
+                lookupTableDtoList
+            );
         }
     }
 }
