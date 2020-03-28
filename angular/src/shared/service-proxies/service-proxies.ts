@@ -742,11 +742,13 @@ export class ProductSellServiceServiceProxy {
     /**
      * @param status (optional) 
      * @param sellingRate (optional) 
+     * @param shopProductId (optional) 
+     * @param productName (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSellDtoPagedResultDto> {
+    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, shopProductId: number | undefined, productName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSellDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductSellService/GetPaginatedAll?";
         if (status === null)
             throw new Error("The parameter 'status' cannot be null.");
@@ -756,6 +758,14 @@ export class ProductSellServiceServiceProxy {
             throw new Error("The parameter 'sellingRate' cannot be null.");
         else if (sellingRate !== undefined)
             url_ += "SellingRate=" + encodeURIComponent("" + sellingRate) + "&"; 
+        if (shopProductId === null)
+            throw new Error("The parameter 'shopProductId' cannot be null.");
+        else if (shopProductId !== undefined)
+            url_ += "ShopProductId=" + encodeURIComponent("" + shopProductId) + "&"; 
+        if (productName === null)
+            throw new Error("The parameter 'productName' cannot be null.");
+        else if (productName !== undefined)
+            url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -4144,6 +4154,7 @@ export interface IChangeUiThemeInput {
 export class CreateProductSellDto implements ICreateProductSellDto {
     status: string | undefined;
     sellingRate: number;
+    shopProductId: number;
     id: number;
 
     constructor(data?: ICreateProductSellDto) {
@@ -4159,6 +4170,7 @@ export class CreateProductSellDto implements ICreateProductSellDto {
         if (_data) {
             this.status = _data["status"];
             this.sellingRate = _data["sellingRate"];
+            this.shopProductId = _data["shopProductId"];
             this.id = _data["id"];
         }
     }
@@ -4174,6 +4186,7 @@ export class CreateProductSellDto implements ICreateProductSellDto {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
         data["sellingRate"] = this.sellingRate;
+        data["shopProductId"] = this.shopProductId;
         data["id"] = this.id;
         return data; 
     }
@@ -4189,12 +4202,18 @@ export class CreateProductSellDto implements ICreateProductSellDto {
 export interface ICreateProductSellDto {
     status: string | undefined;
     sellingRate: number;
+    shopProductId: number;
     id: number;
 }
 
 export class ProductSellDto implements IProductSellDto {
     status: string | undefined;
     sellingRate: number;
+    productName: string | undefined;
+    companyName: string | undefined;
+    productType: string | undefined;
+    profit: number;
+    shopProductId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4217,6 +4236,11 @@ export class ProductSellDto implements IProductSellDto {
         if (_data) {
             this.status = _data["status"];
             this.sellingRate = _data["sellingRate"];
+            this.productName = _data["productName"];
+            this.companyName = _data["companyName"];
+            this.productType = _data["productType"];
+            this.profit = _data["profit"];
+            this.shopProductId = _data["shopProductId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4239,6 +4263,11 @@ export class ProductSellDto implements IProductSellDto {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
         data["sellingRate"] = this.sellingRate;
+        data["productName"] = this.productName;
+        data["companyName"] = this.companyName;
+        data["productType"] = this.productType;
+        data["profit"] = this.profit;
+        data["shopProductId"] = this.shopProductId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4261,6 +4290,11 @@ export class ProductSellDto implements IProductSellDto {
 export interface IProductSellDto {
     status: string | undefined;
     sellingRate: number;
+    productName: string | undefined;
+    companyName: string | undefined;
+    productType: string | undefined;
+    profit: number;
+    shopProductId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

@@ -112,7 +112,8 @@ namespace InventoryManagementSystem.ShopProducts
                     RetailPrice = i.RetailPrice,
                     CompanyRate = i.CompanyRate,
                     CompanyId = i.CompanyId,
-                    ProductId = i.ProductId
+                    ProductId = i.ProductId,
+                    Quantity =  i.Quantity.Value
                 })
                 .FirstOrDefaultAsync();
             return result;
