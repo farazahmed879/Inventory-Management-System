@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
@@ -17,5 +18,8 @@ namespace InventoryManagementSystem.ProductSells
         Task<List<ProductSellDto>> GetAll();
 
         Task<PagedResultDto<ProductSellDto>> GetPaginatedAllAsync(PagedProductSellResultRequestDto input);
+
+
+        Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date);
     }
 }

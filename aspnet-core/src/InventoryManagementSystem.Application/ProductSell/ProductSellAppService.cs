@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
@@ -144,8 +145,8 @@ namespace InventoryManagementSystem.ProductSells
         }
         public async Task<PagedResultDto<ProductSellDto>> GetPaginatedAllAsync(PagedProductSellResultRequestDto input)
         {
-           var filteredProductSells = _productSellRepository.GetAll()
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
+            var filteredProductSells = _productSellRepository.GetAll()
+                 .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells
                 .OrderBy(i => i.Status)
@@ -166,6 +167,69 @@ namespace InventoryManagementSystem.ProductSells
                     Status = i.Status,
                 })
                     .ToListAsync());
+        }
+
+        public async Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date)
+        {
+            var product = await _productSellRepository.GetAll().ToListAsync();
+            var result = new List<ProductSaleGraphDto>();
+            switch (type)
+            {
+                case AppConsts.Week:
+                    {
+                        var days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                        foreach (var item in days)
+                        {
+                            var sale = new ProductSaleGraphDto();
+                            sale.Label = item;
+                            sale.Value = 30;
+                            result.Add(sale);
+                        }
+                        return result;
+                    }
+                case AppConsts.Month:
+                    {
+                        var days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                        foreach (var item in days)
+                        {
+                            var sale = new ProductSaleGraphDto();
+                            sale.Label = item;
+                            sale.Value = 30;
+                            result.Add(sale);
+                        }
+                        return result;
+                    }
+                case AppConsts.Year:
+                    {
+                        var days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                        foreach (var item in days)
+                        {
+                            var sale = new ProductSaleGraphDto();
+                            sale.Label = item;
+                            sale.Value = 30;
+                            result.Add(sale);
+                        }
+                        return result;
+                    }
+                case AppConsts.AllYear:
+                    {
+                        var days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                        foreach (var item in days)
+                        {
+                            var sale = new ProductSaleGraphDto();
+                            sale.Label = item;
+                            sale.Value = 30;
+                            result.Add(sale);
+                        }
+                        return result;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+
+            return null;
         }
     }
 }

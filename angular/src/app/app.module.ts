@@ -63,7 +63,7 @@ import { CreateSubTypeDialogComponent } from './subType/create-subType/create-su
 import { EditSubTypeDialogComponent } from './subType/edit-subType/edit-subType-dialog.component';
 import { SubTypeTypeLookupTableModalComponent } from './subType/subType-type-lookup-modal/subType-type-lookup-table-modal.component';
 //PrimeNg
-
+import {ChartModule} from 'primeng/chart';
 import {DropdownModule} from 'primeng/dropdown';
 //Services
 import {
@@ -74,6 +74,7 @@ import {
   TypeServiceServiceProxy,
   ProductSellServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
+import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.component';
 
 
 @NgModule({
@@ -125,7 +126,9 @@ import {
     //Company
     CompanyComponent,
     CreateCompanyDialogComponent,
-    EditCompanyDialogComponent
+    EditCompanyDialogComponent,
+    //SaleDashboard
+    SaleDashboardComponent
   ],
   imports: [
     CommonModule,
@@ -139,7 +142,8 @@ import {
     ServiceProxyModule,
     SharedModule,
     NgxPaginationModule,
-    DropdownModule
+    DropdownModule,
+    ChartModule
   ],
   providers: [
     ShopProductServiceServiceProxy,
@@ -183,7 +187,9 @@ import {
     //Company
     CompanyComponent,
     CreateCompanyDialogComponent,
-    EditCompanyDialogComponent
+    EditCompanyDialogComponent,
+    //SaleDashboard
+    SaleDashboardComponent
   ]
 })
 export class AppModule { }

@@ -17,5 +17,11 @@
         public const string Available = "Available";
         public const string Confirmed = "Confirmed";
         public const string Apply = "Apply";
+
+        //DateType
+        public const string Week = "Week";
+        public const string Month = "Month";
+        public const string Year = "Year";
+        public const string AllYear = "AllYear";
     }
 }
