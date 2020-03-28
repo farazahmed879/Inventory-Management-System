@@ -60,7 +60,6 @@ export class CreateSubTypeDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
-    debugger;
     this._subTypeService
       .createOrEdit(this.subType)
       .pipe(

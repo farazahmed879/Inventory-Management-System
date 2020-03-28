@@ -40,6 +40,7 @@ namespace InventoryManagementSystem.ProductSells
             var result = await _productSellRepository.InsertAsync(new ProductSell()
             {
                 Status = productSellDto.Status,
+                SellingRate = productSellDto.SellingRate,
                 ShopProductId = productSellDto.ShopProductId,
             });
 
@@ -70,6 +71,7 @@ namespace InventoryManagementSystem.ProductSells
             {
                 Id = productSellDto.Id,
                 Status = productSellDto.Status,
+                SellingRate = productSellDto.SellingRate,
                 ShopProductId = productSellDto.ShopProductId,
             });
 
@@ -100,6 +102,7 @@ namespace InventoryManagementSystem.ProductSells
                 {
                     Id = i.Id,
                     Status = i.Status,
+                    SellingRate = i.SellingRate,
                     ShopProductId = i.ShopProductId
 
                 })
@@ -155,10 +158,11 @@ namespace InventoryManagementSystem.ProductSells
                 items: await pagedAndFilteredProductSells.Select(i => new ProductSellDto()
                 {
                     Id = i.Id,
+                    SellingRate = i.SellingRate,
                     ProductName = i.ShopProduct.Product.Name,
                     CompanyName = i.ShopProduct.Company.Name,
                     ProductType = i.ShopProduct.Product.ProductSubType.Name,
-                    Profit = 0,
+                    Profit = i.SellingRate - i.ShopProduct.WholeSaleRate.Value,
                     Status = i.Status,
                 })
                     .ToListAsync());

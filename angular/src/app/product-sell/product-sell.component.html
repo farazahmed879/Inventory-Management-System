@@ -2,7 +2,7 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card main-content">
       <div class="header">
-        <h2>{{ "Product Sell"}}</h2>
+        <h2>{{ "Product Sale"}}</h2>
         <ul class="header-dropdown m-r--5">
           <li>
             <button
@@ -46,6 +46,7 @@
               <th>{{ "Selling Rate" | localize }}</th>
               <th>{{ "Type" | localize }}</th>
               <th>{{ "Status" | localize }}</th>
+              <th>{{ "Profit" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
@@ -67,6 +68,7 @@
               <td>{{ productSell.sellingRate }}</td>
               <td>{{ productSell.productType }}</td>
               <td>{{ productSell.status }}</td>
+              <td>{{ productSell.profit }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>

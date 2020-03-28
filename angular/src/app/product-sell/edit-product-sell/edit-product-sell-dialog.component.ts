@@ -3,9 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    ProductSellDto, ProductSellServiceServiceProxy
+    ProductSellDto, ProductSellServiceServiceProxy, ShopProductDto, ShopProductServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
 
+interface Status {
+  name: string;
+  value: string;
+}
 @Component({
   templateUrl: 'edit-product-sell-dialog.component.html',
   styles: [
@@ -23,19 +27,35 @@ export class EditProductSellDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   productSell: ProductSellDto = new ProductSellDto();
+  statuses: Status[];
+  products: ShopProductDto[];
 
   constructor(
     injector: Injector,
     public _productSellService: ProductSellServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditProductSellDialogComponent>,
+    public _shopProductService: ShopProductServiceServiceProxy,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
     super(injector);
+
+    this.statuses = [
+      { name: 'Sold', value: 'Sold' },
+      { name: 'Return', value: 'Return' },
+    ];
   }
 
   ngOnInit(): void {
     this._productSellService.getById(this._id).subscribe((result: ProductSellDto) => {
       this.productSell = result;
+    });
+    this.getAllProduct();
+  }
+
+  getAllProduct() {
+    this._shopProductService.getAll().subscribe(result => {
+      this.products = result;
+      console.log("shop products",result);
     });
   }
 
