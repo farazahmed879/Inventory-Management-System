@@ -39,7 +39,8 @@ namespace InventoryManagementSystem.ProductSells
         {
             var result = await _productSellRepository.InsertAsync(new ProductSell()
             {
-                Status = productSellDto.Status
+                Status = productSellDto.Status,
+                ShopProductId = productSellDto.ShopProductId,
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -68,7 +69,8 @@ namespace InventoryManagementSystem.ProductSells
             var result = await _productSellRepository.UpdateAsync(new ProductSell()
             {
                 Id = productSellDto.Id,
-                Status = productSellDto.Status
+                Status = productSellDto.Status,
+                ShopProductId = productSellDto.ShopProductId,
             });
 
             if (result != null)
@@ -97,7 +99,9 @@ namespace InventoryManagementSystem.ProductSells
                 new ProductSellDto()
                 {
                     Id = i.Id,
-                    Status = i.Status
+                    Status = i.Status,
+                    ShopProductId = i.ShopProductId
+
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -126,6 +130,9 @@ namespace InventoryManagementSystem.ProductSells
             {
                 Id = i.Id,
                 Status = i.Status,
+                ProductName = i.ShopProduct.Product.Name,
+                CompanyName = i.ShopProduct.Company.Name,
+                ProductType = i.ShopProduct.Product.ProductSubType.Name,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -148,7 +155,11 @@ namespace InventoryManagementSystem.ProductSells
                 items: await pagedAndFilteredProductSells.Select(i => new ProductSellDto()
                 {
                     Id = i.Id,
-                    Status = i.Status
+                    ProductName = i.ShopProduct.Product.Name,
+                    CompanyName = i.ShopProduct.Company.Name,
+                    ProductType = i.ShopProduct.Product.ProductSubType.Name,
+                    Profit = 0,
+                    Status = i.Status,
                 })
                     .ToListAsync());
         }

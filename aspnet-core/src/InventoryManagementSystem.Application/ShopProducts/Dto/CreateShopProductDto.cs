@@ -11,5 +11,7 @@ namespace InventoryManagementSystem.ShopProducts.Dto
         public int Quantity { get; set; }
         public double? CompanyRate { get; set; }
         public double? RetailPrice { get; set; }
+        public long ProductId { get; set; }
+        public long? CompanyId { get; set; }
     }
 }

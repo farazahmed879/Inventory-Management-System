@@ -5,6 +5,8 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
     ProductServiceServiceProxy,
     CreateProductDto,
+    SubTypeServiceServiceProxy,
+    SubTypeDto
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -24,18 +26,26 @@ export class CreateProductDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   product: CreateProductDto = new CreateProductDto();
+  subTypes: SubTypeDto[];
 
   constructor(
     injector: Injector,
     public _productService: ProductServiceServiceProxy,
+    public _subTYpeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<CreateProductDialogComponent>
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
+    this.getAllProductType();
   }
 
+  getAllProductType() {
+    this._subTYpeService.getAll().subscribe(result => {
+      this.subTypes = result;
+    });
+  }
   save(): void {
     this.saving = true;
 

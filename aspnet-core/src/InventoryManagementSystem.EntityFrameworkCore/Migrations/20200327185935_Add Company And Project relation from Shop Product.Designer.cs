@@ -4,14 +4,16 @@ using InventoryManagementSystem.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemDbContext))]
-    partial class InventoryManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200327185935_Add Company And Project relation from Shop Product")]
+    partial class AddCompanyAndProjectrelationfromShopProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1441,7 +1443,7 @@ namespace InventoryManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Company");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.MultiTenancy.Tenant", b =>
@@ -1662,7 +1664,7 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<double>("SellingRate")
                         .HasColumnType("float");
 
-                    b.Property<long>("ShopProductId")
+                    b.Property<long?>("ShopProductId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Status")
@@ -1938,9 +1940,7 @@ namespace InventoryManagementSystem.Migrations
                 {
                     b.HasOne("InventoryManagementSystem.Shop.ShopProduct", "ShopProduct")
                         .WithMany()
-                        .HasForeignKey("ShopProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShopProductId");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Shop.ShopProduct", b =>

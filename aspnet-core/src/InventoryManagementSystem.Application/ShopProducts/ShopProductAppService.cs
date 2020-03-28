@@ -43,6 +43,9 @@ namespace InventoryManagementSystem.ShopProducts
                 RetailPrice = shopProductDto.RetailPrice,
                 Quantity = shopProductDto.Quantity,
                 CompanyRate = shopProductDto.CompanyRate,
+                ProductId = shopProductDto.ProductId,
+                CompanyId = shopProductDto.CompanyId,
+
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -73,7 +76,10 @@ namespace InventoryManagementSystem.ShopProducts
                 Id = shopProductDto.Id,
                 WholeSaleRate = shopProductDto.WholeSaleRate,
                 Quantity = shopProductDto.Quantity,
-                RetailPrice = shopProductDto.RetailPrice
+                RetailPrice = shopProductDto.RetailPrice,
+                ProductId = shopProductDto.ProductId,
+                CompanyId = shopProductDto.CompanyId,
+                CompanyRate = shopProductDto.CompanyRate
             });
 
             if (result != null)
@@ -104,7 +110,10 @@ namespace InventoryManagementSystem.ShopProducts
                     Id = i.Id,
                     WholeSaleRate = i.WholeSaleRate.Value,
                     RetailPrice = i.RetailPrice,
-                    CompanyRate = i.CompanyRate
+                    CompanyRate = i.CompanyRate,
+                    CompanyId = i.CompanyId,
+                    ProductId = i.ProductId,
+                    Quantity =  i.Quantity.Value
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -132,7 +141,8 @@ namespace InventoryManagementSystem.ShopProducts
             var result = await _shopProductRepository.GetAll().Select(i => new ShopProductDto()
             {
                 Id = i.Id,
-                Name = i.Product.Name,
+                ProductName = i.Product.Name,
+                CompanyName = i.Company.Name,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -141,11 +151,12 @@ namespace InventoryManagementSystem.ShopProducts
         }
         public async Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input)
         {
-            var filteredShopProducts = _shopProductRepository.GetAll()
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Product.Name.Contains(input.Name));
+            var filteredShopProducts = _shopProductRepository.GetAll();
+
+            //.WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Product.Name.Contains(input.Name));
 
             var pagedAndFilteredShopProducts = filteredShopProducts
-                .OrderBy(i => i.Product.Name)
+                .OrderBy(i => i.Id)
                 .PageBy(input);
 
             var totalCount = await pagedAndFilteredShopProducts.CountAsync();
@@ -155,9 +166,10 @@ namespace InventoryManagementSystem.ShopProducts
                 items: await pagedAndFilteredShopProducts.Select(i => new ShopProductDto()
                 {
                     Id = i.Id,
-                    Name = i.Product.Name,
+                    ProductName = i.Product.Name,
+                    CompanyName = i.Company.Name,
                     WholeSaleRate = i.WholeSaleRate.Value,
-                    Quantity = i.Quantity,
+                    Quantity = i.Quantity.Value,
                     RetailPrice = i.RetailPrice
 
                 })

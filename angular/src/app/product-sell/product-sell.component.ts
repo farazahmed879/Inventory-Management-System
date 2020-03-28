@@ -46,19 +46,24 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSellD
         finishedCallback: Function
     ): void {
 
+        debugger;
         request.keyword = this.keyword;
+        //request.maxResultCount = 20;
 
-        this._productSellService
-            .getPaginatedAll(request.keyword, undefined, request.maxResultCount,request.skipCount)
-            .pipe(
-                finalize(() => {
-                    finishedCallback();
-                })
-            )
-            .subscribe((result: ProductSellDtoPagedResultDto) => {
-                this.productSells = result.items;
-                this.showPaging(result, pageNumber);
-            });
+        // this._productSellService
+        //     .getPaginatedAll(request.keyword,undefined,undefined, undefined,request.maxResultCount,request.skipCount)
+        //     .pipe(
+        //         finalize(() => {
+        //             finishedCallback();
+        //         })
+        //     )
+        //     .subscribe((result: any) => {
+        //         this.productSells = result.items;
+        //         this.showPaging(result, pageNumber);
+        //     });
+        this._productSellService.getAll().subscribe(result=>{
+            this.productSells = result;
+        } )
     }
 
     delete(productSell: ProductSellDto): void {
