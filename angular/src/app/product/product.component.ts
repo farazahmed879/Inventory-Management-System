@@ -48,6 +48,7 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
 
         request.keyword = this.keyword;
 
+        debugger;
         this._productService
             .getPaginatedAll(request.keyword, request.skipCount, request.maxResultCount)
             .pipe(
@@ -59,6 +60,7 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
                 this.products = result.items;
                 this.showPaging(result, pageNumber);
             });
+            debugger;
     }
 
     delete(product: ProductDto): void {

@@ -8,7 +8,7 @@ import { AppComponentBase } from '@shared/app-component-base';
 
 @Component({
     selector: 'subType-Type-LookupTableModal',
-    styleUrls: ['subType-type-lookup-table-modal.component'],
+    // styleUrls: ['subType-type-lookup-table-modal.component'],
     encapsulation: ViewEncapsulation.None,
     templateUrl: './subType-type-lookup-table-modal.component.html'
 })
