@@ -141,7 +141,7 @@ namespace InventoryManagementSystem.ProductSells
         }
         public async Task<PagedResultDto<ProductSellDto>> GetPaginatedAllAsync(PagedProductSellResultRequestDto input)
         {
-            var filteredProductSells = _productSellRepository.GetAll()
+           var filteredProductSells = _productSellRepository.GetAll()
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells

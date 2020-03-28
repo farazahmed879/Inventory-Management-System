@@ -45,25 +45,22 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSellD
         pageNumber: number,
         finishedCallback: Function
     ): void {
-
-        debugger;
         request.keyword = this.keyword;
-        //request.maxResultCount = 20;
 
-        // this._productSellService
-        //     .getPaginatedAll(request.keyword,undefined,undefined, undefined,request.maxResultCount,request.skipCount)
-        //     .pipe(
-        //         finalize(() => {
-        //             finishedCallback();
-        //         })
-        //     )
-        //     .subscribe((result: any) => {
-        //         this.productSells = result.items;
-        //         this.showPaging(result, pageNumber);
-        //     });
-        this._productSellService.getAll().subscribe(result=>{
-            this.productSells = result;
-        } )
+        this._productSellService
+            .getPaginatedAll(request.keyword,undefined,undefined, undefined,request.skipCount,request.maxResultCount)
+            .pipe(
+                finalize(() => {
+                    finishedCallback();
+                })
+            )
+            .subscribe((result: any) => {
+                this.productSells = result.items;
+                this.showPaging(result, pageNumber);
+            });
+        // this._productSellService.getAll().subscribe(result=>{
+        //     this.productSells = result;
+        // } )
     }
 
     delete(productSell: ProductSellDto): void {
