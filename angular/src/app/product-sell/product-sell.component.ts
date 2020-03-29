@@ -7,9 +7,9 @@ import {
     PagedRequestDto
 } from 'shared/paged-listing-component-base';
 import {
-    ProductSellServiceServiceProxy,
-    ProductSellDto,
-    ProductSellDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
+    ProductSaleServiceServiceProxy,
+    ProductSaleDto,
+    ProductSaleDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
 import { CreateProductSellDialogComponent } from './create-product-sell/create-product-sell-dialog.component';
 import { EditProductSellDialogComponent } from './edit-product-sell/edit-product-sell-dialog.component';
 
@@ -28,13 +28,13 @@ class PagedProductSellRequestDto extends PagedRequestDto {
         `
       ]
 })
-export class ProductSellComponent extends PagedListingComponentBase<ProductSellDto> {
-    productSells: ProductSellDto[] = [];
+export class ProductSellComponent extends PagedListingComponentBase<ProductSaleDto> {
+    productSells: ProductSaleDto[] = [];
     keyword = '';
 
     constructor(
         injector: Injector,
-        private _productSellService: ProductSellServiceServiceProxy,
+        private _productSellService: ProductSaleServiceServiceProxy,
         private _dialog: MatDialog
     ) {
         super(injector);
@@ -63,7 +63,7 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSellD
         // } )
     }
 
-    delete(productSell: ProductSellDto): void {
+    delete(productSell: ProductSaleDto): void {
         abp.message.confirm(
             this.l('ProductSellDeleteWarningMessage', productSell.status),
             undefined,
@@ -87,7 +87,7 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSellD
         this.showCreateOrEditProductSellDialog();
     }
 
-    editProductSell(productSell: ProductSellDto): void {
+    editProductSell(productSell: ProductSaleDto): void {
         this.showCreateOrEditProductSellDialog(productSell.id);
     }
 

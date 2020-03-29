@@ -1,6 +1,6 @@
 ﻿using Abp.Domain.Entities.Auditing;
 
-namespace InventoryManagementSystem.ProductSells.Dto
+namespace InventoryManagementSystem.ProductSales.Dto
 {
     public class GraphHelperDto
     {

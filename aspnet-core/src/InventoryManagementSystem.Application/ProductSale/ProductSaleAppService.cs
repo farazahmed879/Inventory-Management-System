@@ -8,27 +8,27 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using InventoryManagementSystem.Products;
-using InventoryManagementSystem.ProductSells.Dto;
+using InventoryManagementSystem.ProductSales.Dto;
 using InventoryManagementSystem.Shop;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryManagementSystem.ProductSells
+namespace InventoryManagementSystem.ProductSales
 {
-    public class ProductSellService : AbpServiceBase, IProductSellService
+    public class ProductSaleService : AbpServiceBase, IProductSaleService
     {
-        private readonly IRepository<ProductSell, long> _productSellRepository;
+        private readonly IRepository<ProductSell, long> _productSaleRepository;
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
-        public ProductSellService(
-            IRepository<ProductSell, long> productSellRepository,
+        public ProductSaleService(
+            IRepository<ProductSell, long> productSaleRepository,
             IRepository<ShopProduct, long> shopProductRepository
             )
         {
-            _productSellRepository = productSellRepository;
+            _productSaleRepository = productSaleRepository;
             _shopProductRepository = shopProductRepository;
         }
 
 
-        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateProductSellDto productSellDto)
+        public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateProductSaleDto productSellDto)
         {
             ResponseMessagesDto result;
             if (productSellDto.Id == 0)
@@ -42,9 +42,9 @@ namespace InventoryManagementSystem.ProductSells
             return result;
         }
 
-        private async Task<ResponseMessagesDto> CreateProductSellAsync(CreateProductSellDto productSellDto)
+        private async Task<ResponseMessagesDto> CreateProductSellAsync(CreateProductSaleDto productSellDto)
         {
-            var result = await _productSellRepository.InsertAsync(new ProductSell()
+            var result = await _productSaleRepository.InsertAsync(new ProductSell()
             {
                 Status = productSellDto.Status,
                 SellingRate = productSellDto.SellingRate,
@@ -78,9 +78,9 @@ namespace InventoryManagementSystem.ProductSells
             };
         }
 
-        private async Task<ResponseMessagesDto> UpdateProductSellAsync(CreateProductSellDto productSellDto)
+        private async Task<ResponseMessagesDto> UpdateProductSellAsync(CreateProductSaleDto productSellDto)
         {
-            var result = await _productSellRepository.UpdateAsync(new ProductSell()
+            var result = await _productSaleRepository.UpdateAsync(new ProductSell()
             {
                 Id = productSellDto.Id,
                 Status = productSellDto.Status,
@@ -106,12 +106,12 @@ namespace InventoryManagementSystem.ProductSells
                 Error = true,
             };
         }
-        public async Task<ProductSellDto> GetById(long productSellId)
+        public async Task<ProductSaleDto> GetById(long productSellId)
         {
-            var result = await _productSellRepository.GetAll()
+            var result = await _productSaleRepository.GetAll()
                 .Where(i => i.Id == productSellId)
                 .Select(i =>
-                new ProductSellDto()
+                new ProductSaleDto()
                 {
                     Id = i.Id,
                     Status = i.Status,
@@ -126,7 +126,7 @@ namespace InventoryManagementSystem.ProductSells
 
         public async Task<ResponseMessagesDto> DeleteAsync(long productSellId)
         {
-            await _productSellRepository.DeleteAsync(new ProductSell()
+            await _productSaleRepository.DeleteAsync(new ProductSell()
             {
                 Id = productSellId
             });
@@ -140,9 +140,9 @@ namespace InventoryManagementSystem.ProductSells
             };
         }
 
-        public async Task<List<ProductSellDto>> GetAll()
+        public async Task<List<ProductSaleDto>> GetAll()
         {
-            var result = await _productSellRepository.GetAll().Select(i => new ProductSellDto()
+            var result = await _productSaleRepository.GetAll().Select(i => new ProductSaleDto()
             {
                 Id = i.Id,
                 Status = i.Status,
@@ -155,9 +155,9 @@ namespace InventoryManagementSystem.ProductSells
             }).ToListAsync();
             return result;
         }
-        public async Task<PagedResultDto<ProductSellDto>> GetPaginatedAllAsync(PagedProductSellResultRequestDto input)
+        public async Task<PagedResultDto<ProductSaleDto>> GetPaginatedAllAsync(PagedProductSaleResultRequestDto input)
         {
-            var filteredProductSells = _productSellRepository.GetAll()
+            var filteredProductSells = _productSaleRepository.GetAll()
                  .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells
@@ -166,9 +166,9 @@ namespace InventoryManagementSystem.ProductSells
 
             var totalCount = await pagedAndFilteredProductSells.CountAsync();
 
-            return new PagedResultDto<ProductSellDto>(
+            return new PagedResultDto<ProductSaleDto>(
                 totalCount: totalCount,
-                items: await pagedAndFilteredProductSells.Select(i => new ProductSellDto()
+                items: await pagedAndFilteredProductSells.Select(i => new ProductSaleDto()
                 {
                     Id = i.Id,
                     SellingRate = i.SellingRate,
@@ -183,7 +183,7 @@ namespace InventoryManagementSystem.ProductSells
 
         public async Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date)
         {
-            var product = await _productSellRepository.GetAll().Include(i => i.ShopProduct).ToListAsync();
+            var product = await _productSaleRepository.GetAll().Include(i => i.ShopProduct).ToListAsync();
             var result = new List<ProductSaleGraphDto>();
             switch (type)
             {

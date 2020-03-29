@@ -3,8 +3,8 @@ import { MatDialogRef } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  ProductSellServiceServiceProxy,
-  CreateProductSellDto,
+  ProductSaleServiceServiceProxy,
+  CreateProductSaleDto,
   ProductDto,
   ShopProductServiceServiceProxy,
   ShopProductDto,
@@ -31,14 +31,14 @@ interface Status {
 export class CreateProductSellDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
-  productSell: CreateProductSellDto = new CreateProductSellDto();
+  productSell: CreateProductSaleDto = new CreateProductSaleDto();
   statuses: Status[];
   products: ShopProductDto[];
 
 
   constructor(
     injector: Injector,
-    public _productSellService: ProductSellServiceServiceProxy,
+    public _productSellService: ProductSaleServiceServiceProxy,
     public _shopProductService: ShopProductServiceServiceProxy,
     private _dialogRef: MatDialogRef<CreateProductSellDialogComponent>
   ) {

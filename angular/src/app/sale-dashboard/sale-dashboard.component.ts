@@ -1,7 +1,7 @@
 import { Component, Injector, AfterViewInit } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { ProductSellServiceServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ProductSaleServiceServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppConsts } from '@shared/AppConsts';
 
 
@@ -20,7 +20,7 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
     viewGraph: boolean = false;
     constructor(
         injector: Injector,
-        public _productSaleService: ProductSellServiceServiceProxy,
+        public _productSaleService: ProductSaleServiceServiceProxy,
     ) {
         super(injector);
         this.getThisWeekGraphData();
