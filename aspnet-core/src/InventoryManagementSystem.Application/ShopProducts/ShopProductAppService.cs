@@ -138,7 +138,7 @@ namespace InventoryManagementSystem.ShopProducts
 
         public async Task<List<ShopProductDto>> GetAll()
         {
-            var result = await _shopProductRepository.GetAll().Select(i => new ShopProductDto()
+            var result = await _shopProductRepository.GetAll().Where(i=> i.Quantity > 0).Select(i => new ShopProductDto()
             {
                 Id = i.Id,
                 ProductName = i.Product.Name,
@@ -151,7 +151,7 @@ namespace InventoryManagementSystem.ShopProducts
         }
         public async Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input)
         {
-            var filteredShopProducts = _shopProductRepository.GetAll();
+            var filteredShopProducts = _shopProductRepository.GetAll().Where(i=> i.Quantity > 0);
 
             //.WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Product.Name.Contains(input.Name));
 

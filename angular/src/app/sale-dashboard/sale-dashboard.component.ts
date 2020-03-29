@@ -39,13 +39,13 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
                     backgroundColor: '#42A5F5',
                     borderColor: '#1E88E5',
                     data: []
+                },
+                {
+                    label: 'Profit',
+                    backgroundColor: '#9CCC65',
+                    borderColor: '#7CB342',
+                    data: []
                 }
-                // {
-                //     label: 'My Second dataset',
-                //     backgroundColor: '#9CCC65',
-                //     borderColor: '#7CB342',
-                //     data: [28, 48, 40, 19, 86, 27, 90]
-                // }
             ]
         }
 
@@ -53,9 +53,11 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
             console.log("Graph Data", result);
             for (var x = 0; x < result.length; x++) {
                 var day = result[x].label;
-                var value = result[x].value;
+                var sale = result[x].sale;
+                var profit = result[x].profit;
                 this.data.labels.push(day);
-                this.data.datasets[0].data.push(value);
+                this.data.datasets[0].data.push(sale);
+                this.data.datasets[1].data.push(profit);
             }
             this.viewGraph = true;
             //this.weeks = result.label;

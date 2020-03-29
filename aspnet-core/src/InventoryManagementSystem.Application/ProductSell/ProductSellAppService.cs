@@ -17,9 +17,14 @@ namespace InventoryManagementSystem.ProductSells
     public class ProductSellService : AbpServiceBase, IProductSellService
     {
         private readonly IRepository<ProductSell, long> _productSellRepository;
-        public ProductSellService(IRepository<ProductSell, long> productSellRepository)
+        private readonly IRepository<ShopProduct, long> _shopProductRepository;
+        public ProductSellService(
+            IRepository<ProductSell, long> productSellRepository,
+            IRepository<ShopProduct, long> shopProductRepository
+            )
         {
             _productSellRepository = productSellRepository;
+            _shopProductRepository = shopProductRepository;
         }
 
 
@@ -47,6 +52,12 @@ namespace InventoryManagementSystem.ProductSells
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
+
+            var shopProduct = await _shopProductRepository.GetAll()
+                .Where(i => i.Id == productSellDto.ShopProductId && i.Quantity > 0)
+                .SingleOrDefaultAsync();
+            shopProduct.Quantity = shopProduct.Quantity - 1;
+            await _shopProductRepository.UpdateAsync(shopProduct);
 
             if (result.Id != 0)
             {
@@ -172,7 +183,7 @@ namespace InventoryManagementSystem.ProductSells
 
         public async Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date)
         {
-            var product = await _productSellRepository.GetAll().ToListAsync();
+            var product = await _productSellRepository.GetAll().Include(i => i.ShopProduct).ToListAsync();
             var result = new List<ProductSaleGraphDto>();
             switch (type)
             {
@@ -221,24 +232,22 @@ namespace InventoryManagementSystem.ProductSells
                                 }
                         }
                         DateTime WeekStartDate = DateTime.Now.AddDays(dayValue);
-                        //DateTime WeekSecondDate = WeekStartDate.AddDays(1);
-                        //DateTime WeekThirdDate = WeekStartDate.AddDays(2);
-                        //DateTime WeekFourthDate = WeekStartDate.AddDays(3);
-                        //DateTime WeekFifthDate = WeekStartDate.AddDays(4);
-                        //DateTime WeekSixthDate = WeekStartDate.AddDays(5);
-                        //DateTime WeekEndDate = WeekStartDate.AddDays(6);
                         var dateList = new List<DateTime>();
                         dateList.Add(WeekStartDate);
                         for (var x = 1; x < 7; x++)
                         {
                             dateList.Add(WeekStartDate.AddDays(x));
                         }
-                        var dailySaleForThisWeek = product.Where(i => i.CreationTime.Date >= WeekStartDate.Date && i.CreationTime.Date <= dateList[6].Date);
                         foreach (var item in dateList)
                         {
                             var sale = new ProductSaleGraphDto();
                             sale.Label = item.DayOfWeek.ToString();
-                            sale.Value = dailySaleForThisWeek.Where(i => i.CreationTime == item).Sum(i => i.SellingRate);
+                            sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
+                            sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+
                             result.Add(sale);
                         }
                         return result;
@@ -256,25 +265,43 @@ namespace InventoryManagementSystem.ProductSells
                             dateList.Add(startDate.AddDays(x));
                         }
 
-                        var days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
                         foreach (var item in dateList)
                         {
                             var sale = new ProductSaleGraphDto();
-                            sale.Label = item.DayOfWeek.ToString();
-                            sale.Value = product.Where(i => i.CreationTime == item).Sum(i => i.SellingRate);
+                            sale.Label = item.Day.ToString();
+                            sale.Text = item.DayOfWeek.ToString();
+                            sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
+                            sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             result.Add(sale);
                         }
                         return result;
                     }
                 case AppConsts.ThisYear:
                     {
-                        var months = new List<string>() { "January", "February", "March", "April", 
+                        var months = new List<string>() { "January", "February", "March", "April",
                             "May", "June", "July","August","September", "October","Novermber","December"};
-                        foreach (var month in months)
+                        var monthList = new List<GraphHelperDto>();
+                        for (var x = 1; x <= 7; x++)
+                        {
+                            var day = new GraphHelperDto();
+                            day.Label = months[x - 1];
+                            day.Value = x;
+
+                            monthList.Add(day);
+                        }
+
+                        foreach (var month in monthList)
                         {
                             var sale = new ProductSaleGraphDto();
-                            sale.Label = month;
-                            sale.Value = product.Where(i => i.CreationTime.Month.ToString() == month).Sum(i => i.SellingRate);
+                            sale.Label = month.Label;
+                            sale.Sale = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate);
+                            sale.Profit = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             result.Add(sale);
                         }
                         return result;
@@ -284,7 +311,7 @@ namespace InventoryManagementSystem.ProductSells
                         var startYear = product.OrderByDescending(i => i.CreationTime).Select(i => i.CreationTime.Year).FirstOrDefault();
                         var currentYear = DateTime.Now.Year;
                         var yearList = new List<int>();
-                        for(var x = startYear; x <= currentYear; x++)
+                        for (var x = startYear; x <= currentYear; x++)
                         {
                             yearList.Add(x);
                         }
@@ -292,7 +319,11 @@ namespace InventoryManagementSystem.ProductSells
                         {
                             var sale = new ProductSaleGraphDto();
                             sale.Label = year.ToString();
-                            sale.Value = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate); ;
+                            sale.Sale = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate);
+                            sale.Profit = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
+                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             result.Add(sale);
                         }
                         return result;

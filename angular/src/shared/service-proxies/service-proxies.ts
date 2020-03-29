@@ -4427,7 +4427,9 @@ export interface IProductSellDtoPagedResultDto {
 
 export class ProductSaleGraphDto implements IProductSaleGraphDto {
     label: string | undefined;
-    value: number;
+    text: string | undefined;
+    sale: number;
+    profit: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4449,7 +4451,9 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
     init(_data?: any) {
         if (_data) {
             this.label = _data["label"];
-            this.value = _data["value"];
+            this.text = _data["text"];
+            this.sale = _data["sale"];
+            this.profit = _data["profit"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4471,7 +4475,9 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["label"] = this.label;
-        data["value"] = this.value;
+        data["text"] = this.text;
+        data["sale"] = this.sale;
+        data["profit"] = this.profit;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4493,7 +4499,9 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
 
 export interface IProductSaleGraphDto {
     label: string | undefined;
-    value: number;
+    text: string | undefined;
+    sale: number;
+    profit: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
