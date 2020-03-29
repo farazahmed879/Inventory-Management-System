@@ -17,4 +17,11 @@ export class AppConsts {
     static readonly authorization = {
         encryptedAuthTokenName: 'enc_auth_token'
     };
+    //GraphData
+    static readonly graphData = {
+        ThisWeek: 'ThisWeek',
+        ThisMonth: 'ThisMonth',
+        ThisYear: 'ThisYear',
+        AllYear: 'AllYear'
+    };
 }

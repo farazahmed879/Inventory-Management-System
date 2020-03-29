@@ -821,10 +821,20 @@ export class ProductSellServiceServiceProxy {
     }
 
     /**
+     * @param type (optional) 
+     * @param date (optional) 
      * @return Success
      */
-    getAllProductSale(): Observable<ProductSaleGraphDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductSellService/GetAllProductSale";
+    getAllProductSale(type: string | undefined, date: moment.Moment | undefined): Observable<ProductSaleGraphDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ProductSellService/GetAllProductSale?";
+        if (type === null)
+            throw new Error("The parameter 'type' cannot be null.");
+        else if (type !== undefined)
+            url_ += "type=" + encodeURIComponent("" + type) + "&"; 
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

@@ -19,9 +19,9 @@
         public const string Apply = "Apply";
 
         //DateType
-        public const string Week = "Week";
-        public const string Month = "Month";
-        public const string Year = "Year";
+        public const string ThisWeek = "ThisWeek";
+        public const string ThisMonth = "ThisMonth";
+        public const string ThisYear = "ThisYear";
         public const string AllYear = "AllYear";
     }
 }
