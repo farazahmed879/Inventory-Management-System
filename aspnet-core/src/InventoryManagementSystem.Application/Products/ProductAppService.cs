@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
@@ -138,7 +139,9 @@ namespace InventoryManagementSystem.Products
         public async Task<PagedResultDto<ProductDto>> GetPaginatedAllAsync(PagedProductResultRequestDto input)
         {
             var filteredProducts = _productRepository.GetAll()
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
+                    x => x.Name.Contains(input.Name) ||
+                         x.ProductSubTypeId.Value == input.SubTypeId);
 
             var pagedAndFilteredProducts = filteredProducts
                 .OrderBy(i => i.Name)
