@@ -9,7 +9,9 @@ import {
 import {
     SubTypeServiceServiceProxy,
     SubTypeDto,
-    SubTypeDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
+    SubTypeDtoPagedResultDto,
+    TypeDto,
+    TypeServiceServiceProxy} from '@shared/service-proxies/service-proxies';
 import { CreateSubTypeDialogComponent } from './create-subType/create-subType-dialog.component';
 import { EditSubTypeDialogComponent } from './edit-subType/edit-subType-dialog.component';
 
@@ -31,13 +33,19 @@ class PagedSubTypeRequestDto extends PagedRequestDto {
 export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     subTypes: SubTypeDto[] = [];
     keyword = '';
+    types:TypeDto[]=[];
+    selectedType: string;
 
     constructor(
         injector: Injector,
         private _subTypeService: SubTypeServiceServiceProxy,
-        private _dialog: MatDialog
+        private _dialog: MatDialog,
+        private _typeService:TypeServiceServiceProxy
     ) {
         super(injector);
+    }
+    ngOnInit(){
+        this.getTypes();
     }
 
     list(
@@ -79,6 +87,17 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
                 }
             }
         );
+    }
+
+    getTypes(){
+        debugger;
+        this._typeService
+        .getAll()
+       .subscribe((result)=>{
+        this.types=result
+       });
+       debugger;
+       console.log(this.types)
     }
 
     createSubType(): void {
