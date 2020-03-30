@@ -11,7 +11,8 @@ import {
     SubTypeDto,
     SubTypeDtoPagedResultDto,
     TypeDto,
-    TypeServiceServiceProxy} from '@shared/service-proxies/service-proxies';
+    TypeServiceServiceProxy
+} from '@shared/service-proxies/service-proxies';
 import { CreateSubTypeDialogComponent } from './create-subType/create-subType-dialog.component';
 import { EditSubTypeDialogComponent } from './edit-subType/edit-subType-dialog.component';
 
@@ -28,24 +29,25 @@ class PagedSubTypeRequestDto extends PagedRequestDto {
             padding: 10px;
           }
         `
-      ]
+    ]
 })
 export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     subTypes: SubTypeDto[] = [];
     keyword = '';
-    types:TypeDto[]=[];
+    types: TypeDto[] = [];
     selectedType: string;
 
     constructor(
         injector: Injector,
         private _subTypeService: SubTypeServiceServiceProxy,
         private _dialog: MatDialog,
-        private _typeService:TypeServiceServiceProxy
+        private _typeService: TypeServiceServiceProxy
     ) {
         super(injector);
     }
-    ngOnInit(){
+    ngOnInit() {
         this.getTypes();
+        this.list(undefined,1,undefined);
     }
 
     list(
@@ -57,7 +59,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
         request.keyword = this.keyword;
 
         this._subTypeService
-            .getPaginatedAll(request.keyword,undefined, request.skipCount, request.maxResultCount)
+            .getPaginatedAll(request.keyword, undefined, request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();
@@ -89,15 +91,13 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
         );
     }
 
-    getTypes(){
-        debugger;
+    getTypes() {
         this._typeService
-        .getAll()
-       .subscribe((result)=>{
-        this.types=result
-       });
-       debugger;
-       console.log(this.types)
+            .getAll()
+            .subscribe((result) => {
+                this.types = result
+            });
+        console.log(this.types)
     }
 
     createSubType(): void {

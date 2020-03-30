@@ -8,5 +8,7 @@ namespace InventoryManagementSystem.ProductSales.Dto
         public string Text { get; set; }
         public double Sale { get; set; }
         public double Profit { get; set; }
+        public double Expense { get; set; }
+        public double ProductCost { get; set; }
     }
 }

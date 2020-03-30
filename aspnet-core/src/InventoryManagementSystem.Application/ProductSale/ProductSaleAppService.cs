@@ -7,6 +7,7 @@ using Abp;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using InventoryManagementSystem.Expenses;
 using InventoryManagementSystem.Products;
 using InventoryManagementSystem.ProductSales.Dto;
 using InventoryManagementSystem.Shop;
@@ -18,13 +19,16 @@ namespace InventoryManagementSystem.ProductSales
     {
         private readonly IRepository<ProductSell, long> _productSaleRepository;
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
+        private readonly IRepository<Expense, long> _expenseRepository;
         public ProductSaleService(
             IRepository<ProductSell, long> productSaleRepository,
-            IRepository<ShopProduct, long> shopProductRepository
+            IRepository<ShopProduct, long> shopProductRepository,
+            IRepository<Expense, long> expenseRepository
             )
         {
             _productSaleRepository = productSaleRepository;
             _shopProductRepository = shopProductRepository;
+            _expenseRepository = expenseRepository;
         }
 
 
@@ -184,6 +188,9 @@ namespace InventoryManagementSystem.ProductSales
         public async Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date)
         {
             var product = await _productSaleRepository.GetAll().Include(i => i.ShopProduct).ToListAsync();
+            var productCost = await _shopProductRepository.GetAll().ToListAsync();
+            var expense = await _expenseRepository.GetAll()
+                            .ToListAsync();
             var result = new List<ProductSaleGraphDto>();
             switch (type)
             {
@@ -247,16 +254,19 @@ namespace InventoryManagementSystem.ProductSales
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
-
+                            sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
+                            sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
                             result.Add(sale);
                         }
                         return result;
                     }
                 case AppConsts.ThisMonth:
                     {
+
                         DateTime now = DateTime.Now;
                         var startDate = new DateTime(now.Year, now.Month, 1);
                         var endDate = startDate.AddMonths(1).AddDays(-1);
+                        
 
                         var dateList = new List<DateTime>();
                         dateList.Add(startDate);
@@ -275,7 +285,9 @@ namespace InventoryManagementSystem.ProductSales
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                            sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
                             result.Add(sale);
+                            sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
                         }
                         return result;
                     }
@@ -302,6 +314,9 @@ namespace InventoryManagementSystem.ProductSales
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                            sale.Expense = expense.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.Cost);
+                            result.Add(sale);
+                            sale.ProductCost = productCost.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.WholeSaleRate.Value);
                             result.Add(sale);
                         }
                         return result;
@@ -324,6 +339,9 @@ namespace InventoryManagementSystem.ProductSales
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
                                 product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                            sale.Expense = expense.Where(i => i.CreationTime.Year == year).Sum(i => i.Cost);
+                            result.Add(sale);
+                            sale.ProductCost = productCost.Where(i => i.CreationTime.Year == year).Sum(i => i.WholeSaleRate.Value);
                             result.Add(sale);
                         }
                         return result;

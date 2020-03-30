@@ -1,4 +1,4 @@
-<form autocomplete="off" #createExpenseForm="ngForm" (ngSubmit)="save()">
+<form autocomplete="off" #createExpenseForm="ngForm" >
   <h1 mat-dialog-title>{{ "New Expense" | localize }}</h1>
   <mat-dialog-content>
     <div class="row-fluid">
@@ -14,6 +14,26 @@
             maxlength="64"
           />
         </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="description"
+            [placeholder]="'Description' | localize"
+            [(ngModel)]="expense.description"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="cost"
+            [placeholder]="'Cost' | localize"
+            [(ngModel)]="expense.cost"
+            required
+            type="number"
+            minlength="0"
+            maxlength="64"
+          />
+        </mat-form-field>
       </div>
     </div>
   </mat-dialog-content>
@@ -26,8 +46,9 @@
       expense="submit"
       flex="15"
       color="primary"
-      [disabled]="!createExpenseForm.form.valid || saving">
-      {{ "Save" | localize }}
+      [disabled]="!createExpenseForm.form.valid || saving"
+      (click)="save()">
+      Save
     </button>
   </div>
 </form>

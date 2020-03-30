@@ -11,7 +11,7 @@ import { ChangePasswordComponent } from './users/change-password/change-password
 import { TypeComponent } from './type/type.component';
 import { ProductComponent } from './product/product.component';
 import { CompanyComponent } from './company/company.component';
-import { ProductSellComponent } from './product-sell/product-sell.component';
+import { ProductSaleComponent } from './product-sale/product-sale.component';
 import { ShopProductComponent } from './shop-product/shop-product.component';
 import { SubTypeComponent } from './subType/subType.component';
 import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.component';
@@ -31,7 +31,7 @@ import { ExpenseComponent } from './expense/expense.component';
                     { path: 'type', component: TypeComponent, canActivate: [AppRouteGuard] },
                     { path: 'product', component: ProductComponent, canActivate: [AppRouteGuard] },
                     { path: 'company', component: CompanyComponent, canActivate: [AppRouteGuard] },
-                    { path: 'productSale', component: ProductSellComponent, canActivate: [AppRouteGuard] },
+                    { path: 'productSale', component: ProductSaleComponent, canActivate: [AppRouteGuard] },
                     { path: 'shopProduct', component: ShopProductComponent, canActivate: [AppRouteGuard] },
                     { path: 'productCatagory', component: SubTypeComponent,canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },

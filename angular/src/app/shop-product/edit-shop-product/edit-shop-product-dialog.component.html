@@ -1,17 +1,17 @@
-<form autocomplete="off" #editShopProductForm="ngForm" (ngSubmit)="save()">
+<form autocomplete="off" #editShopProductForm="ngForm">
   <h1 mat-dialog-title>Edit Shop Product</h1>
   <mat-dialog-content>
     <div class="row-fluid">
       <div class="col-md-12">    
         <div class="col-md-6">
           <mat-form-field>
-            <mat-select [placeholder]="l('Choose Product')" [(ngModel)]="shopProduct.productId" name="shopProduct.productId">
+            <mat-select [placeholder]="l('Choose Product')" required [(ngModel)]="shopProduct.productId" name="shopProduct.productId">
                 <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>
                 <mat-option *ngFor="let product of products" [value]="product.id">{{ product.name}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <mat-select [placeholder]="l('Choose Company')" [(ngModel)]="shopProduct.companyId" name="shopProduct.companyId">
+          <mat-select [placeholder]="l('Choose Company')" required [(ngModel)]="shopProduct.companyId" name="shopProduct.companyId">
               <mat-option value="">{{ 'Choose Company' | localize }}</mat-option>
               <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name}}</mat-option>
           </mat-select>
@@ -23,7 +23,8 @@
               [placeholder]="'Wholesale Rate' | localize"
               [(ngModel)]="shopProduct.wholeSaleRate"
               required
-              minlength="2"
+              type="number"
+              minlength="0"
               maxlength="64"
             />
           </mat-form-field>
@@ -34,7 +35,8 @@
               [placeholder]="'Retail Price' | localize"
               [(ngModel)]="shopProduct.retailPrice"
               required
-              minlength="2"
+              type="number"
+              minlength="0"
               maxlength="64"
             />
           </mat-form-field>
@@ -47,7 +49,6 @@
               name="companyRate"
               [placeholder]="'Company Rate' | localize"
               [(ngModel)]="shopProduct.companyRate"
-              required
               minlength="2"
               maxlength="64"
             />
@@ -59,7 +60,8 @@
               [placeholder]="'Quantity' | localize"
               [(ngModel)]="shopProduct.quantity"
               required
-              minlength="2"
+              type="number"
+              minlength="0"
               maxlength="64"
             />
           </mat-form-field>
@@ -77,6 +79,7 @@
       flex="15"
       color="primary"
       [disabled]="!editShopProductForm.form.valid || saving"
+      (click)="save()"
     >
       {{ "Save" | localize }}
     </button>

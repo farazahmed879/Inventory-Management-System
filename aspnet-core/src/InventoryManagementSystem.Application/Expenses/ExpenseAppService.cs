@@ -38,7 +38,9 @@ namespace InventoryManagementSystem.Expenses
         {
             var result = await _expenseRepository.InsertAsync(new Expense()
             {
-                Name = expenseDto.Name
+                Name = expenseDto.Name,
+                Description = expenseDto.Description,
+                Cost = expenseDto.Cost,
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -67,7 +69,9 @@ namespace InventoryManagementSystem.Expenses
             var result = await _expenseRepository.UpdateAsync(new Expense()
             {
                 Id = expenseDto.Id,
-                Name = expenseDto.Name
+                Name = expenseDto.Name,
+                Description = expenseDto.Description,
+                Cost = expenseDto.Cost
             });
 
             if (result != null)
@@ -96,7 +100,9 @@ namespace InventoryManagementSystem.Expenses
                 new ExpenseDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    Description = i.Description,
+                    Cost = i.Cost,
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -125,6 +131,8 @@ namespace InventoryManagementSystem.Expenses
             {
                 Id = i.Id,
                 Name = i.Name,
+                Description = i.Description,
+                Cost = i.Cost,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -147,6 +155,8 @@ namespace InventoryManagementSystem.Expenses
                 items: await pagedAndFilteredExpenses.Select(i => new ExpenseDto()
                 {
                     Id = i.Id,
+                    Description = i.Description,
+                    Cost = i.Cost,
                     Name = i.Name
                 })
                     .ToListAsync());

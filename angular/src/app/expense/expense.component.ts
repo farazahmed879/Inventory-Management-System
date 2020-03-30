@@ -57,6 +57,7 @@ export class ExpenseComponent extends PagedListingComponentBase<ExpenseDto> {
             )
             .subscribe((result: ExpenseDtoPagedResultDto) => {
                 this.expenses = result.items;
+                console.log("Expenses",this.expenses);
                 this.showPaging(result, pageNumber);
             });
     }

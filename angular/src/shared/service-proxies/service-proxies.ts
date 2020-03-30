@@ -4934,6 +4934,8 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
     text: string | undefined;
     sale: number;
     profit: number;
+    expense: number;
+    productCost: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4958,6 +4960,8 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
             this.text = _data["text"];
             this.sale = _data["sale"];
             this.profit = _data["profit"];
+            this.expense = _data["expense"];
+            this.productCost = _data["productCost"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4982,6 +4986,8 @@ export class ProductSaleGraphDto implements IProductSaleGraphDto {
         data["text"] = this.text;
         data["sale"] = this.sale;
         data["profit"] = this.profit;
+        data["expense"] = this.expense;
+        data["productCost"] = this.productCost;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5006,6 +5012,8 @@ export interface IProductSaleGraphDto {
     text: string | undefined;
     sale: number;
     profit: number;
+    expense: number;
+    productCost: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
