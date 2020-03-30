@@ -1,13 +1,22 @@
-import { Component, Injector, OnInit, Inject, Optional } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { finalize } from 'rxjs/operators';
-import { AppComponentBase } from '@shared/app-component-base';
+import { Component, Injector, OnInit, Inject, Optional } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { finalize } from "rxjs/operators";
+import { AppComponentBase } from "@shared/app-component-base";
 import {
-    ShopProductDto, ShopProductServiceServiceProxy, ProductServiceServiceProxy, CompanyServiceServiceProxy, CompanyDto, ProductDto
-} from '@shared/service-proxies/service-proxies';
+  ShopProductDto,
+  ShopProductServiceServiceProxy,
+  ProductServiceServiceProxy,
+  CompanyServiceServiceProxy,
+  CompanyDto,
+  ProductDto,
+  TypeServiceServiceProxy,
+  SubTypeServiceServiceProxy,
+  SubTypeDto,
+  TypeDto
+} from "@shared/service-proxies/service-proxies";
 
 @Component({
-  templateUrl: 'edit-shop-product-dialog.component.html',
+  templateUrl: "edit-shop-product-dialog.component.html",
   styles: [
     `
       mat-form-field {
@@ -25,12 +34,18 @@ export class EditShopProductDialogComponent extends AppComponentBase
   shopProduct: ShopProductDto = new ShopProductDto();
   companies: CompanyDto[];
   products: ProductDto[];
+  types: TypeDto[] = [];
+  subTypes: SubTypeDto[] = [];
+  selectedTypeId: string;
+  selectedSubTypeId: string;
 
   constructor(
     injector: Injector,
     public _shopProductService: ShopProductServiceServiceProxy,
     public _productService: ProductServiceServiceProxy,
     public _companyService: CompanyServiceServiceProxy,
+    private _typeService: TypeServiceServiceProxy,
+    private _subTypeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditShopProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
@@ -38,11 +53,15 @@ export class EditShopProductDialogComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
-    this._shopProductService.getById(this._id).subscribe((result: ShopProductDto) => {
-      this.shopProduct = result;
-    });
+    this._shopProductService
+      .getById(this._id)
+      .subscribe((result: ShopProductDto) => {
+        this.shopProduct = result;
+      });
     this.getAllCompany();
     this.getAllProduct();
+    this.getAllTypes();
+    this.getAllSubTypes();
   }
   getAllCompany() {
     this._companyService.getAll().subscribe(result => {
@@ -55,6 +74,19 @@ export class EditShopProductDialogComponent extends AppComponentBase
       this.products = result;
     });
   }
+
+  getAllTypes() {
+    this._typeService.getAll().subscribe(result => {
+      this.types = result;
+    });
+  }
+
+  getAllSubTypes() {
+    this._subTypeService.getAll().subscribe(result => {
+      this.subTypes = result;
+    });
+  }
+
   save(): void {
     this.saving = true;
 
@@ -66,7 +98,7 @@ export class EditShopProductDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
+        this.notify.info(this.l("SavedSuccessfully"));
         this.close(true);
       });
   }
