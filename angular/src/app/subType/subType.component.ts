@@ -35,6 +35,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     keyword = '';
     types:TypeDto[]=[];
     selectedType: string;
+    
 
     constructor(
         injector: Injector,
@@ -47,6 +48,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     ngOnInit(){
         this.getTypes();
     }
+    
 
     list(
         request: PagedSubTypeRequestDto,
@@ -90,14 +92,11 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     }
 
     getTypes(){
-        debugger;
         this._typeService
         .getAll()
        .subscribe((result)=>{
         this.types=result
        });
-       debugger;
-       console.log(this.types)
     }
 
     createSubType(): void {

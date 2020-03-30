@@ -31,6 +31,16 @@
                              <input matInput [placeholder]="l('Filter')" [(ngModel)]="name" name="keyword">
                          </mat-form-field>
                      </div>
+                     <div class="col-md-6">
+                      <mat-form-field>
+                        <mat-label>Select Type</mat-label>
+                        <mat-select [(ngModel)]="selectedSubType" name="SubType">
+                          <mat-option *ngFor="let subType of subTypes" [value]="subType.id">
+                            {{subType.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
                      <div class="col-md-12 text-right p-r-25">
                          <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
                      </div>

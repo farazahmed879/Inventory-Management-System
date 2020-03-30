@@ -9,7 +9,9 @@ import {
 import {
     ProductServiceServiceProxy,
     ProductDto,
-    ProductDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
+    ProductDtoPagedResultDto,
+    SubTypeDto,
+    SubTypeServiceServiceProxy} from '@shared/service-proxies/service-proxies';
 import { CreateProductDialogComponent } from './create-product/create-product-dialog.component';
 import { EditProductDialogComponent } from './edit-product/edit-product-dialog.component';
 
@@ -31,13 +33,20 @@ class PagedProductRequestDto extends PagedRequestDto {
 export class ProductComponent extends PagedListingComponentBase<ProductDto> {
     products: ProductDto[] = [];
     keyword = '';
+    subTypes:SubTypeDto[]=[];
+    selectedSubType: string;
 
     constructor(
         injector: Injector,
         private _productService: ProductServiceServiceProxy,
-        private _dialog: MatDialog
+        private _dialog: MatDialog,
+        private _subTypeService:SubTypeServiceServiceProxy
     ) {
         super(injector);
+    }
+
+    ngOnInit(){
+        this.getSubtypes();
     }
 
     list(
@@ -84,6 +93,14 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
 
     createProduct(): void {
         this.showCreateOrEditProductDialog();
+    }
+
+    getSubtypes(){
+        this._subTypeService
+        .getAll()
+       .subscribe((result)=>{
+        this.subTypes=result
+       });
     }
 
     editProduct(product: ProductDto): void {
