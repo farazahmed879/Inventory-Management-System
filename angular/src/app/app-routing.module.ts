@@ -15,6 +15,7 @@ import { ProductSellComponent } from './product-sell/product-sell.component';
 import { ShopProductComponent } from './shop-product/shop-product.component';
 import { SubTypeComponent } from './subType/subType.component';
 import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.component';
+import { ExpenseComponent } from './expense/expense.component';
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.componen
                 children: [
                     { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
                     { path: 'productSaleDashboard', component: SaleDashboardComponent,  canActivate: [AppRouteGuard] },
+                    { path: 'expense', component: ExpenseComponent,  canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'type', component: TypeComponent, canActivate: [AppRouteGuard] },
                     { path: 'product', component: ProductComponent, canActivate: [AppRouteGuard] },

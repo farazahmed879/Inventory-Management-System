@@ -6,6 +6,7 @@ using InventoryManagementSystem.Companies;
 using InventoryManagementSystem.MultiTenancy;
 using InventoryManagementSystem.Products;
 using InventoryManagementSystem.Shop;
+using InventoryManagementSystem.Expenses;
 
 namespace InventoryManagementSystem.EntityFrameworkCore
 {
@@ -19,6 +20,7 @@ namespace InventoryManagementSystem.EntityFrameworkCore
         public DbSet<SubType> SubTypes { get; set; }
         public DbSet<ShopProduct> ShopProducts { get; set; }
         public DbSet<ProductSell> ProductSells { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         public InventoryManagementSystemDbContext(DbContextOptions<InventoryManagementSystemDbContext> options)
             : base(options)
