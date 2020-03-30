@@ -9,7 +9,15 @@ import {
 import {
     ShopProductServiceServiceProxy,
     ShopProductDto,
-    ShopProductDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
+    ShopProductDtoPagedResultDto,
+    ProductServiceServiceProxy,
+    ProductDto,
+    CompanyDto,
+    CompanyServiceServiceProxy,
+    TypeDto,
+    TypeServiceServiceProxy,
+    SubTypeDto,
+    SubTypeServiceServiceProxy} from '@shared/service-proxies/service-proxies';
 import { CreateShopProductDialogComponent } from './create-shop-product/create-shop-product-dialog.component';
 import { EditShopProductDialogComponent } from './edit-shop-product/edit-shop-product-dialog.component';
 
@@ -31,13 +39,65 @@ class PagedShopProductRequestDto extends PagedRequestDto {
 export class ShopProductComponent extends PagedListingComponentBase<ShopProductDto> {
     shopProducts: ShopProductDto[] = [];
     keyword = '';
+    products:ProductDto[]=[];
+    selectedProduct: string;
+    companies:CompanyDto[]=[];
+    selectedCompany: string;
+    types:TypeDto[]=[];
+    selectedType: string;
+    subTypes:SubTypeDto[]=[];
+    selectedSubType: string;
+    
 
     constructor(
         injector: Injector,
         private _shopProductService: ShopProductServiceServiceProxy,
-        private _dialog: MatDialog
+        private _dialog: MatDialog,
+        private _productService:ProductServiceServiceProxy,
+        private _companyService:CompanyServiceServiceProxy,
+        private _typeService:TypeServiceServiceProxy,
+        private _subTypeService:SubTypeServiceServiceProxy
     ) {
         super(injector);
+    }
+
+    ngOnInit(){
+        this.getProducts();
+        this.getCompanies();
+        this.getTypes();
+        this.getSubTypes();
+    }
+
+    getProducts(){
+       this._productService
+       .getAll()
+       .subscribe((result)=>{
+        this.products=result;
+       })
+    }
+
+    getCompanies(){
+        this._companyService
+        .getAll()
+        .subscribe((result)=>{
+            this.companies=result;
+        })
+    }
+
+    getTypes(){
+        this._typeService
+        .getAll()
+        .subscribe((result)=>{
+            this.types=result;
+        })
+    }
+
+    getSubTypes(){
+        this._subTypeService
+        .getAll()
+        .subscribe((result)=>{
+            this.subTypes=result;
+        })
     }
 
     list(
