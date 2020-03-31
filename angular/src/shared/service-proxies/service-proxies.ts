@@ -4724,6 +4724,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     status: string | undefined;
     sellingRate: number;
     shopProductId: number;
+    quantity: number | undefined;
     id: number;
 
     constructor(data?: ICreateProductSaleDto) {
@@ -4740,6 +4741,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
             this.status = _data["status"];
             this.sellingRate = _data["sellingRate"];
             this.shopProductId = _data["shopProductId"];
+            this.quantity = _data["quantity"];
             this.id = _data["id"];
         }
     }
@@ -4756,6 +4758,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
         data["status"] = this.status;
         data["sellingRate"] = this.sellingRate;
         data["shopProductId"] = this.shopProductId;
+        data["quantity"] = this.quantity;
         data["id"] = this.id;
         return data; 
     }
@@ -4772,6 +4775,7 @@ export interface ICreateProductSaleDto {
     status: string | undefined;
     sellingRate: number;
     shopProductId: number;
+    quantity: number | undefined;
     id: number;
 }
 
@@ -4783,6 +4787,7 @@ export class ProductSaleDto implements IProductSaleDto {
     productType: string | undefined;
     profit: number;
     shopProductId: number;
+    quantity: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4810,6 +4815,7 @@ export class ProductSaleDto implements IProductSaleDto {
             this.productType = _data["productType"];
             this.profit = _data["profit"];
             this.shopProductId = _data["shopProductId"];
+            this.quantity = _data["quantity"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4837,6 +4843,7 @@ export class ProductSaleDto implements IProductSaleDto {
         data["productType"] = this.productType;
         data["profit"] = this.profit;
         data["shopProductId"] = this.shopProductId;
+        data["quantity"] = this.quantity;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4864,6 +4871,7 @@ export interface IProductSaleDto {
     productType: string | undefined;
     profit: number;
     shopProductId: number;
+    quantity: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

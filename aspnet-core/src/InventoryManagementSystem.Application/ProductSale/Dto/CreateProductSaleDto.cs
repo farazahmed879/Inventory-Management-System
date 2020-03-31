@@ -10,6 +10,7 @@ namespace InventoryManagementSystem.ProductSales.Dto
         public string Status { get; set; }
         public double SellingRate { get; set; }
         public long ShopProductId { get; set; }
+        public int? Quantity { get; set; }
        
        
     }

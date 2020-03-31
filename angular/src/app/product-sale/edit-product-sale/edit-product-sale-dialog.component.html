@@ -26,6 +26,16 @@
             <mat-option *ngFor="let status of statuses" [value]="status.value">{{ status.name}}</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="Quantity"
+            [placeholder]="'Quantity' | localize"
+            [(ngModel)]="productSale.quantity"
+            minlength="0"
+            maxlength="64"
+          />
+        </mat-form-field>
       </div>
     </div>
   </mat-dialog-content>

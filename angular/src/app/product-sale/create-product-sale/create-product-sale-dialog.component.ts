@@ -53,6 +53,7 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
 
   ngOnInit(): void {
     this.getAllProduct();
+    this.productSale.quantity = 1;
   }
 
   getAllProduct() {

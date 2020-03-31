@@ -11,7 +11,7 @@ export class SideBarNavComponent extends AppComponentBase {
 
     menuItems: MenuItem[] = [
         // new MenuItem(this.l('HomePage'), '', 'home', '/app/home'), 
-        new MenuItem(this.l('Sale Dashboard'), '','home', '/app/productSaleDashboard'), 
+        new MenuItem(this.l('Dashboard'), '','home', '/app/productSaleDashboard'), 
         new MenuItem(this.l('Product Sale'), '','home', '/app/productSale'), 
         new MenuItem(this.l('Shop Product'), '','business', '/app/shopProduct'),
         new MenuItem(this.l('Expenses'), '','business', '/app/expense'),

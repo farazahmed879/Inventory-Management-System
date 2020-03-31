@@ -35,25 +35,29 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
             labels: [],
             datasets: [
                 {
+                    //Sale
                     label: label,
                     backgroundColor: '#42A5F5',
                     borderColor: '#1E88E5',
                     data: []
                 },
                 {
-                    label: 'Profit',
+                    //Profit
+                    label: label,
                     backgroundColor: '#9CCC65',
                     borderColor: '#7CB342',
                     data: []
                 },
                 {
-                    label: 'Product Costing',
+                    //Expense
+                    label: label,
                     backgroundColor: '	#FF6347 ',
                     borderColor: '#800000',
                     data: []
                 },
                 {
-                    label: 'Other Sale',
+                    //Other Expenses
+                    label: label,
                     backgroundColor: '	#FF0000 ',
                     borderColor: '#8B0000',
                     data: []
@@ -63,20 +67,23 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
 
         this._productSaleService.getAllProductSale(type,undefined).subscribe(result => {
             console.log("Graph Data", result);
-            for (var x = 0; x < result.length; x++) {
-                var day = result[x].label;
-                var sale = result[x].sale;
-                var profit = result[x].profit;
-                var expense = result[x].expense;
-                var productCost = result[x].productCost;
-                this.data.labels.push(day);
-                this.data.datasets[0].data.push(sale);
-                this.data.datasets[1].data.push(profit);
-                this.data.datasets[2].data.push(productCost);
-                this.data.datasets[3].data.push(expense);
-                
+            if(result){
+                for (var x = 0; x < result.length; x++) {
+                    var day = result[x].label;
+                    var sale = result[x].sale;
+                    var profit = result[x].profit;
+                    var expense = result[x].expense;
+                    var productCost = result[x].productCost;
+                    this.data.labels.push(day);
+                    this.data.datasets[0].data.push(sale);
+                    this.data.datasets[1].data.push(profit);
+                    this.data.datasets[2].data.push(productCost);
+                    this.data.datasets[3].data.push(expense);
+                    
+                }
+                this.viewGraph = true;
             }
-            this.viewGraph = true;
+           
             //this.weeks = result.label;
         });
 

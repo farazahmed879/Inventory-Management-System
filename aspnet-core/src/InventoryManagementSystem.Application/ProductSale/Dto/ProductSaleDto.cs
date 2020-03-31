@@ -11,5 +11,6 @@ namespace InventoryManagementSystem.ProductSales.Dto
         public string ProductType { get; set; }
         public double Profit { get; set; }
         public long ShopProductId { get; set; }
+        public long? Quantity { get; set; }
     }
 }

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore.Repositories;
 using Abp.Linq.Extensions;
+using InventoryManagementSystem.EntityFrameworkCore;
 using InventoryManagementSystem.Expenses;
 using InventoryManagementSystem.Products;
 using InventoryManagementSystem.ProductSales.Dto;
@@ -20,6 +22,7 @@ namespace InventoryManagementSystem.ProductSales
         private readonly IRepository<ProductSell, long> _productSaleRepository;
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
         private readonly IRepository<Expense, long> _expenseRepository;
+        private readonly InventoryManagementSystemDbContext _context;
         public ProductSaleService(
             IRepository<ProductSell, long> productSaleRepository,
             IRepository<ShopProduct, long> shopProductRepository,
@@ -48,26 +51,38 @@ namespace InventoryManagementSystem.ProductSales
 
         private async Task<ResponseMessagesDto> CreateProductSellAsync(CreateProductSaleDto productSellDto)
         {
-            var result = await _productSaleRepository.InsertAsync(new ProductSell()
+            var productList = new List<ProductSell>();
+            for (var x = 0; x < productSellDto.Quantity; x++)
             {
-                Status = productSellDto.Status,
-                SellingRate = productSellDto.SellingRate,
-                ShopProductId = productSellDto.ShopProductId,
-            });
+                var product = new ProductSell();
+                product.Status = productSellDto.Status;
+                product.SellingRate = productSellDto.SellingRate;
+                product.ShopProductId = productSellDto.ShopProductId;
+                productList.Add(product);
+            }
+            await _productSaleRepository.GetDbContext().AddRangeAsync(productList);
+
+            //var result = await _productSaleRepository.InsertAsync(new ProductSell()
+            //{
+            //    Status = productSellDto.Status,
+            //    SellingRate = productSellDto.SellingRate,
+            //    ShopProductId = productSellDto.ShopProductId,
+            //});
+
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
 
             var shopProduct = await _shopProductRepository.GetAll()
                 .Where(i => i.Id == productSellDto.ShopProductId && i.Quantity > 0)
                 .SingleOrDefaultAsync();
-            shopProduct.Quantity = shopProduct.Quantity - 1;
+            shopProduct.Quantity = shopProduct.Quantity - productSellDto.Quantity;
             await _shopProductRepository.UpdateAsync(shopProduct);
 
-            if (result.Id != 0)
+            if (productList[0].Id != 0)
             {
                 return new ResponseMessagesDto()
                 {
-                    Id = result.Id,
+                    Id = productList[0].Id,
                     SuccessMessage = AppConsts.SuccessfullyInserted,
                     Success = true,
                     Error = false,
@@ -251,9 +266,9 @@ namespace InventoryManagementSystem.ProductSales
                             sale.Label = item.DayOfWeek.ToString();
                             sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
                             sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
                             sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
                             result.Add(sale);
@@ -266,7 +281,7 @@ namespace InventoryManagementSystem.ProductSales
                         DateTime now = DateTime.Now;
                         var startDate = new DateTime(now.Year, now.Month, 1);
                         var endDate = startDate.AddMonths(1).AddDays(-1);
-                        
+
 
                         var dateList = new List<DateTime>();
                         dateList.Add(startDate);
@@ -282,9 +297,9 @@ namespace InventoryManagementSystem.ProductSales
                             sale.Text = item.DayOfWeek.ToString();
                             sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
                             sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
                             result.Add(sale);
                             sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
@@ -311,9 +326,9 @@ namespace InventoryManagementSystem.ProductSales
                             sale.Label = month.Label;
                             sale.Sale = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate);
                             sale.Profit = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             sale.Expense = expense.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.Cost);
                             result.Add(sale);
                             sale.ProductCost = productCost.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.WholeSaleRate.Value);
@@ -336,9 +351,9 @@ namespace InventoryManagementSystem.ProductSales
                             sale.Label = year.ToString();
                             sale.Sale = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate);
                             sale.Profit = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
+                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
                                 product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
-                                product.Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
+                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
                             sale.Expense = expense.Where(i => i.CreationTime.Year == year).Sum(i => i.Cost);
                             result.Add(sale);
                             sale.ProductCost = productCost.Where(i => i.CreationTime.Year == year).Sum(i => i.WholeSaleRate.Value);
