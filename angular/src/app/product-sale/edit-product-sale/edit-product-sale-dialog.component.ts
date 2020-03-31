@@ -1,46 +1,41 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, Injector, OnInit, Inject, Optional } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  ProductSaleServiceServiceProxy,
-  CreateProductSaleDto,
-  ProductDto,
-  ShopProductServiceServiceProxy,
-  ShopProductDto,
+    ProductSaleDto, ProductSaleServiceServiceProxy, ShopProductDto, ShopProductServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
 
 interface Status {
   name: string;
   value: string;
 }
-
 @Component({
-  templateUrl: 'create-product-sell-dialog.component.html',
+  templateUrl: 'edit-product-sale-dialog.component.html',
   styles: [
     `
-            mat-form-field {
-                width: 100%;
-            }
-            mat-checkbox {
-                padding-bottom: 5px;
-            }
-        `
+      mat-form-field {
+        width: 100%;
+      }
+      mat-checkbox {
+        padding-bottom: 5px;
+      }
+    `
   ]
 })
-export class CreateProductSellDialogComponent extends AppComponentBase
+export class EditProductSaleDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
-  productSell: CreateProductSaleDto = new CreateProductSaleDto();
+  productSale: ProductSaleDto = new ProductSaleDto();
   statuses: Status[];
   products: ShopProductDto[];
 
-
   constructor(
     injector: Injector,
-    public _productSellService: ProductSaleServiceServiceProxy,
+    public _productSaleService: ProductSaleServiceServiceProxy,
+    private _dialogRef: MatDialogRef<EditProductSaleDialogComponent>,
     public _shopProductService: ShopProductServiceServiceProxy,
-    private _dialogRef: MatDialogRef<CreateProductSellDialogComponent>
+    @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
     super(injector);
 
@@ -48,10 +43,12 @@ export class CreateProductSellDialogComponent extends AppComponentBase
       { name: 'Sold', value: 'Sold' },
       { name: 'Return', value: 'Return' },
     ];
-
   }
 
   ngOnInit(): void {
+    this._productSaleService.getById(this._id).subscribe((result: ProductSaleDto) => {
+      this.productSale = result;
+    });
     this.getAllProduct();
   }
 
@@ -65,8 +62,8 @@ export class CreateProductSellDialogComponent extends AppComponentBase
   save(): void {
     this.saving = true;
 
-    this._productSellService
-      .createOrEdit(this.productSell)
+    this._productSaleService
+      .createOrEdit(this.productSale)
       .pipe(
         finalize(() => {
           this.saving = false;

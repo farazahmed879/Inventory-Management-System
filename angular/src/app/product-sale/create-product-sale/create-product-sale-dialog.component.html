@@ -1,10 +1,10 @@
-<form autocomplete="off" #editTypeForm="ngForm" (ngSubmit)="save()">
-  <h1 mat-dialog-title>Edit Sale</h1>
+<form autocomplete="off" #createProductSaleForm="ngForm">
+  <h1 mat-dialog-title>New Sale</h1>
   <mat-dialog-content>
     <div class="row-fluid">
       <div class="col-md-12">
         <mat-form-field>
-          <mat-select [placeholder]="l('Chooose Product')" [(ngModel)]="productSell.shopProductId" name="productSell.shopProductId">
+          <mat-select [placeholder]="l('Chooose Product')" [(ngModel)]="productSale.shopProductId" name="productSale.shopProductId">
             <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>
             <mat-option *ngFor="let product of products" [value]="product.id">{{ product.productName}}</mat-option>
           </mat-select>
@@ -12,16 +12,16 @@
         <mat-form-field>
           <input
             matInput
-            name="productSell"
-            [placeholder]="'ProductSell' | localize"
-            [(ngModel)]="productSell.sellingRate"
+            name="productSale"
+            [placeholder]="'Selling Rate' | localize"
+            [(ngModel)]="productSale.sellingRate"
             required
             minlength="2"
             maxlength="64"
           />
         </mat-form-field>
         <mat-form-field>
-          <mat-select [placeholder]="l('Select status')" [(ngModel)]="productSell.status" name="productSell.status">
+          <mat-select [placeholder]="l('Select status')" [(ngModel)]="productSale.status" name="productSale.status">
             <mat-option value="">{{ 'Select status' | localize }}</mat-option>
             <mat-option *ngFor="let status of statuses" [value]="status.value">{{ status.name}}</mat-option>
           </mat-select>
@@ -30,15 +30,16 @@
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions align="end">
-    <button mat-button productSell="button" [disabled]="saving" (click)="close(false)">
+    <button mat-button productSale="button" [disabled]="saving" (click)="close(false)">
       {{ "Cancel" | localize }}
     </button>
     <button
       mat-flat-button
-      productSell="submit"
+      productSale="submit"
       flex="15"
       color="primary"
-      [disabled]="!editTypeForm.form.valid || saving"
+      [disabled]="!createProductSaleForm.form.valid || saving"
+      (click)="save()"
     >
       {{ "Save" | localize }}
     </button>

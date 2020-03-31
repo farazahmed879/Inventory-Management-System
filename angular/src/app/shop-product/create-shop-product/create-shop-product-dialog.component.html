@@ -1,18 +1,18 @@
-<form autocomplete="off" #createShopProductForm="ngForm" (ngSubmit)="save()">
+<form autocomplete="off" #createShopProductForm="ngForm">
   <h1 mat-dialog-title>Add Shop Product</h1>
   <mat-dialog-content>
     <div class="row-fluid">
       <div class="col-md-12">
         <div class="col-md-6">
           <mat-form-field>
-            <mat-select [placeholder]="l('Choose Product')" [(ngModel)]="shopProduct.productId"
+            <mat-select [placeholder]="l('Choose Product')" required [(ngModel)]="shopProduct.productId"
               name="shopProduct.productId">
               <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>
               <mat-option *ngFor="let product of products" [value]="product.id">{{ product.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
-            <mat-select [placeholder]="l('Choose Company')" [(ngModel)]="shopProduct.companyId"
+            <mat-select [placeholder]="l('Choose Company')" required [(ngModel)]="shopProduct.companyId"
               name="shopProduct.companyId">
               <mat-option value="">{{ 'Choose Company' | localize }}</mat-option>
               <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name}}</mat-option>
@@ -20,11 +20,11 @@
           </mat-form-field>
           <mat-form-field>
             <input matInput name="wholeSaleRate" [placeholder]="'Wholesale Rate' | localize"
-              [(ngModel)]="shopProduct.wholeSaleRate" required minlength="2" maxlength="64" />
+              [(ngModel)]="shopProduct.wholeSaleRate" required type="number" minlength="0" maxlength="64" />
           </mat-form-field>
           <mat-form-field>
             <input matInput name="retailPrice" [placeholder]="'Retail Price' | localize"
-              [(ngModel)]="shopProduct.retailPrice" required minlength="2" maxlength="64" />
+              [(ngModel)]="shopProduct.retailPrice" required type="number" minlength="0" maxlength="64" />
           </mat-form-field>
         </div>
         <div class="col-md-6">
@@ -47,12 +47,12 @@
 
           <mat-form-field>
             <input matInput name="companyRate" [placeholder]="'Company Rate' | localize"
-              [(ngModel)]="shopProduct.companyRate" required minlength="2" maxlength="64" />
+              [(ngModel)]="shopProduct.companyRate" type="number" minlength="0" maxlength="64" />
           </mat-form-field>
 
           <mat-form-field>
             <input matInput name="quantity" [placeholder]="'Quantity' | localize" [(ngModel)]="shopProduct.quantity"
-              required minlength="2" maxlength="64" />
+              required type="number" minlength="0" maxlength="64" />
           </mat-form-field>
         </div>
       </div>
@@ -63,7 +63,7 @@
       {{ "Cancel" | localize }}
     </button>
     <button mat-flat-button shopProduct="submit" flex="15" color="primary"
-      [disabled]="!createShopProductForm.form.valid || saving">
+      [disabled]="!createShopProductForm.form.valid || saving" (click)="save()">
       {{ "Save" | localize }}
     </button>
   </div>

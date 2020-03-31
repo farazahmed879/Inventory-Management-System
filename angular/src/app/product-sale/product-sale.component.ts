@@ -10,15 +10,15 @@ import {
     ProductSaleServiceServiceProxy,
     ProductSaleDto,
     ProductSaleDtoPagedResultDto} from '@shared/service-proxies/service-proxies';
-import { CreateProductSellDialogComponent } from './create-product-sell/create-product-sell-dialog.component';
-import { EditProductSellDialogComponent } from './edit-product-sell/edit-product-sell-dialog.component';
+import { CreateProductSaleDialogComponent } from './create-product-sale/create-product-sale-dialog.component';
+import { EditProductSaleDialogComponent } from './edit-product-sale/edit-product-sale-dialog.component';
 
-class PagedProductSellRequestDto extends PagedRequestDto {
+class PagedProductSaleRequestDto extends PagedRequestDto {
     keyword: string;
 }
 
 @Component({
-    templateUrl: './product-sell.component.html',
+    templateUrl: './product-sale.component.html',
     animations: [appModuleAnimation()],
     styles: [
         `
@@ -28,26 +28,26 @@ class PagedProductSellRequestDto extends PagedRequestDto {
         `
       ]
 })
-export class ProductSellComponent extends PagedListingComponentBase<ProductSaleDto> {
-    productSells: ProductSaleDto[] = [];
+export class ProductSaleComponent extends PagedListingComponentBase<ProductSaleDto> {
+    productSales: ProductSaleDto[] = [];
     keyword = '';
 
     constructor(
         injector: Injector,
-        private _productSellService: ProductSaleServiceServiceProxy,
+        private _productSaleService: ProductSaleServiceServiceProxy,
         private _dialog: MatDialog
     ) {
         super(injector);
     }
 
     list(
-        request: PagedProductSellRequestDto,
+        request: PagedProductSaleRequestDto,
         pageNumber: number,
         finishedCallback: Function
     ): void {
         request.keyword = this.keyword;
 
-        this._productSellService
+        this._productSaleService
             .getPaginatedAll(request.keyword,undefined,undefined, undefined,request.skipCount,request.maxResultCount)
             .pipe(
                 finalize(() => {
@@ -55,22 +55,22 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSaleD
                 })
             )
             .subscribe((result: any) => {
-                this.productSells = result.items;
+                this.productSales = result.items;
                 this.showPaging(result, pageNumber);
             });
-        // this._productSellService.getAll().subscribe(result=>{
-        //     this.productSells = result;
+        // this._productSaleService.getAll().subscribe(result=>{
+        //     this.productSales = result;
         // } )
     }
 
-    delete(productSell: ProductSaleDto): void {
+    delete(productSale: ProductSaleDto): void {
         abp.message.confirm(
-            this.l('ProductSellDeleteWarningMessage', productSell.status),
+            this.l('ProductSaleDeleteWarningMessage', productSale.status),
             undefined,
             (result: boolean) => {
                 if (result) {
-                    this._productSellService
-                        .delete(productSell.id)
+                    this._productSaleService
+                        .delete(productSale.id)
                         .pipe(
                             finalize(() => {
                                 abp.notify.success(this.l('SuccessfullyDeleted'));
@@ -83,25 +83,25 @@ export class ProductSellComponent extends PagedListingComponentBase<ProductSaleD
         );
     }
 
-    createProductSell(): void {
-        this.showCreateOrEditProductSellDialog();
+    createProductSale(): void {
+        this.showCreateOrEditProductSaleDialog();
     }
 
-    editProductSell(productSell: ProductSaleDto): void {
-        this.showCreateOrEditProductSellDialog(productSell.id);
+    editProductSale(productSale: ProductSaleDto): void {
+        this.showCreateOrEditProductSaleDialog(productSale.id);
     }
 
-    showCreateOrEditProductSellDialog(id?: number): void {
-        let createOrEditProductSellDialog;
+    showCreateOrEditProductSaleDialog(id?: number): void {
+        let createOrEditProductSaleDialog;
         if (id === undefined || id <= 0) {
-            createOrEditProductSellDialog = this._dialog.open(CreateProductSellDialogComponent);
+            createOrEditProductSaleDialog = this._dialog.open(CreateProductSaleDialogComponent);
         } else {
-            createOrEditProductSellDialog = this._dialog.open(EditProductSellDialogComponent, {
+            createOrEditProductSaleDialog = this._dialog.open(EditProductSaleDialogComponent, {
                 data: id
             });
         }
 
-        createOrEditProductSellDialog.afterClosed().subscribe(result => {
+        createOrEditProductSaleDialog.afterClosed().subscribe(result => {
             if (result) {
                 this.refresh();
             }

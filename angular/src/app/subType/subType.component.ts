@@ -47,6 +47,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
   }
   ngOnInit() {
     this.getTypes();
+    this.list(undefined, 1, undefined);
   }
 
   list(
@@ -85,15 +86,21 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
       undefined,
       (result: boolean) => {
         if (result) {
-          this._subTypeService
-            .delete(subType.id)
-            .pipe(
-              finalize(() => {
-                abp.notify.success(this.l("SuccessfullyDeleted"));
-                this.refresh();
-              })
-            )
-            .subscribe(() => {});
+          this._subTypeService.delete(subType.id);
+          // this._subTypeService
+          //   .getPaginatedAll(
+          //     request.keyword,
+          //     undefined,
+          //     request.skipCount,
+          //     request.maxResultCount
+          //   )
+          //   .pipe(
+          //     finalize(() => {
+          //       abp.notify.success(this.l("SuccessfullyDeleted"));
+          //       this.refresh();
+          //     })
+          //   )
+          //   .subscribe(() => {});
         }
       }
     );
@@ -103,6 +110,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
     this._typeService.getAll().subscribe(result => {
       this.types = result;
     });
+    console.log(this.types);
   }
 
   createSubType(): void {

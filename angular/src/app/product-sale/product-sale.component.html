@@ -53,7 +53,7 @@
           <tbody>
             <tr
               *ngFor="
-                let productSell of (productSells
+                let productSale of (productSales
                   | paginate
                     : {
                         id: 'server',
@@ -63,22 +63,22 @@
                       })
               "
             >
-              <td>{{ productSell.productName }}</td>
-              <td>{{ productSell.companyName }}</td>
-              <td>{{ productSell.sellingRate }}</td>
-              <td>{{ productSell.productType }}</td>
-              <td>{{ productSell.status }}</td>
-              <td>{{ productSell.profit }}</td>
+              <td>{{ productSale.productName }}</td>
+              <td>{{ productSale.companyName }}</td>
+              <td>{{ productSale.sellingRate }}</td>
+              <td>{{ productSale.productType }}</td>
+              <td>{{ productSale.status }}</td>
+              <td style="background-color: green; color:white">{{ productSale.profit }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>
                 </button>
                 <mat-menu #actionsMenu="matMenu">
-                  <button mat-menu-item (click)="editProductSell(productSell)">
+                  <button mat-menu-item (click)="editProductSale(productSale)">
                     <mat-icon>edit</mat-icon>
                     <span>{{ "Edit" | localize }}</span>
                   </button>
-                  <button mat-menu-item (click)="delete(productSell)">
+                  <button mat-menu-item (click)="delete(productSale)">
                     <mat-icon>delete</mat-icon>
                     <span>{{ "Delete" | localize }}</span>
                   </button>
@@ -101,7 +101,7 @@
           mat-mini-fab
           color="primary"
           class="pull-right"
-          (click)="createProductSell()"
+          (click)="createProductSale()"
         >
           <mat-icon>add</mat-icon>
         </button>

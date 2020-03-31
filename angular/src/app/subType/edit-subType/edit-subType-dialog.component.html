@@ -1,4 +1,4 @@
-<form autocomplete="off" #editSubTypeForm="ngForm" (ngSubmit)="save()">
+<form autocomplete="off" #editSubTypeForm="ngForm">
   <h1 mat-dialog-title>{{ "Edit Catagory" | localize }}</h1>
   <mat-dialog-content>
     <div class="row-fluid">
@@ -33,6 +33,7 @@
       flex="15"
       color="primary"
       [disabled]="!editSubTypeForm.form.valid || saving"
+      (click)="save()"
     >
       {{ "Save" | localize }}
     </button>

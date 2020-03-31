@@ -1,4 +1,4 @@
-<form autocomplete="off" #createTypeForm="ngForm" (ngSubmit)="save()">
+<form autocomplete="off" #createTypeForm="ngForm" >
   <h1 mat-dialog-title>{{ "New Catagory" | localize }}</h1>
 
     <!-- <div class="form-group m-form__group">
@@ -10,7 +10,7 @@
     </div>
     </div> -->
     <mat-form-field>
-      <mat-select [placeholder]="l('IsActive')" [(ngModel)]="subType.productTypeId" name="isActive">
+      <mat-select [placeholder]="l('IsActive')" required [(ngModel)]="subType.productTypeId" name="isActive">
           <mat-option value="">{{ 'Choose Type' | localize }}</mat-option>
           <mat-option *ngFor="let type of types" [value]="type.id">{{ type.name}}</mat-option>
       </mat-select>
@@ -29,7 +29,7 @@
     <button mat-button type="button" [disabled]="saving" (click)="close(false)">
       {{ "Cancel" | localize }}
     </button>
-    <button mat-flat-button type="submit" flex="15" color="primary" [disabled]="!createTypeForm.form.valid || saving">
+    <button mat-flat-button type="submit" flex="15" color="primary" (click)="save()" [disabled]="!createTypeForm.form.valid || saving">
       {{ "Save" | localize }}
     </button>
   </div>

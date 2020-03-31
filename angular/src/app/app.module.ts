@@ -49,10 +49,10 @@ import { EditProductDialogComponent } from '@app/product/edit-product/edit-produ
 import { ShopProductComponent } from './shop-product/shop-product.component';
 import { EditShopProductDialogComponent } from './shop-product/edit-shop-product/edit-shop-product-dialog.component';
 import { CreateShopProductDialogComponent } from './shop-product/create-shop-product/create-shop-product-dialog.component';
-// Product Sell
-import { ProductSellComponent } from './product-sell/product-sell.component';
-import { CreateProductSellDialogComponent } from './product-sell/create-product-sell/create-product-sell-dialog.component';
-import { EditProductSellDialogComponent } from './product-sell/edit-product-sell/edit-product-sell-dialog.component';
+// Product Sale
+import { ProductSaleComponent } from './product-sale/product-sale.component';
+import { CreateProductSaleDialogComponent } from './product-sale/create-product-sale/create-product-sale-dialog.component';
+import { EditProductSaleDialogComponent } from './product-sale/edit-product-sale/edit-product-sale-dialog.component';
 // Company
 import { CompanyComponent } from './company/company.component';
 import { CreateCompanyDialogComponent } from './company/create-company/create-company-dialog.component';
@@ -123,10 +123,10 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     ShopProductComponent,
     CreateShopProductDialogComponent,
     EditShopProductDialogComponent,
-    //ProductSell
-    ProductSellComponent,
-    CreateProductSellDialogComponent,
-    EditProductSellDialogComponent,
+    //ProductSale
+    ProductSaleComponent,
+    CreateProductSaleDialogComponent,
+    EditProductSaleDialogComponent,
     //Company
     CompanyComponent,
     CreateCompanyDialogComponent,
@@ -191,10 +191,10 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     ShopProductComponent,
     CreateShopProductDialogComponent,
     EditShopProductDialogComponent,
-    //ProductSell
-    ProductSellComponent,
-    CreateProductSellDialogComponent,
-    EditProductSellDialogComponent,
+    //ProductSale
+    ProductSaleComponent,
+    CreateProductSaleDialogComponent,
+    EditProductSaleDialogComponent,
     //Company
     CompanyComponent,
     CreateCompanyDialogComponent,
