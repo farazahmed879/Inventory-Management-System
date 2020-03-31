@@ -44,7 +44,7 @@ namespace InventoryManagementSystem.SubTypes
             var result = await _subTypeRepository.InsertAsync(new SubType()
             {
                 Name = subTypeDto.Name,
-                ProductTypeId= subTypeDto.ProductTypeId
+                ProductTypeId = subTypeDto.ProductTypeId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -143,7 +143,8 @@ namespace InventoryManagementSystem.SubTypes
         public async Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input)
         {
             var filteredSubTypes = _subTypeRepository.GetAll()
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Name) || !string.IsNullOrWhiteSpace(input.ProductType),
+                    x => x.Name.Contains(input.Name) || x.ProductType.Name.Contains(input.ProductType));
 
             var pagedAndFilteredTypes = filteredSubTypes
                 .OrderBy(i => i.Name)

@@ -26,11 +26,51 @@
          <div class="row clearfix">
              <form>
                  <div class="row">
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                          <mat-form-field>
                              <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
                          </mat-form-field>
                      </div>
+                     <div class="col-md-2">
+                      <mat-form-field>
+                        <mat-label>Select Product</mat-label>
+                        <mat-select [(ngModel)]="selectedProduct" name="Product">
+                          <mat-option *ngFor="let product of products" [value]="product.id">
+                            {{product.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
+                    <mat-form-field>
+                      <mat-label>Select Company</mat-label>
+                      <mat-select [(ngModel)]="selectedCompany" name="Company">
+                        <mat-option *ngFor="let company of companies" [value]="company.id">
+                          {{company.name}} 
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field>
+                    <mat-label>Select Type</mat-label>
+                    <mat-select [(ngModel)]="selectedType" name="Type">
+                      <mat-option *ngFor="let type of types" [value]="type.id">
+                        {{type.name}} 
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field>
+                  <mat-label>Select SubType</mat-label>
+                  <mat-select [(ngModel)]="selectedSubType" name="SubType">
+                    <mat-option *ngFor="let subType of subTypes" [value]="subType.id">
+                      {{subType.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
                      <div class="col-md-12 text-right p-r-25">
                          <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
                      </div>

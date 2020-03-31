@@ -5,11 +5,7 @@
         <h2>All Products</h2>
         <ul class="header-dropdown m-r--5">
           <li>
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="headerMenu"
-              class="header-dropdown-mat-icon-button"
-            >
+            <button mat-icon-button [matMenuTriggerFor]="headerMenu" class="header-dropdown-mat-icon-button">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #headerMenu="matMenu">
@@ -22,22 +18,36 @@
         </ul>
       </div>
       <div class="body table-responsive">
-         <!--query start-->
-         <div class="row clearfix">
-             <form>
-                 <div class="row">
-                     <div class="col-md-6">
-                         <mat-form-field>
-                             <input matInput [placeholder]="l('Filter')" [(ngModel)]="name" name="keyword">
-                         </mat-form-field>
-                     </div>
-                     <div class="col-md-12 text-right p-r-25">
-                         <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
-                     </div>
-                 </div>
-             </form>
-          </div>
-          <!--query end-->
+        <!--query start-->
+        <div class="row clearfix">
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Select SubType</mat-label>
+                  <mat-select [(ngModel)]="selectedSubType" name="SubType">
+                    <mat-option *ngFor="let subType of subTypes" [value]="subType.id">
+                      {{subType.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-12 text-right p-r-25">
+                <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
+                {{" "}}
+                <button mat-raised-button color="primary"
+                  (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--query end-->
         <table class="table table-hover table-striped" [busy]="isTableLoading">
           <thead>
             <tr>
@@ -47,8 +57,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="
+            <tr *ngFor="
                 let product of (products
                   | paginate
                     : {
@@ -57,8 +66,7 @@
                         currentPage: pageNumber,
                         totalItems: totalItems
                       })
-              "
-            >
+              ">
               <td>{{ product.name }}</td>
               <td>{{ product.subTypeName }}</td>
               <td>
@@ -79,22 +87,11 @@
             </tr>
           </tbody>
         </table>
-        <div
-          class="abp-pagination-controls-wrapper"
-          *ngIf="totalItems > pageSize"
-        >
-          <abp-pagination-controls
-            (pageChange)="getDataPage($event)"
-            id="server"
-          >
+        <div class="abp-pagination-controls-wrapper" *ngIf="totalItems > pageSize">
+          <abp-pagination-controls (pageChange)="getDataPage($event)" id="server">
           </abp-pagination-controls>
         </div>
-        <button
-          mat-mini-fab
-          color="primary"
-          class="pull-right"
-          (click)="createProduct()"
-        >
+        <button mat-mini-fab color="primary" class="pull-right" (click)="createProduct()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
