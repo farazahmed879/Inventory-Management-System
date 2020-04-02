@@ -106,4 +106,8 @@ export class ExpenseComponent extends PagedListingComponentBase<ExpenseDto> {
             }
         });
     }
+
+    clearFilters(){
+        this.keyword = "";
+    }
 }

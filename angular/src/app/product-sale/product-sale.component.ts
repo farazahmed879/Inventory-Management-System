@@ -107,4 +107,8 @@ export class ProductSaleComponent extends PagedListingComponentBase<ProductSaleD
             }
         });
     }
+
+    clearFilters() {
+        this.keyword = "";
+      }
 }

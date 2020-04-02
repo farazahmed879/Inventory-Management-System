@@ -140,8 +140,8 @@ namespace InventoryManagementSystem.Products
         {
             var filteredProducts = _productRepository.GetAll()
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
-                    x => x.Name.Contains(input.Name) ||
-                         x.ProductSubTypeId.Value == input.SubTypeId);
+                    x => x.Name.Contains(input.Name))
+            .WhereIf(input.SubTypeId.HasValue, x=> x.ProductSubTypeId == input.SubTypeId);
 
             var pagedAndFilteredProducts = filteredProducts
                 .OrderBy(i => i.Name)

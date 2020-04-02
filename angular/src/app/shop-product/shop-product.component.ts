@@ -42,14 +42,14 @@ export class ShopProductComponent extends PagedListingComponentBase<
 > {
   shopProducts: ShopProductDto[] = [];
   keyword = "";
-  products: ProductDto[] = [];
+  shopProductsFilter: ShopProductDto[] = [];
   selectedProduct: number;
   companies: CompanyDto[] = [];
   selectedCompany: number;
   types: TypeDto[] = [];
-  selectedType: string;
+  selectedType: number;
   subTypes: SubTypeDto[] = [];
-  selectedSubType: string;
+  selectedSubType: number;
 
   constructor(
     injector: Injector,
@@ -64,15 +64,15 @@ export class ShopProductComponent extends PagedListingComponentBase<
   }
 
   ngOnInit() {
-    this.getProducts();
+    this.getAllShopProducts();
     this.getCompanies();
     this.getTypes();
     this.getSubTypes();
   }
 
-  getProducts() {
-    this._productService.getAll().subscribe(result => {
-      this.products = result;
+  getAllShopProducts() {
+    this._shopProductService.getAll().subscribe(result => {
+      this.shopProductsFilter = result;
     });
   }
 
@@ -104,14 +104,9 @@ export class ShopProductComponent extends PagedListingComponentBase<
     this._shopProductService
       .getPaginatedAll(
         request.keyword,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        this.selectedProduct,
         this.selectedCompany,
-        undefined,
-        undefined,
+        this.selectedType,
+        this.selectedSubType,
         request.skipCount,
         request.maxResultCount
       )
@@ -174,5 +169,12 @@ export class ShopProductComponent extends PagedListingComponentBase<
         this.refresh();
       }
     });
+  }
+
+  clearFilters(){
+    this.selectedSubType = null;
+    this.selectedType = null;
+    this.selectedCompany = null;
+    this.keyword = "";
   }
 }

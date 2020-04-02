@@ -73,7 +73,8 @@ import {
   CompanyServiceServiceProxy,
   TypeServiceServiceProxy,
   ExpenseServiceServiceProxy,
-  ProductSaleServiceServiceProxy
+  ProductSaleServiceServiceProxy,
+  DashboardServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
 import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.component';
 import { ExpenseComponent } from './expense/expense.component';
@@ -162,7 +163,8 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     SubTypeServiceServiceProxy,
     ProductServiceServiceProxy,
     ExpenseServiceServiceProxy,
-    ProductSaleServiceServiceProxy
+    ProductSaleServiceServiceProxy,
+    DashboardServiceServiceProxy
   ],
   entryComponents: [
     // tenants

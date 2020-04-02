@@ -151,12 +151,14 @@ namespace InventoryManagementSystem.ShopProducts
         }
         public async Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input)
         {
-            var filteredShopProducts = _shopProductRepository.GetAll().Where(i=> i.Quantity > 0);
-
-            //.WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Product.Name.Contains(input.Name));
+            var filteredShopProducts = _shopProductRepository.GetAll()
+                .WhereIf(!string.IsNullOrWhiteSpace(input.ProductName), x => x.Product.Name.Contains(input.ProductName))
+                .WhereIf(input.CompanyId.HasValue, x => x.CompanyId == input.CompanyId)
+                .WhereIf(input.TypeId.HasValue, x => x.Product.ProductSubType.ProductType.Id == input.TypeId)
+                .WhereIf(input.SubTypeId.HasValue, x => x.Product.ProductSubTypeId == input.SubTypeId);
 
             var pagedAndFilteredShopProducts = filteredShopProducts
-                .OrderBy(i => i.Id)
+                .OrderByDescending(i => i.Id)
                 .PageBy(input);
 
             var totalCount = await pagedAndFilteredShopProducts.CountAsync();

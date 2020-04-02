@@ -506,6 +506,134 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class DashboardServiceServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param type (optional) 
+     * @param date (optional) 
+     * @return Success
+     */
+    getProductGraph(type: string | undefined, date: moment.Moment | undefined): Observable<ProductSaleGraphDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/DashboardService/GetProductGraph?";
+        if (type === null)
+            throw new Error("The parameter 'type' cannot be null.");
+        else if (type !== undefined)
+            url_ += "type=" + encodeURIComponent("" + type) + "&"; 
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProductGraph(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProductGraph(<any>response_);
+                } catch (e) {
+                    return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetProductGraph(response: HttpResponseBase): Observable<ProductSaleGraphDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ProductSaleGraphDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProductSaleGraphDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getDashboardList(): Observable<DashboardListDto> {
+        let url_ = this.baseUrl + "/api/services/app/DashboardService/GetDashboardList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDashboardList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDashboardList(<any>response_);
+                } catch (e) {
+                    return <Observable<DashboardListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DashboardListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDashboardList(response: HttpResponseBase): Observable<DashboardListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardListDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DashboardListDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class ExpenseServiceServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1129,71 +1257,6 @@ export class ProductSaleServiceServiceProxy {
             }));
         }
         return _observableOf<ProductSaleDtoPagedResultDto>(<any>null);
-    }
-
-    /**
-     * @param type (optional) 
-     * @param date (optional) 
-     * @return Success
-     */
-    getAllProductSale(type: string | undefined, date: moment.Moment | undefined): Observable<ProductSaleGraphDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAllProductSale?";
-        if (type === null)
-            throw new Error("The parameter 'type' cannot be null.");
-        else if (type !== undefined)
-            url_ += "type=" + encodeURIComponent("" + type) + "&"; 
-        if (date === null)
-            throw new Error("The parameter 'date' cannot be null.");
-        else if (date !== undefined)
-            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllProductSale(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllProductSale(<any>response_);
-                } catch (e) {
-                    return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllProductSale(response: HttpResponseBase): Observable<ProductSaleGraphDto[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(ProductSaleGraphDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ProductSaleGraphDto[]>(<any>null);
     }
 }
 
@@ -2262,57 +2325,32 @@ export class ShopProductServiceServiceProxy {
     }
 
     /**
-     * @param name (optional) 
-     * @param wholeSaleRate (optional) 
-     * @param quantity (optional) 
-     * @param companyRate (optional) 
-     * @param retailPrice (optional) 
-     * @param productId (optional) 
-     * @param companyId (optional) 
      * @param productName (optional) 
-     * @param companyName (optional) 
+     * @param companyId (optional) 
+     * @param typeId (optional) 
+     * @param subTypeId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, wholeSaleRate: number | undefined, quantity: number | undefined, companyRate: number | undefined, retailPrice: number | undefined, productId: number | undefined, companyId: number | undefined, productName: string | undefined, companyName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
+    getPaginatedAll(productName: string | undefined, companyId: number | undefined, typeId: number | undefined, subTypeId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetPaginatedAll?";
-        if (name === null)
-            throw new Error("The parameter 'name' cannot be null.");
-        else if (name !== undefined)
-            url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
-        if (wholeSaleRate === null)
-            throw new Error("The parameter 'wholeSaleRate' cannot be null.");
-        else if (wholeSaleRate !== undefined)
-            url_ += "WholeSaleRate=" + encodeURIComponent("" + wholeSaleRate) + "&"; 
-        if (quantity === null)
-            throw new Error("The parameter 'quantity' cannot be null.");
-        else if (quantity !== undefined)
-            url_ += "Quantity=" + encodeURIComponent("" + quantity) + "&"; 
-        if (companyRate === null)
-            throw new Error("The parameter 'companyRate' cannot be null.");
-        else if (companyRate !== undefined)
-            url_ += "CompanyRate=" + encodeURIComponent("" + companyRate) + "&"; 
-        if (retailPrice === null)
-            throw new Error("The parameter 'retailPrice' cannot be null.");
-        else if (retailPrice !== undefined)
-            url_ += "RetailPrice=" + encodeURIComponent("" + retailPrice) + "&"; 
-        if (productId === null)
-            throw new Error("The parameter 'productId' cannot be null.");
-        else if (productId !== undefined)
-            url_ += "ProductId=" + encodeURIComponent("" + productId) + "&"; 
-        if (companyId === null)
-            throw new Error("The parameter 'companyId' cannot be null.");
-        else if (companyId !== undefined)
-            url_ += "CompanyId=" + encodeURIComponent("" + companyId) + "&"; 
         if (productName === null)
             throw new Error("The parameter 'productName' cannot be null.");
         else if (productName !== undefined)
             url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
-        if (companyName === null)
-            throw new Error("The parameter 'companyName' cannot be null.");
-        else if (companyName !== undefined)
-            url_ += "CompanyName=" + encodeURIComponent("" + companyName) + "&"; 
+        if (companyId === null)
+            throw new Error("The parameter 'companyId' cannot be null.");
+        else if (companyId !== undefined)
+            url_ += "CompanyId=" + encodeURIComponent("" + companyId) + "&"; 
+        if (typeId === null)
+            throw new Error("The parameter 'typeId' cannot be null.");
+        else if (typeId !== undefined)
+            url_ += "TypeId=" + encodeURIComponent("" + typeId) + "&"; 
+        if (subTypeId === null)
+            throw new Error("The parameter 'subTypeId' cannot be null.");
+        else if (subTypeId !== undefined)
+            url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -4527,6 +4565,215 @@ export interface IChangeUiThemeInput {
     theme: string | undefined;
 }
 
+export class ProductSaleGraphDto implements IProductSaleGraphDto {
+    label: string | undefined;
+    text: string | undefined;
+    sale: number;
+    profit: number;
+    expense: number;
+    productCost: number;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IProductSaleGraphDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.label = _data["label"];
+            this.text = _data["text"];
+            this.sale = _data["sale"];
+            this.profit = _data["profit"];
+            this.expense = _data["expense"];
+            this.productCost = _data["productCost"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ProductSaleGraphDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductSaleGraphDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["label"] = this.label;
+        data["text"] = this.text;
+        data["sale"] = this.sale;
+        data["profit"] = this.profit;
+        data["expense"] = this.expense;
+        data["productCost"] = this.productCost;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): ProductSaleGraphDto {
+        const json = this.toJSON();
+        let result = new ProductSaleGraphDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProductSaleGraphDto {
+    label: string | undefined;
+    text: string | undefined;
+    sale: number;
+    profit: number;
+    expense: number;
+    productCost: number;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class SaleDto implements ISaleDto {
+    today: number;
+    yesterday: number;
+    thisWeek: number;
+    thisMonth: number;
+    thisYear: number;
+
+    constructor(data?: ISaleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.today = _data["today"];
+            this.yesterday = _data["yesterday"];
+            this.thisWeek = _data["thisWeek"];
+            this.thisMonth = _data["thisMonth"];
+            this.thisYear = _data["thisYear"];
+        }
+    }
+
+    static fromJS(data: any): SaleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["today"] = this.today;
+        data["yesterday"] = this.yesterday;
+        data["thisWeek"] = this.thisWeek;
+        data["thisMonth"] = this.thisMonth;
+        data["thisYear"] = this.thisYear;
+        return data; 
+    }
+
+    clone(): SaleDto {
+        const json = this.toJSON();
+        let result = new SaleDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISaleDto {
+    today: number;
+    yesterday: number;
+    thisWeek: number;
+    thisMonth: number;
+    thisYear: number;
+}
+
+export class DashboardListDto implements IDashboardListDto {
+    sale: SaleDto;
+    costing: SaleDto;
+    expenses: SaleDto;
+    profit: SaleDto;
+
+    constructor(data?: IDashboardListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sale = _data["sale"] ? SaleDto.fromJS(_data["sale"]) : <any>undefined;
+            this.costing = _data["costing"] ? SaleDto.fromJS(_data["costing"]) : <any>undefined;
+            this.expenses = _data["expenses"] ? SaleDto.fromJS(_data["expenses"]) : <any>undefined;
+            this.profit = _data["profit"] ? SaleDto.fromJS(_data["profit"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DashboardListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sale"] = this.sale ? this.sale.toJSON() : <any>undefined;
+        data["costing"] = this.costing ? this.costing.toJSON() : <any>undefined;
+        data["expenses"] = this.expenses ? this.expenses.toJSON() : <any>undefined;
+        data["profit"] = this.profit ? this.profit.toJSON() : <any>undefined;
+        return data; 
+    }
+
+    clone(): DashboardListDto {
+        const json = this.toJSON();
+        let result = new DashboardListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDashboardListDto {
+    sale: SaleDto;
+    costing: SaleDto;
+    expenses: SaleDto;
+    profit: SaleDto;
+}
+
 export class CreateExpenseDto implements ICreateExpenseDto {
     name: string | undefined;
     description: string | undefined;
@@ -4935,101 +5182,6 @@ export class ProductSaleDtoPagedResultDto implements IProductSaleDtoPagedResultD
 export interface IProductSaleDtoPagedResultDto {
     totalCount: number;
     items: ProductSaleDto[] | undefined;
-}
-
-export class ProductSaleGraphDto implements IProductSaleGraphDto {
-    label: string | undefined;
-    text: string | undefined;
-    sale: number;
-    profit: number;
-    expense: number;
-    productCost: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
-
-    constructor(data?: IProductSaleGraphDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.label = _data["label"];
-            this.text = _data["text"];
-            this.sale = _data["sale"];
-            this.profit = _data["profit"];
-            this.expense = _data["expense"];
-            this.productCost = _data["productCost"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): ProductSaleGraphDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductSaleGraphDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["label"] = this.label;
-        data["text"] = this.text;
-        data["sale"] = this.sale;
-        data["profit"] = this.profit;
-        data["expense"] = this.expense;
-        data["productCost"] = this.productCost;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): ProductSaleGraphDto {
-        const json = this.toJSON();
-        let result = new ProductSaleGraphDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IProductSaleGraphDto {
-    label: string | undefined;
-    text: string | undefined;
-    sale: number;
-    profit: number;
-    expense: number;
-    productCost: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
 }
 
 export class CreateProductDto implements ICreateProductDto {

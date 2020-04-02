@@ -19,7 +19,5 @@ namespace InventoryManagementSystem.ProductSales
 
         Task<PagedResultDto<ProductSaleDto>> GetPaginatedAllAsync(PagedProductSaleResultRequestDto input);
 
-
-        Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date);
     }
 }

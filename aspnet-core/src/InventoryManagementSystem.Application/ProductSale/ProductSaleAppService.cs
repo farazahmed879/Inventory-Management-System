@@ -8,6 +8,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Repositories;
 using Abp.Linq.Extensions;
+using InventoryManagementSystem.Dashboards.Dto;
 using InventoryManagementSystem.EntityFrameworkCore;
 using InventoryManagementSystem.Expenses;
 using InventoryManagementSystem.Products;
@@ -180,7 +181,7 @@ namespace InventoryManagementSystem.ProductSales
                  .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells
-                .OrderBy(i => i.Status)
+                .OrderByDescending(i => i.Id)
                 .PageBy(input);
 
             var totalCount = await pagedAndFilteredProductSells.CountAsync();
@@ -200,175 +201,6 @@ namespace InventoryManagementSystem.ProductSales
                     .ToListAsync());
         }
 
-        public async Task<List<ProductSaleGraphDto>> GetAllProductSale(string type, DateTime date)
-        {
-            var product = await _productSaleRepository.GetAll().Include(i => i.ShopProduct).ToListAsync();
-            var productCost = await _shopProductRepository.GetAll().ToListAsync();
-            var expense = await _expenseRepository.GetAll()
-                            .ToListAsync();
-            var result = new List<ProductSaleGraphDto>();
-            switch (type)
-            {
-                case AppConsts.ThisWeek:
-                    {
-                        DayOfWeek Day = DateTime.Now.DayOfWeek;
-                        int dayValue = 0;
-
-                        switch (Day)
-                        {
-                            case DayOfWeek.Sunday:
-                                {
-                                    dayValue = -6;
-                                    break;
-                                }
-                            case DayOfWeek.Monday:
-                                {
-                                    dayValue = -0;
-                                    break;
-                                }
-                            case DayOfWeek.Tuesday:
-                                {
-                                    dayValue = -1;
-                                    break;
-                                }
-                            case DayOfWeek.Wednesday:
-                                {
-                                    dayValue = -2;
-                                    break;
-                                }
-                            case DayOfWeek.Thursday:
-                                {
-                                    dayValue = -3;
-                                    break;
-                                }
-                            case DayOfWeek.Friday:
-                                {
-                                    dayValue = -4;
-                                    break;
-                                }
-                            default:
-                                {
-
-                                    dayValue = 5;
-                                    break;
-                                }
-                        }
-                        DateTime WeekStartDate = DateTime.Now.AddDays(dayValue);
-                        var dateList = new List<DateTime>();
-                        dateList.Add(WeekStartDate);
-                        for (var x = 1; x < 7; x++)
-                        {
-                            dateList.Add(WeekStartDate.AddDays(x));
-                        }
-                        foreach (var item in dateList)
-                        {
-                            var sale = new ProductSaleGraphDto();
-                            sale.Label = item.DayOfWeek.ToString();
-                            sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
-                            sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
-                            sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
-                            sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
-                            result.Add(sale);
-                        }
-                        return result;
-                    }
-                case AppConsts.ThisMonth:
-                    {
-
-                        DateTime now = DateTime.Now;
-                        var startDate = new DateTime(now.Year, now.Month, 1);
-                        var endDate = startDate.AddMonths(1).AddDays(-1);
-
-
-                        var dateList = new List<DateTime>();
-                        dateList.Add(startDate);
-                        for (var x = startDate.Day; x < endDate.Day; x++)
-                        {
-                            dateList.Add(startDate.AddDays(x));
-                        }
-
-                        foreach (var item in dateList)
-                        {
-                            var sale = new ProductSaleGraphDto();
-                            sale.Label = item.Day.ToString();
-                            sale.Text = item.DayOfWeek.ToString();
-                            sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
-                            sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
-                            sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
-                            result.Add(sale);
-                            sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
-                        }
-                        return result;
-                    }
-                case AppConsts.ThisYear:
-                    {
-                        var months = new List<string>() { "January", "February", "March", "April",
-                            "May", "June", "July","August","September", "October","Novermber","December"};
-                        var monthList = new List<GraphHelperDto>();
-                        for (var x = 1; x <= 7; x++)
-                        {
-                            var day = new GraphHelperDto();
-                            day.Label = months[x - 1];
-                            day.Value = x;
-
-                            monthList.Add(day);
-                        }
-
-                        foreach (var month in monthList)
-                        {
-                            var sale = new ProductSaleGraphDto();
-                            sale.Label = month.Label;
-                            sale.Sale = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate);
-                            sale.Profit = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
-                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
-                            sale.Expense = expense.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.Cost);
-                            result.Add(sale);
-                            sale.ProductCost = productCost.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.WholeSaleRate.Value);
-                            result.Add(sale);
-                        }
-                        return result;
-                    }
-                case AppConsts.AllYear:
-                    {
-                        var startYear = product.OrderByDescending(i => i.CreationTime).Select(i => i.CreationTime.Year).FirstOrDefault();
-                        var currentYear = DateTime.Now.Year;
-                        var yearList = new List<int>();
-                        for (var x = startYear; x <= currentYear; x++)
-                        {
-                            yearList.Add(x);
-                        }
-                        foreach (var year in yearList)
-                        {
-                            var sale = new ProductSaleGraphDto();
-                            sale.Label = year.ToString();
-                            sale.Sale = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate);
-                            sale.Profit = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.ShopProduct.WholeSaleRate.Value) > 0 ?
-                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
-                                product.Where(i => i.CreationTime.Year == year).Sum(i => i.ShopProduct.WholeSaleRate.Value) : 0;
-                            sale.Expense = expense.Where(i => i.CreationTime.Year == year).Sum(i => i.Cost);
-                            result.Add(sale);
-                            sale.ProductCost = productCost.Where(i => i.CreationTime.Year == year).Sum(i => i.WholeSaleRate.Value);
-                            result.Add(sale);
-                        }
-                        return result;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
-
-            return null;
-        }
     }
 }
 
