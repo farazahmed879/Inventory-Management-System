@@ -41,7 +41,8 @@
         <table class="table table-hover table-striped" [busy]="isTableLoading">
           <thead>
             <tr>
-              <th>{{ "Type" | localize }}</th>
+              <th>{{ "Shop" | localize }}</th>
+              <th>{{ "Description" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
@@ -59,6 +60,7 @@
               "
             >
               <td>{{ type.name }}</td>
+              <td>{{ type.description }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>

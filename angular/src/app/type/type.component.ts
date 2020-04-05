@@ -49,7 +49,7 @@ export class TypeComponent extends PagedListingComponentBase<TypeDto> {
         request.keyword = this.keyword;
 
         this._typeService
-            .getPaginatedAll(request.keyword, request.skipCount, request.maxResultCount)
+            .getPaginatedAll(request.keyword,this.appSession.tenantId, request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();

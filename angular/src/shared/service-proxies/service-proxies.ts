@@ -3501,16 +3501,21 @@ export class TypeServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/TypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
