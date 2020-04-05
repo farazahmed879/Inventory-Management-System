@@ -4288,6 +4288,7 @@ export interface IRegisterOutput {
 
 export class CreateCompanyDto implements ICreateCompanyDto {
     name: string | undefined;
+    description: string | undefined;
     id: number;
 
     constructor(data?: ICreateCompanyDto) {
@@ -4302,6 +4303,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.id = _data["id"];
         }
     }
@@ -4316,6 +4318,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["id"] = this.id;
         return data; 
     }
@@ -4330,6 +4333,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
 
 export interface ICreateCompanyDto {
     name: string | undefined;
+    description: string | undefined;
     id: number;
 }
 
@@ -4394,6 +4398,7 @@ export interface IResponseMessagesDto {
 
 export class CompanyDto implements ICompanyDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4415,6 +4420,7 @@ export class CompanyDto implements ICompanyDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4436,6 +4442,7 @@ export class CompanyDto implements ICompanyDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4457,6 +4464,7 @@ export class CompanyDto implements ICompanyDto {
 
 export interface ICompanyDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4969,6 +4977,7 @@ export interface IExpenseDtoPagedResultDto {
 
 export class CreateProductSaleDto implements ICreateProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     shopProductId: number;
     quantity: number | undefined;
@@ -4986,6 +4995,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     init(_data?: any) {
         if (_data) {
             this.status = _data["status"];
+            this.description = _data["description"];
             this.sellingRate = _data["sellingRate"];
             this.shopProductId = _data["shopProductId"];
             this.quantity = _data["quantity"];
@@ -5003,6 +5013,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
+        data["description"] = this.description;
         data["sellingRate"] = this.sellingRate;
         data["shopProductId"] = this.shopProductId;
         data["quantity"] = this.quantity;
@@ -5020,6 +5031,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
 
 export interface ICreateProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     shopProductId: number;
     quantity: number | undefined;
@@ -5028,6 +5040,7 @@ export interface ICreateProductSaleDto {
 
 export class ProductSaleDto implements IProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     productName: string | undefined;
     companyName: string | undefined;
@@ -5056,6 +5069,7 @@ export class ProductSaleDto implements IProductSaleDto {
     init(_data?: any) {
         if (_data) {
             this.status = _data["status"];
+            this.description = _data["description"];
             this.sellingRate = _data["sellingRate"];
             this.productName = _data["productName"];
             this.companyName = _data["companyName"];
@@ -5084,6 +5098,7 @@ export class ProductSaleDto implements IProductSaleDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
+        data["description"] = this.description;
         data["sellingRate"] = this.sellingRate;
         data["productName"] = this.productName;
         data["companyName"] = this.companyName;
@@ -5112,6 +5127,7 @@ export class ProductSaleDto implements IProductSaleDto {
 
 export interface IProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     productName: string | undefined;
     companyName: string | undefined;
@@ -5186,6 +5202,7 @@ export interface IProductSaleDtoPagedResultDto {
 
 export class CreateProductDto implements ICreateProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     id: number;
 
@@ -5201,6 +5218,7 @@ export class CreateProductDto implements ICreateProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
             this.id = _data["id"];
         }
@@ -5216,6 +5234,7 @@ export class CreateProductDto implements ICreateProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
         data["id"] = this.id;
         return data; 
@@ -5231,12 +5250,14 @@ export class CreateProductDto implements ICreateProductDto {
 
 export interface ICreateProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     id: number;
 }
 
 export class ProductDto implements IProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
     isDeleted: boolean;
@@ -5260,6 +5281,7 @@ export class ProductDto implements IProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
             this.subTypeName = _data["subTypeName"];
             this.isDeleted = _data["isDeleted"];
@@ -5283,6 +5305,7 @@ export class ProductDto implements IProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
         data["subTypeName"] = this.subTypeName;
         data["isDeleted"] = this.isDeleted;
@@ -5306,6 +5329,7 @@ export class ProductDto implements IProductDto {
 
 export interface IProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
     isDeleted: boolean;
@@ -6188,6 +6212,7 @@ export interface IGetCurrentLoginInformationsOutput {
 }
 
 export class CreateShopProductDto implements ICreateShopProductDto {
+    description: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
@@ -6207,6 +6232,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.wholeSaleRate = _data["wholeSaleRate"];
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
@@ -6226,6 +6252,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["wholeSaleRate"] = this.wholeSaleRate;
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
@@ -6245,6 +6272,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 }
 
 export interface ICreateShopProductDto {
+    description: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
@@ -6259,6 +6287,7 @@ export class ShopProductDto implements IShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    description: string | undefined;
     productId: number;
     companyId: number | undefined;
     productName: string | undefined;
@@ -6287,6 +6316,7 @@ export class ShopProductDto implements IShopProductDto {
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
             this.retailPrice = _data["retailPrice"];
+            this.description = _data["description"];
             this.productId = _data["productId"];
             this.companyId = _data["companyId"];
             this.productName = _data["productName"];
@@ -6315,6 +6345,7 @@ export class ShopProductDto implements IShopProductDto {
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
         data["retailPrice"] = this.retailPrice;
+        data["description"] = this.description;
         data["productId"] = this.productId;
         data["companyId"] = this.companyId;
         data["productName"] = this.productName;
@@ -6343,6 +6374,7 @@ export interface IShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    description: string | undefined;
     productId: number;
     companyId: number | undefined;
     productName: string | undefined;
@@ -6413,6 +6445,7 @@ export interface IShopProductDtoPagedResultDto {
 }
 
 export class CreateSubTypeDto implements ICreateSubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeId: number;
     id: number;
@@ -6428,6 +6461,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.name = _data["name"];
             this.productTypeId = _data["productTypeId"];
             this.id = _data["id"];
@@ -6443,6 +6477,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["name"] = this.name;
         data["productTypeId"] = this.productTypeId;
         data["id"] = this.id;
@@ -6458,12 +6493,14 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 }
 
 export interface ICreateSubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeId: number;
     id: number;
 }
 
 export class SubTypeDto implements ISubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
@@ -6487,6 +6524,7 @@ export class SubTypeDto implements ISubTypeDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.name = _data["name"];
             this.productTypeName = _data["productTypeName"];
             this.productTypeId = _data["productTypeId"];
@@ -6510,6 +6548,7 @@ export class SubTypeDto implements ISubTypeDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["name"] = this.name;
         data["productTypeName"] = this.productTypeName;
         data["productTypeId"] = this.productTypeId;
@@ -6533,6 +6572,7 @@ export class SubTypeDto implements ISubTypeDto {
 }
 
 export interface ISubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
@@ -7161,6 +7201,7 @@ export interface IExternalAuthenticateResultModel {
 
 export class CreateTypeDto implements ICreateTypeDto {
     name: string | undefined;
+    description: string | undefined;
     id: number;
 
     constructor(data?: ICreateTypeDto) {
@@ -7175,6 +7216,7 @@ export class CreateTypeDto implements ICreateTypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.id = _data["id"];
         }
     }
@@ -7189,6 +7231,7 @@ export class CreateTypeDto implements ICreateTypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["id"] = this.id;
         return data; 
     }
@@ -7203,11 +7246,13 @@ export class CreateTypeDto implements ICreateTypeDto {
 
 export interface ICreateTypeDto {
     name: string | undefined;
+    description: string | undefined;
     id: number;
 }
 
 export class TypeDto implements ITypeDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -7229,6 +7274,7 @@ export class TypeDto implements ITypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -7250,6 +7296,7 @@ export class TypeDto implements ITypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -7271,6 +7318,7 @@ export class TypeDto implements ITypeDto {
 
 export interface ITypeDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

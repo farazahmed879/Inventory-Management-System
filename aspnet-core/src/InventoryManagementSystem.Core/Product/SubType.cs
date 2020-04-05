@@ -13,6 +13,9 @@ namespace InventoryManagementSystem.Products
         [StringLength(100)]
         public string Name { get; set; }
 
+        [StringLength(100)]
+        public string Description { get; set; }
+
         [ForeignKey("ProductTypeId")]
         public Type ProductType { get; set; }
         public long ProductTypeId { get; set; }

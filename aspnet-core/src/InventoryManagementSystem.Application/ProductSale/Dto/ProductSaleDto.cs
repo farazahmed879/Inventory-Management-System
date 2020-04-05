@@ -5,6 +5,7 @@ namespace InventoryManagementSystem.ProductSales.Dto
     public class ProductSaleDto : FullAuditedEntity<long>
     {
         public string Status { get; set; }
+        public string Description { get; set; }
         public double SellingRate { get; set; }
         public string ProductName { get; set; }
         public string CompanyName { get; set; }

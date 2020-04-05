@@ -45,6 +45,7 @@ namespace InventoryManagementSystem.ShopProducts
                 CompanyRate = shopProductDto.CompanyRate,
                 ProductId = shopProductDto.ProductId,
                 CompanyId = shopProductDto.CompanyId,
+                Description = shopProductDto.Description,
 
             });
 
@@ -79,7 +80,8 @@ namespace InventoryManagementSystem.ShopProducts
                 RetailPrice = shopProductDto.RetailPrice,
                 ProductId = shopProductDto.ProductId,
                 CompanyId = shopProductDto.CompanyId,
-                CompanyRate = shopProductDto.CompanyRate
+                CompanyRate = shopProductDto.CompanyRate,
+                Description = shopProductDto.Description
             });
 
             if (result != null)
@@ -111,6 +113,7 @@ namespace InventoryManagementSystem.ShopProducts
                     WholeSaleRate = i.WholeSaleRate.Value,
                     RetailPrice = i.RetailPrice,
                     CompanyRate = i.CompanyRate,
+                    Description = i.Description,
                     CompanyId = i.CompanyId,
                     ProductId = i.ProductId,
                     Quantity =  i.Quantity.Value
@@ -122,10 +125,9 @@ namespace InventoryManagementSystem.ShopProducts
 
         public async Task<ResponseMessagesDto> DeleteAsync(long shopProductId)
         {
-            await _shopProductRepository.DeleteAsync(new ShopProduct()
-            {
-                Id = shopProductId
-            });
+            var model = await _shopProductRepository.GetAll().Where(i => i.Id == shopProductId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _shopProductRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -138,10 +140,12 @@ namespace InventoryManagementSystem.ShopProducts
 
         public async Task<List<ShopProductDto>> GetAll()
         {
-            var result = await _shopProductRepository.GetAll().Where(i=> i.Quantity > 0).Select(i => new ShopProductDto()
+            var result = await _shopProductRepository.GetAll()
+                .Where(i=> i.Quantity > 0 && i.IsDeleted == false).Select(i => new ShopProductDto()
             {
                 Id = i.Id,
                 ProductName = i.Product.Name,
+                Description = i.Product.Description,
                 CompanyName = i.Company.Name,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
@@ -152,6 +156,7 @@ namespace InventoryManagementSystem.ShopProducts
         public async Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input)
         {
             var filteredShopProducts = _shopProductRepository.GetAll()
+                .Where(i=> i.IsDeleted == false)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.ProductName), x => x.Product.Name.Contains(input.ProductName))
                 .WhereIf(input.CompanyId.HasValue, x => x.CompanyId == input.CompanyId)
                 .WhereIf(input.TypeId.HasValue, x => x.Product.ProductSubType.ProductType.Id == input.TypeId)
@@ -169,6 +174,7 @@ namespace InventoryManagementSystem.ShopProducts
                 {
                     Id = i.Id,
                     ProductName = i.Product.Name,
+                    Description = i.Product.Description,
                     CompanyName = i.Company.Name,
                     WholeSaleRate = i.WholeSaleRate.Value,
                     Quantity = i.Quantity.Value,

@@ -1,4 +1,4 @@
-import { Component, Injector, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { MenuItem } from '@shared/layout/menu-item';
 
@@ -8,7 +8,8 @@ import { MenuItem } from '@shared/layout/menu-item';
     encapsulation: ViewEncapsulation.None
 })
 export class SideBarNavComponent extends AppComponentBase {
-
+    insideTm: any;
+    outsideTm: any;
     menuItems: MenuItem[] = [
         // new MenuItem(this.l('HomePage'), '', 'home', '/app/home'), 
         new MenuItem(this.l('Dashboard'), '','home', '/app/dashboard'), 
@@ -43,10 +44,19 @@ export class SideBarNavComponent extends AppComponentBase {
     ];
 
     constructor(
-        injector: Injector
+        injector: Injector,
+        private render: Renderer2
     ) {
         super(injector);
+       // $("#leftsidebar").slideToggle();
+    //    setTimeout(()=>{
+    //     this.ngOnInIt();
+    //    },1000)
+      
     }
+    // ngOnInIt(){
+    //     $("#leftsidebar").slideToggle();
+    // }
 
     showMenuItem(menuItem): boolean {
         if (menuItem.permissionName) {
@@ -55,4 +65,46 @@ export class SideBarNavComponent extends AppComponentBase {
 
         return true;
     }
+
+    mouseEnter(e: Event) {
+
+       //$("#leftsidebar").toggle("slide");
+      // $("#leftsidebar").slideToggle();
+      // $("#leftsidebar").slideToggle( { direction: "left" }, 1000);
+        // check if the left aside menu is fixed
+        //  if (document.body.classList.contains('kt-aside--fixed')) {
+        //      if (this.outsideTm) {
+        //          clearTimeout(this.outsideTm);
+        //          this.outsideTm = null;
+        //      }
+ 
+        //      this.insideTm = setTimeout(() => {
+        //          // if the left aside menu is minimized
+        //          if (document.body.classList.contains('kt-aside--minimize')) {
+        //              // show the left aside menu
+        //              this.render.removeClass(document.body, 'kt-aside--minimize');
+        //              this.render.addClass(document.body, 'kt-aside--minimize-hover');
+        //          }
+        //      }, 50);
+        //  }
+     }
+ 
+     mouseLeave(e: Event) {
+        //   $("#leftsidebar").slideToggle();
+    //      if (document.body.classList.contains('kt-aside--fixed')) {
+    //          if (this.insideTm) {
+    //              clearTimeout(this.insideTm);
+    //              this.insideTm = null;
+    //          }
+ 
+    //          this.outsideTm = setTimeout(() => {
+    //              // if the left aside menu is expand
+    //              if (document.body.classList.contains('kt-aside--minimize-hover') ) {
+    //                  // hide back the left aside menu
+    //                  this.render.removeClass(document.body, 'kt-aside--minimize-hover');
+    //                  this.render.addClass(document.body, 'kt-aside--minimize');
+    //              }
+    //          }, 100);
+    //      }
+      }
 }

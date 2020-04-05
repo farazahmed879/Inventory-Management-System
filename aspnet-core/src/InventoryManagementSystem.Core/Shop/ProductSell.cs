@@ -12,6 +12,9 @@ namespace InventoryManagementSystem.Shop
         [Required]
         [StringLength(100)]
         public string Status { get; set; }
+
+        [StringLength(100)]
+        public string Description { get; set; }
         public double SellingRate { get; set; }
 
         [ForeignKey("ShopProductId")]

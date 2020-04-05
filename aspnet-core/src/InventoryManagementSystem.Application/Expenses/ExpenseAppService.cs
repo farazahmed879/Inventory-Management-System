@@ -111,10 +111,9 @@ namespace InventoryManagementSystem.Expenses
 
         public async Task<ResponseMessagesDto> DeleteAsync(long expenseId)
         {
-            await _expenseRepository.DeleteAsync(new Expense()
-            {
-                Id = expenseId
-            });
+            var model = await _expenseRepository.GetAll().Where(i => i.Id == expenseId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _expenseRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -127,7 +126,7 @@ namespace InventoryManagementSystem.Expenses
 
         public async Task<List<ExpenseDto>> GetAll()
         {
-            var result = await _expenseRepository.GetAll().Select(i => new ExpenseDto()
+            var result = await _expenseRepository.GetAll().Where(i=> i.IsDeleted == false).Select(i => new ExpenseDto()
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -142,6 +141,7 @@ namespace InventoryManagementSystem.Expenses
         public async Task<PagedResultDto<ExpenseDto>> GetPaginatedAllAsync(PagedExpenseResultRequestDto input)
         {
             var filteredExpenses = _expenseRepository.GetAll()
+                .Where(i => i.IsDeleted == false)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
             var pagedAndFilteredExpenses = filteredExpenses

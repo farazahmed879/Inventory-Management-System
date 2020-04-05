@@ -20,6 +20,7 @@ export class SideBarUserAreaComponent extends AppComponentBase implements OnInit
 
     ngOnInit() {
         this.shownLoginName = this.appSession.getShownLoginName();
+        console.log("shownLoginName", this.shownLoginName);
     }
 
     logout(): void {

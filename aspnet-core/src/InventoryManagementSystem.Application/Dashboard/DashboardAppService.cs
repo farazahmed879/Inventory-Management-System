@@ -23,7 +23,7 @@ namespace InventoryManagementSystem.Dashboards
         private readonly IRepository<ProductSell, long> _productSaleRepository;
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
         private readonly IRepository<Expense, long> _expenseRepository;
-        private readonly InventoryManagementSystemDbContext _context;
+
         public DashboardService(
             IRepository<ProductSell, long> productSaleRepository,
             IRepository<ShopProduct, long> shopProductRepository,

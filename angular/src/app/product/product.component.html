@@ -53,6 +53,7 @@
             <tr>
               <th>{{ "Product" | localize }}</th>
               <th>{{ "Catagory" | localize }}</th>
+              <th>{{ "Description" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
@@ -69,6 +70,7 @@
               ">
               <td>{{ product.name }}</td>
               <td>{{ product.subTypeName }}</td>
+              <td>{{ product.description }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>

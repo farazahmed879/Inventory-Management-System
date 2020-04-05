@@ -37,7 +37,8 @@ namespace InventoryManagementSystem.Companies
         {
             var result = await _companyRepository.InsertAsync(new Company()
             {
-                Name = companyDto.Name
+                Name = companyDto.Name,
+                Description = companyDto.Description
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -66,7 +67,9 @@ namespace InventoryManagementSystem.Companies
             var result = await _companyRepository.UpdateAsync(new Company()
             {
                 Id = companyDto.Id,
-                Name = companyDto.Name
+                Name = companyDto.Name,
+                Description = companyDto.Description,
+
             });
 
             if (result != null)
@@ -95,7 +98,8 @@ namespace InventoryManagementSystem.Companies
                 new CompanyDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    Description = i.Description
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -104,10 +108,11 @@ namespace InventoryManagementSystem.Companies
 
         public async Task<ResponseMessagesDto> DeleteAsync(long companyId)
         {
-            await _companyRepository.DeleteAsync(new Company()
-            {
-                Id = companyId
-            });
+
+
+            var model = await _companyRepository.GetAll().Where(i => i.Id == companyId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _companyRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -120,10 +125,11 @@ namespace InventoryManagementSystem.Companies
 
         public async Task<List<CompanyDto>> GetAll()
         {
-            var result = await _companyRepository.GetAll().Select(i => new CompanyDto()
+            var result = await _companyRepository.GetAll().Where(i => i.IsDeleted == false).Select(i => new CompanyDto()
             {
                 Id = i.Id,
                 Name = i.Name,
+                Description = i.Description,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
@@ -143,10 +149,11 @@ namespace InventoryManagementSystem.Companies
 
             return new PagedResultDto<CompanyDto>(
                 totalCount: totalCount,
-                items: await pagedAndFilteredCompanys.Select(i => new CompanyDto()
+                items: await pagedAndFilteredCompanys.Where(i=> i.IsDeleted == false).Select(i => new CompanyDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    Description = i.Description
                 })
                     .ToListAsync());
         }

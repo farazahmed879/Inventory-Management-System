@@ -23,7 +23,7 @@ namespace InventoryManagementSystem.ProductSales
         private readonly IRepository<ProductSell, long> _productSaleRepository;
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
         private readonly IRepository<Expense, long> _expenseRepository;
-        private readonly InventoryManagementSystemDbContext _context;
+
         public ProductSaleService(
             IRepository<ProductSell, long> productSaleRepository,
             IRepository<ShopProduct, long> shopProductRepository,
@@ -57,6 +57,7 @@ namespace InventoryManagementSystem.ProductSales
             {
                 var product = new ProductSell();
                 product.Status = productSellDto.Status;
+                product.Description = productSellDto.Description;
                 product.SellingRate = productSellDto.SellingRate;
                 product.ShopProductId = productSellDto.ShopProductId;
                 productList.Add(product);
@@ -104,6 +105,7 @@ namespace InventoryManagementSystem.ProductSales
             {
                 Id = productSellDto.Id,
                 Status = productSellDto.Status,
+                Description = productSellDto.Description,
                 SellingRate = productSellDto.SellingRate,
                 ShopProductId = productSellDto.ShopProductId,
             });
@@ -135,6 +137,7 @@ namespace InventoryManagementSystem.ProductSales
                 {
                     Id = i.Id,
                     Status = i.Status,
+                    Description = i.Description,
                     SellingRate = i.SellingRate,
                     ShopProductId = i.ShopProductId
 
@@ -146,10 +149,9 @@ namespace InventoryManagementSystem.ProductSales
 
         public async Task<ResponseMessagesDto> DeleteAsync(long productSellId)
         {
-            await _productSaleRepository.DeleteAsync(new ProductSell()
-            {
-                Id = productSellId
-            });
+            var model = await _productSaleRepository.GetAll().Where(i => i.Id == productSellId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _productSaleRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -162,10 +164,12 @@ namespace InventoryManagementSystem.ProductSales
 
         public async Task<List<ProductSaleDto>> GetAll()
         {
-            var result = await _productSaleRepository.GetAll().Select(i => new ProductSaleDto()
+            var result = await _productSaleRepository.GetAll()
+                .Where(i=> i.IsDeleted == false).Select(i => new ProductSaleDto()
             {
                 Id = i.Id,
                 Status = i.Status,
+                Description = i.Description,
                 ProductName = i.ShopProduct.Product.Name,
                 CompanyName = i.ShopProduct.Company.Name,
                 ProductType = i.ShopProduct.Product.ProductSubType.Name,
@@ -178,6 +182,7 @@ namespace InventoryManagementSystem.ProductSales
         public async Task<PagedResultDto<ProductSaleDto>> GetPaginatedAllAsync(PagedProductSaleResultRequestDto input)
         {
             var filteredProductSells = _productSaleRepository.GetAll()
+                 .Where(i => i.IsDeleted == false)
                  .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells
@@ -192,6 +197,7 @@ namespace InventoryManagementSystem.ProductSales
                 {
                     Id = i.Id,
                     SellingRate = i.SellingRate,
+                    Description = i.Description,
                     ProductName = i.ShopProduct.Product.Name,
                     CompanyName = i.ShopProduct.Company.Name,
                     ProductType = i.ShopProduct.Product.ProductSubType.Name,

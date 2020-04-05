@@ -39,6 +39,7 @@ namespace InventoryManagementSystem.Products
             var result = await _productRepository.InsertAsync(new Product()
             {
                 Name = productDto.Name,
+                Description = productDto.Description,
                 ProductSubTypeId = productDto.SubTypeId
             });
 
@@ -69,6 +70,7 @@ namespace InventoryManagementSystem.Products
             {
                 Id = productDto.Id,
                 Name = productDto.Name,
+                Description = productDto.Description,
                 ProductSubTypeId = productDto.SubTypeId
             });
 
@@ -99,6 +101,7 @@ namespace InventoryManagementSystem.Products
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     SubTypeId = i.ProductSubTypeId.Value
                 })
                 .FirstOrDefaultAsync();
@@ -108,10 +111,9 @@ namespace InventoryManagementSystem.Products
 
         public async Task<ResponseMessagesDto> DeleteAsync(long productId)
         {
-            await _productRepository.DeleteAsync(new Product()
-            {
-                Id = productId
-            });
+            var model = await _productRepository.GetAll().Where(i => i.Id == productId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _productRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -124,10 +126,11 @@ namespace InventoryManagementSystem.Products
 
         public async Task<List<ProductDto>> GetAll()
         {
-            var result = await _productRepository.GetAll().Select(i => new ProductDto()
+            var result = await _productRepository.GetAll().Where(i=> i.IsDeleted == false).Select(i => new ProductDto()
             {
                 Id = i.Id,
                 Name = i.Name,
+                Description = i.Description,
                 SubTypeId = i.ProductSubTypeId.Value,
                 SubTypeName = i.ProductSubType.Name,
                 CreatorUserId = i.CreatorUserId,
@@ -139,6 +142,7 @@ namespace InventoryManagementSystem.Products
         public async Task<PagedResultDto<ProductDto>> GetPaginatedAllAsync(PagedProductResultRequestDto input)
         {
             var filteredProducts = _productRepository.GetAll()
+                .Where(i => i.IsDeleted == false)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
                     x => x.Name.Contains(input.Name))
             .WhereIf(input.SubTypeId.HasValue, x=> x.ProductSubTypeId == input.SubTypeId);
@@ -155,6 +159,7 @@ namespace InventoryManagementSystem.Products
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     SubTypeId = i.ProductSubTypeId.Value,
                     SubTypeName = i.ProductSubType.Name
                 })

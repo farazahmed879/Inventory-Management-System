@@ -7,6 +7,7 @@ namespace InventoryManagementSystem.ShopProducts.Dto
 {
     public class CreateShopProductDto : Entity<long>
     {
+        public string Description { get; set; }
         public double WholeSaleRate { get; set; }
         public int Quantity { get; set; }
         public double? CompanyRate { get; set; }
