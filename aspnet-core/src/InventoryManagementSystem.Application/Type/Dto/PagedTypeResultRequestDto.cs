@@ -9,6 +9,5 @@ namespace InventoryManagementSystem.Types.Dto
     public class PagedTypeResultRequestDto : PagedResultRequestDto
     {
         public string Name { get; set; }
-        public long TenantId { get; set; }
     }
 }

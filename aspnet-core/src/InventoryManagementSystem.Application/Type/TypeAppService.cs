@@ -138,7 +138,6 @@ namespace InventoryManagementSystem.Types
         public async Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input)
         {
             var filteredTypes = _typeRepository.GetAll()
-                .Where(i => i.IsDeleted == false && i.TenantId == input.TenantId)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
             var pagedAndFilteredTypes = filteredTypes
