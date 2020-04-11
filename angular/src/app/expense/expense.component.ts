@@ -49,7 +49,7 @@ export class ExpenseComponent extends PagedListingComponentBase<ExpenseDto> {
         request.keyword = this.keyword;
 
         this._expenseService
-            .getPaginatedAll(request.keyword,undefined,undefined, request.skipCount, request.maxResultCount)
+            .getPaginatedAll(request.keyword,undefined,undefined,this.appSession.tenantId, request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();

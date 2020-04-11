@@ -21,6 +21,7 @@ import {
 } from "@shared/service-proxies/service-proxies";
 import { CreateShopProductDialogComponent } from "./create-shop-product/create-shop-product-dialog.component";
 import { EditShopProductDialogComponent } from "./edit-shop-product/edit-shop-product-dialog.component";
+import { timingSafeEqual } from "crypto";
 
 class PagedShopProductRequestDto extends PagedRequestDto {
   keyword: string;
@@ -71,25 +72,25 @@ export class ShopProductComponent extends PagedListingComponentBase<
   }
 
   getAllShopProducts() {
-    this._shopProductService.getAll().subscribe(result => {
+    this._shopProductService.getAll(this.appSession.tenantId).subscribe(result => {
       this.shopProductsFilter = result;
     });
   }
 
   getCompanies() {
-    this._companyService.getAll().subscribe(result => {
+    this._companyService.getAll(this.appSession.tenantId).subscribe(result => {
       this.companies = result;
     });
   }
 
   getTypes() {
-    this._typeService.getAll().subscribe(result => {
+    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.types = result;
     });
   }
 
   getSubTypes() {
-    this._subTypeService.getAll().subscribe(result => {
+    this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
     });
   }
@@ -107,6 +108,7 @@ export class ShopProductComponent extends PagedListingComponentBase<
         this.selectedCompany,
         this.selectedType,
         this.selectedSubType,
+        this.appSession.tenantId,
         request.skipCount,
         request.maxResultCount
       )

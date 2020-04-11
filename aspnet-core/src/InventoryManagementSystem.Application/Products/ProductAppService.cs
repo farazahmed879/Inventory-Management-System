@@ -14,11 +14,11 @@ namespace InventoryManagementSystem.Products
     public class ProductService : AbpServiceBase, IProductService
     {
         private readonly IRepository<Product, long> _productRepository;
+
         public ProductService(IRepository<Product, long> productRepository)
         {
             _productRepository = productRepository;
         }
-
 
         public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateProductDto productDto)
         {
@@ -40,7 +40,8 @@ namespace InventoryManagementSystem.Products
             {
                 Name = productDto.Name,
                 Description = productDto.Description,
-                ProductSubTypeId = productDto.SubTypeId
+                ProductSubTypeId = productDto.SubTypeId,
+                TenantId = productDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -92,6 +93,7 @@ namespace InventoryManagementSystem.Products
                 Error = true,
             };
         }
+
         public async Task<ProductDto> GetById(long productId)
         {
             var result = await _productRepository.GetAll()
@@ -108,7 +110,6 @@ namespace InventoryManagementSystem.Products
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long productId)
         {
             var model = await _productRepository.GetAll().Where(i => i.Id == productId).FirstOrDefaultAsync();
@@ -124,9 +125,9 @@ namespace InventoryManagementSystem.Products
             };
         }
 
-        public async Task<List<ProductDto>> GetAll()
+        public async Task<List<ProductDto>> GetAll(long? tenantId)
         {
-            var result = await _productRepository.GetAll().Where(i=> i.IsDeleted == false).Select(i => new ProductDto()
+            var result = await _productRepository.GetAll().Where(i=> i.IsDeleted == false && i.TenantId == tenantId).Select(i => new ProductDto()
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -139,10 +140,11 @@ namespace InventoryManagementSystem.Products
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<ProductDto>> GetPaginatedAllAsync(PagedProductResultRequestDto input)
         {
             var filteredProducts = _productRepository.GetAll()
-                .Where(i => i.IsDeleted == false)
+                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
                     x => x.Name.Contains(input.Name))
             .WhereIf(input.SubTypeId.HasValue, x=> x.ProductSubTypeId == input.SubTypeId);

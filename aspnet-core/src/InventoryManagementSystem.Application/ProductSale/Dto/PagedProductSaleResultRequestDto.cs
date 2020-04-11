@@ -12,5 +12,6 @@ namespace InventoryManagementSystem.ProductSales.Dto
         public double SellingRate { get; set; }
         public long ShopProductId { get; set; }
         public string ProductName { get; set; }
+        public long? TenantId { get; set; }
     }
 }

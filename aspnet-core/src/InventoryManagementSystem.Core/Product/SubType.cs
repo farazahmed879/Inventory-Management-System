@@ -19,5 +19,7 @@ namespace InventoryManagementSystem.Products
         [ForeignKey("ProductTypeId")]
         public Type ProductType { get; set; }
         public long ProductTypeId { get; set; }
+
+        public long? TenantId { get; set; }
     }
 }

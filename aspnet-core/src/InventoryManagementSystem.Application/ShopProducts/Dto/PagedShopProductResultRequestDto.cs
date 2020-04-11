@@ -8,5 +8,6 @@ namespace InventoryManagementSystem.ShopProducts.Dto
         public long? CompanyId { get; set; }
         public long? TypeId { get; set; }
         public long? SubTypeId { get; set; }
+        public long? TenantId { get; set; }
     }
 }

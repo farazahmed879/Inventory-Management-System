@@ -45,7 +45,8 @@ namespace InventoryManagementSystem.SubTypes
             {
                 Name = subTypeDto.Name,
                 Description = subTypeDto.Description,
-                ProductTypeId = subTypeDto.ProductTypeId
+                ProductTypeId = subTypeDto.ProductTypeId,
+                TenantId = subTypeDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -97,6 +98,7 @@ namespace InventoryManagementSystem.SubTypes
                 Error = true,
             };
         }
+
         public async Task<SubTypeDto> GetById(long subTypeId)
         {
             var result = await _subTypeRepository.GetAll()
@@ -113,7 +115,6 @@ namespace InventoryManagementSystem.SubTypes
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long subTypeId)
         {
             var model = await _subTypeRepository.GetAll().Where(i => i.Id == subTypeId).FirstOrDefaultAsync();
@@ -129,10 +130,10 @@ namespace InventoryManagementSystem.SubTypes
             };
         }
 
-        public async Task<List<SubTypeDto>> GetAll()
+        public async Task<List<SubTypeDto>> GetAll(long? tenantId)
         {
             var result = await _subTypeRepository.GetAll()
-                .Where(i => i.IsDeleted == false).Select(i => new SubTypeDto()
+                .Where(i => i.IsDeleted == false && i.TenantId == tenantId).Select(i => new SubTypeDto()
                 {
                     Id = i.Id,
                     Name = i.Name,
@@ -144,10 +145,11 @@ namespace InventoryManagementSystem.SubTypes
                 }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input)
         {
             var filteredSubTypes = _subTypeRepository.GetAll()
-                .Where(i => i.IsDeleted == false)
+                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name) || !string.IsNullOrWhiteSpace(input.ProductType),
                     x => x.Name.Contains(input.Name) || x.ProductType.Name.Contains(input.ProductType));
 

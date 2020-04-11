@@ -15,5 +15,7 @@ namespace InventoryManagementSystem.Expenses
         [StringLength(100)]
         public string Description { get; set; }
         public double Cost { get; set; }
+
+        public long? TenantId { get; set; }
     }
 }

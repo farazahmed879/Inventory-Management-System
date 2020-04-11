@@ -60,6 +60,7 @@ namespace InventoryManagementSystem.ProductSales
                 product.Description = productSellDto.Description;
                 product.SellingRate = productSellDto.SellingRate;
                 product.ShopProductId = productSellDto.ShopProductId;
+                product.TenantId = productSellDto.TenantId;
                 productList.Add(product);
             }
             await _productSaleRepository.GetDbContext().AddRangeAsync(productList);
@@ -128,6 +129,7 @@ namespace InventoryManagementSystem.ProductSales
                 Error = true,
             };
         }
+
         public async Task<ProductSaleDto> GetById(long productSellId)
         {
             var result = await _productSaleRepository.GetAll()
@@ -146,7 +148,6 @@ namespace InventoryManagementSystem.ProductSales
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long productSellId)
         {
             var model = await _productSaleRepository.GetAll().Where(i => i.Id == productSellId).FirstOrDefaultAsync();
@@ -162,10 +163,10 @@ namespace InventoryManagementSystem.ProductSales
             };
         }
 
-        public async Task<List<ProductSaleDto>> GetAll()
+        public async Task<List<ProductSaleDto>> GetAll(long? tenantId)
         {
             var result = await _productSaleRepository.GetAll()
-                .Where(i=> i.IsDeleted == false).Select(i => new ProductSaleDto()
+                .Where(i=> i.IsDeleted == false && i.TenantId == tenantId).Select(i => new ProductSaleDto()
             {
                 Id = i.Id,
                 Status = i.Status,
@@ -179,10 +180,11 @@ namespace InventoryManagementSystem.ProductSales
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<ProductSaleDto>> GetPaginatedAllAsync(PagedProductSaleResultRequestDto input)
         {
             var filteredProductSells = _productSaleRepository.GetAll()
-                 .Where(i => i.IsDeleted == false)
+                 .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                  .WhereIf(!string.IsNullOrWhiteSpace(input.Status), x => x.Status.Contains(input.Status));
 
             var pagedAndFilteredProductSells = filteredProductSells

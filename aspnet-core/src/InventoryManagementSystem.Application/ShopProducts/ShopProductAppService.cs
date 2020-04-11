@@ -15,11 +15,11 @@ namespace InventoryManagementSystem.ShopProducts
     public class ShopProductService : AbpServiceBase, IShopProductService
     {
         private readonly IRepository<ShopProduct, long> _shopProductRepository;
+
         public ShopProductService(IRepository<ShopProduct, long> shopProductRepository)
         {
             _shopProductRepository = shopProductRepository;
         }
-
 
         public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateShopProductDto shopProductDto)
         {
@@ -46,6 +46,7 @@ namespace InventoryManagementSystem.ShopProducts
                 ProductId = shopProductDto.ProductId,
                 CompanyId = shopProductDto.CompanyId,
                 Description = shopProductDto.Description,
+                TenantId = shopProductDto.TenantId
 
             });
 
@@ -102,6 +103,7 @@ namespace InventoryManagementSystem.ShopProducts
                 Error = true,
             };
         }
+
         public async Task<ShopProductDto> GetById(long shopProductId)
         {
             var result = await _shopProductRepository.GetAll()
@@ -122,7 +124,6 @@ namespace InventoryManagementSystem.ShopProducts
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long shopProductId)
         {
             var model = await _shopProductRepository.GetAll().Where(i => i.Id == shopProductId).FirstOrDefaultAsync();
@@ -138,10 +139,10 @@ namespace InventoryManagementSystem.ShopProducts
             };
         }
 
-        public async Task<List<ShopProductDto>> GetAll()
+        public async Task<List<ShopProductDto>> GetAll(long? tenantId)
         {
             var result = await _shopProductRepository.GetAll()
-                .Where(i=> i.Quantity > 0 && i.IsDeleted == false).Select(i => new ShopProductDto()
+                .Where(i=> i.Quantity > 0 && i.IsDeleted == false && i.TenantId == tenantId).Select(i => new ShopProductDto()
             {
                 Id = i.Id,
                 ProductName = i.Product.Name,
@@ -153,10 +154,11 @@ namespace InventoryManagementSystem.ShopProducts
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input)
         {
             var filteredShopProducts = _shopProductRepository.GetAll()
-                .Where(i=> i.IsDeleted == false)
+               .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.ProductName), x => x.Product.Name.Contains(input.ProductName))
                 .WhereIf(input.CompanyId.HasValue, x => x.CompanyId == input.CompanyId)
                 .WhereIf(input.TypeId.HasValue, x => x.Product.ProductSubType.ProductType.Id == input.TypeId)

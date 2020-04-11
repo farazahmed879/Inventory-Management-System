@@ -320,10 +320,15 @@ export class CompanyServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<CompanyDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/CompanyService/GetAll";
+    getAll(tenantId: number | undefined): Observable<CompanyDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/CompanyService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -376,16 +381,21 @@ export class CompanyServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CompanyDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CompanyDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/CompanyService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -813,10 +823,15 @@ export class ExpenseServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ExpenseDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ExpenseDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -871,11 +886,12 @@ export class ExpenseServiceServiceProxy {
      * @param name (optional) 
      * @param description (optional) 
      * @param cost (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, description: string | undefined, cost: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ExpenseDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, description: string | undefined, cost: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ExpenseDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -889,6 +905,10 @@ export class ExpenseServiceServiceProxy {
             throw new Error("The parameter 'cost' cannot be null.");
         else if (cost !== undefined)
             url_ += "Cost=" + encodeURIComponent("" + cost) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -1124,10 +1144,15 @@ export class ProductSaleServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ProductSaleDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ProductSaleDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1183,11 +1208,12 @@ export class ProductSaleServiceServiceProxy {
      * @param sellingRate (optional) 
      * @param shopProductId (optional) 
      * @param productName (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, shopProductId: number | undefined, productName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSaleDtoPagedResultDto> {
+    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, shopProductId: number | undefined, productName: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSaleDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetPaginatedAll?";
         if (status === null)
             throw new Error("The parameter 'status' cannot be null.");
@@ -1205,6 +1231,10 @@ export class ProductSaleServiceServiceProxy {
             throw new Error("The parameter 'productName' cannot be null.");
         else if (productName !== undefined)
             url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -1440,10 +1470,15 @@ export class ProductServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ProductDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ProductDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ProductService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1497,11 +1532,12 @@ export class ProductServiceServiceProxy {
     /**
      * @param name (optional) 
      * @param subTypeId (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, subTypeId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, subTypeId: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -1511,6 +1547,10 @@ export class ProductServiceServiceProxy {
             throw new Error("The parameter 'subTypeId' cannot be null.");
         else if (subTypeId !== undefined)
             url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -2270,10 +2310,15 @@ export class ShopProductServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ShopProductDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ShopProductDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2329,11 +2374,12 @@ export class ShopProductServiceServiceProxy {
      * @param companyId (optional) 
      * @param typeId (optional) 
      * @param subTypeId (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(productName: string | undefined, companyId: number | undefined, typeId: number | undefined, subTypeId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
+    getPaginatedAll(productName: string | undefined, companyId: number | undefined, typeId: number | undefined, subTypeId: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetPaginatedAll?";
         if (productName === null)
             throw new Error("The parameter 'productName' cannot be null.");
@@ -2351,6 +2397,10 @@ export class ShopProductServiceServiceProxy {
             throw new Error("The parameter 'subTypeId' cannot be null.");
         else if (subTypeId !== undefined)
             url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -2586,10 +2636,15 @@ export class SubTypeServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<SubTypeDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAll";
+    getAll(tenantId: number | undefined): Observable<SubTypeDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2643,11 +2698,12 @@ export class SubTypeServiceServiceProxy {
     /**
      * @param name (optional) 
      * @param productType (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, productType: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, productType: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -2657,6 +2713,10 @@ export class SubTypeServiceServiceProxy {
             throw new Error("The parameter 'productType' cannot be null.");
         else if (productType !== undefined)
             url_ += "ProductType=" + encodeURIComponent("" + productType) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -3445,10 +3505,15 @@ export class TypeServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<TypeDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/GetAll";
+    getAll(tenantId: number | undefined): Observable<TypeDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/TypeService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -4289,6 +4354,7 @@ export interface IRegisterOutput {
 export class CreateCompanyDto implements ICreateCompanyDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateCompanyDto) {
@@ -4304,6 +4370,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
         if (_data) {
             this.name = _data["name"];
             this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -4319,6 +4386,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -4334,6 +4402,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
 export interface ICreateCompanyDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -4399,6 +4468,7 @@ export interface IResponseMessagesDto {
 export class CompanyDto implements ICompanyDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4421,6 +4491,7 @@ export class CompanyDto implements ICompanyDto {
         if (_data) {
             this.name = _data["name"];
             this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4443,6 +4514,7 @@ export class CompanyDto implements ICompanyDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4465,6 +4537,7 @@ export class CompanyDto implements ICompanyDto {
 export interface ICompanyDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4786,6 +4859,7 @@ export class CreateExpenseDto implements ICreateExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateExpenseDto) {
@@ -4802,6 +4876,7 @@ export class CreateExpenseDto implements ICreateExpenseDto {
             this.name = _data["name"];
             this.description = _data["description"];
             this.cost = _data["cost"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -4818,6 +4893,7 @@ export class CreateExpenseDto implements ICreateExpenseDto {
         data["name"] = this.name;
         data["description"] = this.description;
         data["cost"] = this.cost;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -4834,6 +4910,7 @@ export interface ICreateExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     id: number;
 }
 
@@ -4848,6 +4925,7 @@ export class ExpenseDto implements IExpenseDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: IExpenseDto) {
@@ -4981,6 +5059,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     sellingRate: number;
     shopProductId: number;
     quantity: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateProductSaleDto) {
@@ -4999,6 +5078,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
             this.sellingRate = _data["sellingRate"];
             this.shopProductId = _data["shopProductId"];
             this.quantity = _data["quantity"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -5017,6 +5097,7 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
         data["sellingRate"] = this.sellingRate;
         data["shopProductId"] = this.shopProductId;
         data["quantity"] = this.quantity;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -5035,6 +5116,7 @@ export interface ICreateProductSaleDto {
     sellingRate: number;
     shopProductId: number;
     quantity: number | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -5055,6 +5137,7 @@ export class ProductSaleDto implements IProductSaleDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId : number;
     id: number;
 
     constructor(data?: IProductSaleDto) {
@@ -5204,6 +5287,7 @@ export class CreateProductDto implements ICreateProductDto {
     name: string | undefined;
     description: string | undefined;
     subTypeId: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateProductDto) {
@@ -5220,6 +5304,7 @@ export class CreateProductDto implements ICreateProductDto {
             this.name = _data["name"];
             this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -5236,6 +5321,7 @@ export class CreateProductDto implements ICreateProductDto {
         data["name"] = this.name;
         data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -5252,6 +5338,7 @@ export interface ICreateProductDto {
     name: string | undefined;
     description: string | undefined;
     subTypeId: number;
+    tenantId: number;
     id: number;
 }
 
@@ -5267,6 +5354,7 @@ export class ProductDto implements IProductDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId : number;
     id: number;
 
     constructor(data?: IProductDto) {
@@ -6219,6 +6307,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
     retailPrice: number | undefined;
     productId: number;
     companyId: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateShopProductDto) {
@@ -6239,6 +6328,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
             this.retailPrice = _data["retailPrice"];
             this.productId = _data["productId"];
             this.companyId = _data["companyId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -6259,6 +6349,7 @@ export class CreateShopProductDto implements ICreateShopProductDto {
         data["retailPrice"] = this.retailPrice;
         data["productId"] = this.productId;
         data["companyId"] = this.companyId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -6279,6 +6370,7 @@ export interface ICreateShopProductDto {
     retailPrice: number | undefined;
     productId: number;
     companyId: number | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -6299,6 +6391,7 @@ export class ShopProductDto implements IShopProductDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: IShopProductDto) {
@@ -6448,6 +6541,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
     description: string | undefined;
     name: string | undefined;
     productTypeId: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateSubTypeDto) {
@@ -6464,6 +6558,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
             this.description = _data["description"];
             this.name = _data["name"];
             this.productTypeId = _data["productTypeId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -6480,6 +6575,7 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
         data["description"] = this.description;
         data["name"] = this.name;
         data["productTypeId"] = this.productTypeId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -6496,6 +6592,7 @@ export interface ICreateSubTypeDto {
     description: string | undefined;
     name: string | undefined;
     productTypeId: number;
+    tenantId: number;
     id: number;
 }
 
@@ -6511,6 +6608,7 @@ export class SubTypeDto implements ISubTypeDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId : number;
     id: number;
 
     constructor(data?: ISubTypeDto) {
@@ -7202,6 +7300,7 @@ export interface IExternalAuthenticateResultModel {
 export class CreateTypeDto implements ICreateTypeDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateTypeDto) {
@@ -7217,6 +7316,7 @@ export class CreateTypeDto implements ICreateTypeDto {
         if (_data) {
             this.name = _data["name"];
             this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -7232,6 +7332,7 @@ export class CreateTypeDto implements ICreateTypeDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -7247,6 +7348,7 @@ export class CreateTypeDto implements ICreateTypeDto {
 export interface ICreateTypeDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -7260,6 +7362,7 @@ export class TypeDto implements ITypeDto {
     lastModifierUserId: number | undefined;
     creationTime: moment.Moment;
     creatorUserId: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ITypeDto) {

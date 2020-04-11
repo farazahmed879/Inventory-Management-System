@@ -53,13 +53,16 @@ export class CreateSubTypeDialogComponent extends AppComponentBase
   }
 
   getAllProductType() {
-    this._typeService.getAll().subscribe(result => {
+    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.types = result;
     });
   }
 
   save(): void {
     this.saving = true;
+    this.subType.tenantId = this.appSession.tenantId;
+
+
     this._subTypeService
       .createOrEdit(this.subType)
       .pipe(

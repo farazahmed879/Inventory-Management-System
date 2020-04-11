@@ -27,6 +27,8 @@ namespace InventoryManagementSystem.Shop
         public long ProductId { get; set; }
         public long? CompanyId { get; set; }
 
+        public long? TenantId { get; set; }
+
 
     }
 }

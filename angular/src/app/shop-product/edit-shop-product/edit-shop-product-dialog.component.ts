@@ -64,25 +64,25 @@ export class EditShopProductDialogComponent extends AppComponentBase
     this.getAllSubTypes();
   }
   getAllCompany() {
-    this._companyService.getAll().subscribe(result => {
+    this._companyService.getAll(this.appSession.tenantId).subscribe(result => {
       this.companies = result;
     });
   }
 
   getAllProduct() {
-    this._productService.getAll().subscribe(result => {
+    this._productService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
     });
   }
 
   getAllTypes() {
-    this._typeService.getAll().subscribe(result => {
+    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.types = result;
     });
   }
 
   getAllSubTypes() {
-    this._subTypeService.getAll().subscribe(result => {
+    this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
     });
   }

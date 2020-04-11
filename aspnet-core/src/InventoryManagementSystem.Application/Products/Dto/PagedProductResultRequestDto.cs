@@ -10,5 +10,6 @@ namespace InventoryManagementSystem.Products.Dto
     {
         public string Name { get; set; }
         public long? SubTypeId { get; set; }
+        public long? TenantId { get; set; }
     }
 }

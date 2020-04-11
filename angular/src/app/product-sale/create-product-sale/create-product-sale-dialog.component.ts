@@ -57,7 +57,7 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
   }
 
   getAllProduct() {
-    this._shopProductService.getAll().subscribe(result => {
+    this._shopProductService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
       console.log("shop products",result);
     });
@@ -65,6 +65,7 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
+    this.productSale.tenantId = this.appSession.tenantId;
 
     this._productSaleService
       .createOrEdit(this.productSale)

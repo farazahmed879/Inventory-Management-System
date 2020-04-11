@@ -20,5 +20,7 @@ namespace InventoryManagementSystem.Shop
         [ForeignKey("ShopProductId")]
         public ShopProduct ShopProduct { get; set; }
         public long ShopProductId { get; set; }
+
+        public long? TenantId { get; set; }
     }
 }
