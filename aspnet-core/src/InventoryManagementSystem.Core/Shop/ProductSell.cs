@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace InventoryManagementSystem.Shop
 {
-    public class ProductSell : FullAuditedEntity<long>
+    public class ProductSell : FullAuditedEntity<long>, IMayHaveTenant
     {
         [Required]
         [StringLength(100)]
@@ -21,6 +22,6 @@ namespace InventoryManagementSystem.Shop
         public ShopProduct ShopProduct { get; set; }
         public long ShopProductId { get; set; }
 
-        public long? TenantId { get; set; }
+        public int? TenantId { get; set; }
     }
 }

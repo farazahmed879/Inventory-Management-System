@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace InventoryManagementSystem.Products
 {
-    public class SubType : FullAuditedEntity<long>
+    public class SubType : FullAuditedEntity<long> , IMayHaveTenant
     {
         [Required]
         [StringLength(100)]
@@ -18,8 +19,9 @@ namespace InventoryManagementSystem.Products
 
         [ForeignKey("ProductTypeId")]
         public Type ProductType { get; set; }
+
         public long ProductTypeId { get; set; }
 
-        public long? TenantId { get; set; }
+        public int? TenantId { get; set; }
     }
 }
