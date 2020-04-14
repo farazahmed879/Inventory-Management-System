@@ -14,6 +14,14 @@
             maxlength="64"
           />
         </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="description"
+            [placeholder]="'Description' | localize"
+            [(ngModel)]="type.description"
+          />
+        </mat-form-field>
       </div>
     </div>
   </mat-dialog-content>

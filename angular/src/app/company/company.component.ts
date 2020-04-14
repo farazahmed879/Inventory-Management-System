@@ -20,13 +20,7 @@ class PagedCompanyRequestDto extends PagedRequestDto {
 @Component({
     templateUrl: './company.component.html',
     animations: [appModuleAnimation()],
-    styles: [
-        `
-          mat-form-field {
-            padding: 10px;
-          }
-        `
-      ]
+    styles: ['./company.component.less']
 })
 export class CompanyComponent extends PagedListingComponentBase<CompanyDto> {
     companies: CompanyDto[] = [];
@@ -49,7 +43,7 @@ export class CompanyComponent extends PagedListingComponentBase<CompanyDto> {
         request.keyword = this.keyword;
 
         this._companyService
-            .getPaginatedAll(request.keyword, request.skipCount, request.maxResultCount)
+            .getPaginatedAll(request.keyword,this.appSession.tenantId, request.skipCount, request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();

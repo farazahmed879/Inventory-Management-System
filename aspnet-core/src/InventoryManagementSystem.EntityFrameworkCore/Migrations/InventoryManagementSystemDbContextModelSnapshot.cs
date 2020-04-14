@@ -1425,6 +1425,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1438,6 +1442,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1467,7 +1474,8 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1482,6 +1490,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1570,6 +1581,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1586,6 +1601,9 @@ namespace InventoryManagementSystem.Migrations
 
                     b.Property<long?>("ProductSubTypeId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1613,6 +1631,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1629,6 +1651,9 @@ namespace InventoryManagementSystem.Migrations
 
                     b.Property<long>("ProductTypeId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1656,6 +1681,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1669,6 +1698,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1694,6 +1726,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1713,6 +1749,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1746,6 +1785,10 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1763,6 +1806,9 @@ namespace InventoryManagementSystem.Migrations
 
                     b.Property<double?>("RetailPrice")
                         .HasColumnType("float");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.Property<double?>("WholeSaleRate")
                         .HasColumnType("float");

@@ -9,5 +9,6 @@ namespace InventoryManagementSystem.Companies.Dto
     public class PagedCompanyResultRequestDto : PagedResultRequestDto
     {
         public string Name { get; set; }
+        public long? TenantId { get; set; }
     }
 }

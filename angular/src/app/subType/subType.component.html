@@ -29,7 +29,7 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Select Type</mat-label>
+                  <mat-label>Select Shop</mat-label>
                   <mat-select [(ngModel)]="selectedType" name="Type">
                     <mat-option *ngFor="let type of types" [value]="type.name">
                       {{type.name}}
@@ -50,8 +50,9 @@
         <table class="table table-hover table-striped" [busy]="isTableLoading">
           <thead>
             <tr>
-              <th>{{ "Subtype" | localize }}</th>
-              <th>{{ "Type" | localize }}</th>
+              <th>{{ "Catagory" | localize }}</th>
+              <th>{{ "Shop" | localize }}</th>
+              <th>{{ "Description" | localize }}</th>
               <th>{{ "Actions" | localize }}</th>
             </tr>
           </thead>
@@ -68,6 +69,7 @@
               ">
               <td>{{ subType.name }}</td>
               <td>{{ subType.productTypeName }}</td>
+              <td>{{ subType.description }}</td>
               <td>
                 <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
                   <mat-icon>menu</mat-icon>

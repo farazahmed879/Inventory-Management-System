@@ -53,7 +53,7 @@ export class EditProductSaleDialogComponent extends AppComponentBase
   }
 
   getAllProduct() {
-    this._shopProductService.getAll().subscribe(result => {
+    this._shopProductService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
       console.log("shop products",result);
     });

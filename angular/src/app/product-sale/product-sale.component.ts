@@ -48,7 +48,7 @@ export class ProductSaleComponent extends PagedListingComponentBase<ProductSaleD
         request.keyword = this.keyword;
 
         this._productSaleService
-            .getPaginatedAll(request.keyword,undefined,undefined, undefined,request.skipCount,request.maxResultCount)
+            .getPaginatedAll(request.keyword,undefined,undefined, undefined,this.appSession.tenantId,request.skipCount,request.maxResultCount)
             .pipe(
                 finalize(() => {
                     finishedCallback();
@@ -107,4 +107,8 @@ export class ProductSaleComponent extends PagedListingComponentBase<ProductSaleD
             }
         });
     }
+
+    clearFilters() {
+        this.keyword = "";
+      }
 }

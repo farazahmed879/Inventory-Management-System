@@ -14,11 +14,11 @@ namespace InventoryManagementSystem.Types
     public class TypeService : AbpServiceBase, ITypeService
     {
         private readonly IRepository<Type, long> _typeRepository;
+
         public TypeService(IRepository<Type, long> typeRepository)
         {
             _typeRepository = typeRepository;
         }
-
 
         public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateTypeDto typeDto)
         {
@@ -38,7 +38,9 @@ namespace InventoryManagementSystem.Types
         {
             var result = await _typeRepository.InsertAsync(new Type()
             {
-                Name = typeDto.Name
+                Name = typeDto.Name,
+                Description = typeDto.Description,
+                TenantId = typeDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -67,6 +69,7 @@ namespace InventoryManagementSystem.Types
             var result = await _typeRepository.UpdateAsync(new Type()
             {
                 Id = typeDto.Id,
+                Description = typeDto.Description,
                 Name = typeDto.Name
             });
 
@@ -88,6 +91,7 @@ namespace InventoryManagementSystem.Types
                 Error = true,
             };
         }
+
         public async Task<TypeDto> GetById(long typeId)
         {
             var result = await _typeRepository.GetAll()
@@ -96,19 +100,18 @@ namespace InventoryManagementSystem.Types
                 new TypeDto()
                 {
                     Id = i.Id,
-                    Name = i.Name
+                    Name = i.Name,
+                    Description = i.Description,
                 })
                 .FirstOrDefaultAsync();
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long typeId)
         {
-            await _typeRepository.DeleteAsync(new Type()
-            {
-                Id = typeId
-            });
+            var model = await _typeRepository.GetAll().Where(i => i.Id == typeId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _typeRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -119,21 +122,25 @@ namespace InventoryManagementSystem.Types
             };
         }
 
-        public async Task<List<TypeDto>> GetAll()
+        public async Task<List<TypeDto>> GetAll(long? tenantId)
         {
-            var result = await _typeRepository.GetAll().Select(i => new TypeDto()
+            var result = await _typeRepository.GetAll()
+                .Where(i=> i.IsDeleted == false && i.TenantId == tenantId).Select(i => new TypeDto()
             {
                 Id = i.Id,
                 Name = i.Name,
+                Description = i.Description,
                 CreatorUserId = i.CreatorUserId,
                 CreationTime = i.CreationTime,
                 LastModificationTime = i.LastModificationTime
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input)
         {
             var filteredTypes = _typeRepository.GetAll()
+               .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
             var pagedAndFilteredTypes = filteredTypes
@@ -147,6 +154,7 @@ namespace InventoryManagementSystem.Types
                 items: await pagedAndFilteredTypes.Select(i => new TypeDto()
                 {
                     Id = i.Id,
+                    Description = i.Description,
                     Name = i.Name
                 })
                     .ToListAsync());

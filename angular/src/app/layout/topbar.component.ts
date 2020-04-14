@@ -1,5 +1,6 @@
-import { Component, Injector, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
+import { SideBarNavComponent } from './sidebar-nav.component';
 
 @Component({
     templateUrl: './topbar.component.html',
@@ -8,9 +9,14 @@ import { AppComponentBase } from '@shared/app-component-base';
 })
 export class TopBarComponent extends AppComponentBase {
 
+    //@ViewChild('sidebar') sidebar: SideBarNavComponent;
     constructor(
         injector: Injector
     ) {
         super(injector);
     }
+
+    // closeClick() {
+    //     this.sidebar.hide();
+    // }
 }

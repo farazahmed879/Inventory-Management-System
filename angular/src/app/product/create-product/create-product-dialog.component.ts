@@ -42,12 +42,13 @@ export class CreateProductDialogComponent extends AppComponentBase
   }
 
   getAllProductType() {
-    this._subTYpeService.getAll().subscribe(result => {
+    this._subTYpeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
     });
   }
   save(): void {
     this.saving = true;
+    this.product.tenantId = this.appSession.tenantId;
 
     this._productService
       .createOrEdit(this.product)

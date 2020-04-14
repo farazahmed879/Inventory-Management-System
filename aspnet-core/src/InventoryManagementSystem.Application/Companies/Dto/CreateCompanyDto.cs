@@ -8,5 +8,7 @@ namespace InventoryManagementSystem.Companies.Dto
     public class CreateCompanyDto :Entity<long>
     {
         public string Name { get; set; }
+        public string Description { get; set; }
+        public int TenantId { get; set; }
     }
 }

@@ -14,11 +14,11 @@ namespace InventoryManagementSystem.Expenses
     public class ExpenseService : AbpServiceBase, IExpenseService
     {
         private readonly IRepository<Expense, long> _expenseRepository;
+
         public ExpenseService(IRepository<Expense, long> expenseRepository)
         {
             _expenseRepository = expenseRepository;
         }
-
 
         public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateExpenseDto expenseDto)
         {
@@ -41,6 +41,7 @@ namespace InventoryManagementSystem.Expenses
                 Name = expenseDto.Name,
                 Description = expenseDto.Description,
                 Cost = expenseDto.Cost,
+                TenantId = expenseDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -92,6 +93,7 @@ namespace InventoryManagementSystem.Expenses
                 Error = true,
             };
         }
+
         public async Task<ExpenseDto> GetById(long expenseId)
         {
             var result = await _expenseRepository.GetAll()
@@ -108,13 +110,11 @@ namespace InventoryManagementSystem.Expenses
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long expenseId)
         {
-            await _expenseRepository.DeleteAsync(new Expense()
-            {
-                Id = expenseId
-            });
+            var model = await _expenseRepository.GetAll().Where(i => i.Id == expenseId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _expenseRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -125,9 +125,9 @@ namespace InventoryManagementSystem.Expenses
             };
         }
 
-        public async Task<List<ExpenseDto>> GetAll()
+        public async Task<List<ExpenseDto>> GetAll(long? tenantId)
         {
-            var result = await _expenseRepository.GetAll().Select(i => new ExpenseDto()
+            var result = await _expenseRepository.GetAll().Where(i=> i.IsDeleted == false && i.TenantId == tenantId).Select(i => new ExpenseDto()
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -139,9 +139,11 @@ namespace InventoryManagementSystem.Expenses
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<ExpenseDto>> GetPaginatedAllAsync(PagedExpenseResultRequestDto input)
         {
             var filteredExpenses = _expenseRepository.GetAll()
+                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name), x => x.Name.Contains(input.Name));
 
             var pagedAndFilteredExpenses = filteredExpenses

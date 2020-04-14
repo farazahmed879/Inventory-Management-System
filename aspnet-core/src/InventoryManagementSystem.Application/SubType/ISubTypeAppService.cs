@@ -13,7 +13,8 @@ namespace InventoryManagementSystem.SubTypes
         Task<SubTypeDto> GetById(long typeId);
 
         Task<ResponseMessagesDto> DeleteAsync(long typeId);
-        Task<List<SubTypeDto>> GetAll();
+
+        Task<List<SubTypeDto>> GetAll(long? tenantId);
 
         Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input);
 

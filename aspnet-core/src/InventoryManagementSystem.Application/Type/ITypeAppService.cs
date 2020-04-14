@@ -13,7 +13,7 @@ namespace InventoryManagementSystem.Types
         Task<TypeDto> GetById(long typeId);
 
         Task<ResponseMessagesDto> DeleteAsync(long typeId);
-        Task<List<TypeDto>> GetAll();
+        Task<List<TypeDto>> GetAll(long? tenentId);
 
         Task<PagedResultDto<TypeDto>> GetPaginatedAllAsync(PagedTypeResultRequestDto input);
     }

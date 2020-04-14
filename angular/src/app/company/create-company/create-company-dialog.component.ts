@@ -38,7 +38,7 @@ export class CreateCompanyDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
-
+    this.company.tenantId = this.appSession.tenantId;
     this._companyService
       .createOrEdit(this.company)
       .pipe(

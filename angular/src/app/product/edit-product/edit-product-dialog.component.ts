@@ -45,7 +45,7 @@ export class EditProductDialogComponent extends AppComponentBase
     this.getAllProductType();
   }
   getAllProductType() {
-    this._subTypeService.getAll().subscribe(result => {
+    this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
     });
   }

@@ -9,6 +9,7 @@ namespace InventoryManagementSystem.Products.Dto
     public class PagedProductResultRequestDto : PagedResultRequestDto
     {
         public string Name { get; set; }
-        public long SubTypeId { get; set; }
+        public long? SubTypeId { get; set; }
+        public long? TenantId { get; set; }
     }
 }

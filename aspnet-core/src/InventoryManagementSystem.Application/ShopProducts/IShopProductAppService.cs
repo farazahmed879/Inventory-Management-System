@@ -13,7 +13,8 @@ namespace InventoryManagementSystem.ShopProducts
         Task<ShopProductDto> GetById(long shopProductId);
 
         Task<ResponseMessagesDto> DeleteAsync(long shopProductId);
-        Task<List<ShopProductDto>> GetAll();
+
+        Task<List<ShopProductDto>> GetAll(long? tenantId);
 
         Task<PagedResultDto<ShopProductDto>> GetPaginatedAllAsync(PagedShopProductResultRequestDto input);
     }

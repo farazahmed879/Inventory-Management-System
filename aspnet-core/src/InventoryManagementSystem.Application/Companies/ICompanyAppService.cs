@@ -13,7 +13,8 @@ namespace InventoryManagementSystem.Companies
         Task<CompanyDto> GetById(long companyId);
 
         Task<ResponseMessagesDto> DeleteAsync(long companyId);
-        Task<List<CompanyDto>> GetAll();
+
+        Task<List<CompanyDto>> GetAll(long? tenantId);
 
         Task<PagedResultDto<CompanyDto>> GetPaginatedAllAsync(PagedCompanyResultRequestDto input);
     }

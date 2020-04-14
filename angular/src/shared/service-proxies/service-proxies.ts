@@ -320,10 +320,15 @@ export class CompanyServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<CompanyDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/CompanyService/GetAll";
+    getAll(tenantId: number | undefined): Observable<CompanyDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/CompanyService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -376,16 +381,21 @@ export class CompanyServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CompanyDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CompanyDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/CompanyService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -502,6 +512,134 @@ export class ConfigurationServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
+export class DashboardServiceServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param type (optional) 
+     * @param date (optional) 
+     * @return Success
+     */
+    getProductGraph(type: string | undefined, date: moment.Moment | undefined): Observable<ProductSaleGraphDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/DashboardService/GetProductGraph?";
+        if (type === null)
+            throw new Error("The parameter 'type' cannot be null.");
+        else if (type !== undefined)
+            url_ += "type=" + encodeURIComponent("" + type) + "&"; 
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProductGraph(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProductGraph(<any>response_);
+                } catch (e) {
+                    return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetProductGraph(response: HttpResponseBase): Observable<ProductSaleGraphDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ProductSaleGraphDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProductSaleGraphDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getDashboardList(): Observable<DashboardListDto> {
+        let url_ = this.baseUrl + "/api/services/app/DashboardService/GetDashboardList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDashboardList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDashboardList(<any>response_);
+                } catch (e) {
+                    return <Observable<DashboardListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DashboardListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDashboardList(response: HttpResponseBase): Observable<DashboardListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardListDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DashboardListDto>(<any>null);
     }
 }
 
@@ -685,10 +823,15 @@ export class ExpenseServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ExpenseDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ExpenseDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -743,11 +886,12 @@ export class ExpenseServiceServiceProxy {
      * @param name (optional) 
      * @param description (optional) 
      * @param cost (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, description: string | undefined, cost: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ExpenseDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, description: string | undefined, cost: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ExpenseDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ExpenseService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -761,6 +905,10 @@ export class ExpenseServiceServiceProxy {
             throw new Error("The parameter 'cost' cannot be null.");
         else if (cost !== undefined)
             url_ += "Cost=" + encodeURIComponent("" + cost) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -996,10 +1144,15 @@ export class ProductSaleServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ProductSaleDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ProductSaleDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1055,11 +1208,12 @@ export class ProductSaleServiceServiceProxy {
      * @param sellingRate (optional) 
      * @param shopProductId (optional) 
      * @param productName (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, shopProductId: number | undefined, productName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSaleDtoPagedResultDto> {
+    getPaginatedAll(status: string | undefined, sellingRate: number | undefined, shopProductId: number | undefined, productName: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductSaleDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetPaginatedAll?";
         if (status === null)
             throw new Error("The parameter 'status' cannot be null.");
@@ -1077,6 +1231,10 @@ export class ProductSaleServiceServiceProxy {
             throw new Error("The parameter 'productName' cannot be null.");
         else if (productName !== undefined)
             url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -1129,71 +1287,6 @@ export class ProductSaleServiceServiceProxy {
             }));
         }
         return _observableOf<ProductSaleDtoPagedResultDto>(<any>null);
-    }
-
-    /**
-     * @param type (optional) 
-     * @param date (optional) 
-     * @return Success
-     */
-    getAllProductSale(type: string | undefined, date: moment.Moment | undefined): Observable<ProductSaleGraphDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductSaleService/GetAllProductSale?";
-        if (type === null)
-            throw new Error("The parameter 'type' cannot be null.");
-        else if (type !== undefined)
-            url_ += "type=" + encodeURIComponent("" + type) + "&"; 
-        if (date === null)
-            throw new Error("The parameter 'date' cannot be null.");
-        else if (date !== undefined)
-            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllProductSale(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllProductSale(<any>response_);
-                } catch (e) {
-                    return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ProductSaleGraphDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllProductSale(response: HttpResponseBase): Observable<ProductSaleGraphDto[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(ProductSaleGraphDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ProductSaleGraphDto[]>(<any>null);
     }
 }
 
@@ -1377,10 +1470,15 @@ export class ProductServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ProductDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ProductDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ProductService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1434,11 +1532,12 @@ export class ProductServiceServiceProxy {
     /**
      * @param name (optional) 
      * @param subTypeId (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, subTypeId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, subTypeId: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ProductService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -1448,6 +1547,10 @@ export class ProductServiceServiceProxy {
             throw new Error("The parameter 'subTypeId' cannot be null.");
         else if (subTypeId !== undefined)
             url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -2207,10 +2310,15 @@ export class ShopProductServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<ShopProductDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetAll";
+    getAll(tenantId: number | undefined): Observable<ShopProductDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2262,57 +2370,37 @@ export class ShopProductServiceServiceProxy {
     }
 
     /**
-     * @param name (optional) 
-     * @param wholeSaleRate (optional) 
-     * @param quantity (optional) 
-     * @param companyRate (optional) 
-     * @param retailPrice (optional) 
-     * @param productId (optional) 
-     * @param companyId (optional) 
      * @param productName (optional) 
-     * @param companyName (optional) 
+     * @param companyId (optional) 
+     * @param typeId (optional) 
+     * @param subTypeId (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, wholeSaleRate: number | undefined, quantity: number | undefined, companyRate: number | undefined, retailPrice: number | undefined, productId: number | undefined, companyId: number | undefined, productName: string | undefined, companyName: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
+    getPaginatedAll(productName: string | undefined, companyId: number | undefined, typeId: number | undefined, subTypeId: number | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<ShopProductDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/ShopProductService/GetPaginatedAll?";
-        if (name === null)
-            throw new Error("The parameter 'name' cannot be null.");
-        else if (name !== undefined)
-            url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
-        if (wholeSaleRate === null)
-            throw new Error("The parameter 'wholeSaleRate' cannot be null.");
-        else if (wholeSaleRate !== undefined)
-            url_ += "WholeSaleRate=" + encodeURIComponent("" + wholeSaleRate) + "&"; 
-        if (quantity === null)
-            throw new Error("The parameter 'quantity' cannot be null.");
-        else if (quantity !== undefined)
-            url_ += "Quantity=" + encodeURIComponent("" + quantity) + "&"; 
-        if (companyRate === null)
-            throw new Error("The parameter 'companyRate' cannot be null.");
-        else if (companyRate !== undefined)
-            url_ += "CompanyRate=" + encodeURIComponent("" + companyRate) + "&"; 
-        if (retailPrice === null)
-            throw new Error("The parameter 'retailPrice' cannot be null.");
-        else if (retailPrice !== undefined)
-            url_ += "RetailPrice=" + encodeURIComponent("" + retailPrice) + "&"; 
-        if (productId === null)
-            throw new Error("The parameter 'productId' cannot be null.");
-        else if (productId !== undefined)
-            url_ += "ProductId=" + encodeURIComponent("" + productId) + "&"; 
-        if (companyId === null)
-            throw new Error("The parameter 'companyId' cannot be null.");
-        else if (companyId !== undefined)
-            url_ += "CompanyId=" + encodeURIComponent("" + companyId) + "&"; 
         if (productName === null)
             throw new Error("The parameter 'productName' cannot be null.");
         else if (productName !== undefined)
             url_ += "ProductName=" + encodeURIComponent("" + productName) + "&"; 
-        if (companyName === null)
-            throw new Error("The parameter 'companyName' cannot be null.");
-        else if (companyName !== undefined)
-            url_ += "CompanyName=" + encodeURIComponent("" + companyName) + "&"; 
+        if (companyId === null)
+            throw new Error("The parameter 'companyId' cannot be null.");
+        else if (companyId !== undefined)
+            url_ += "CompanyId=" + encodeURIComponent("" + companyId) + "&"; 
+        if (typeId === null)
+            throw new Error("The parameter 'typeId' cannot be null.");
+        else if (typeId !== undefined)
+            url_ += "TypeId=" + encodeURIComponent("" + typeId) + "&"; 
+        if (subTypeId === null)
+            throw new Error("The parameter 'subTypeId' cannot be null.");
+        else if (subTypeId !== undefined)
+            url_ += "SubTypeId=" + encodeURIComponent("" + subTypeId) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -2548,10 +2636,15 @@ export class SubTypeServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<SubTypeDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAll";
+    getAll(tenantId: number | undefined): Observable<SubTypeDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2605,11 +2698,12 @@ export class SubTypeServiceServiceProxy {
     /**
      * @param name (optional) 
      * @param productType (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, productType: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, productType: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
@@ -2619,6 +2713,10 @@ export class SubTypeServiceServiceProxy {
             throw new Error("The parameter 'productType' cannot be null.");
         else if (productType !== undefined)
             url_ += "ProductType=" + encodeURIComponent("" + productType) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -3407,10 +3505,15 @@ export class TypeServiceServiceProxy {
     }
 
     /**
+     * @param tenantId (optional) 
      * @return Success
      */
-    getAll(): Observable<TypeDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/GetAll";
+    getAll(tenantId: number | undefined): Observable<TypeDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/TypeService/GetAll?";
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -3463,16 +3566,21 @@ export class TypeServiceServiceProxy {
 
     /**
      * @param name (optional) 
+     * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/TypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
+        if (tenantId === null)
+            throw new Error("The parameter 'tenantId' cannot be null.");
+        else if (tenantId !== undefined)
+            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
         if (skipCount === null)
             throw new Error("The parameter 'skipCount' cannot be null.");
         else if (skipCount !== undefined)
@@ -4250,6 +4358,8 @@ export interface IRegisterOutput {
 
 export class CreateCompanyDto implements ICreateCompanyDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateCompanyDto) {
@@ -4264,6 +4374,8 @@ export class CreateCompanyDto implements ICreateCompanyDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -4278,6 +4390,8 @@ export class CreateCompanyDto implements ICreateCompanyDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -4292,6 +4406,8 @@ export class CreateCompanyDto implements ICreateCompanyDto {
 
 export interface ICreateCompanyDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -4356,6 +4472,8 @@ export interface IResponseMessagesDto {
 
 export class CompanyDto implements ICompanyDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4377,6 +4495,8 @@ export class CompanyDto implements ICompanyDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4398,6 +4518,8 @@ export class CompanyDto implements ICompanyDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4419,6 +4541,8 @@ export class CompanyDto implements ICompanyDto {
 
 export interface ICompanyDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4527,10 +4651,220 @@ export interface IChangeUiThemeInput {
     theme: string | undefined;
 }
 
+export class ProductSaleGraphDto implements IProductSaleGraphDto {
+    label: string | undefined;
+    text: string | undefined;
+    sale: number;
+    profit: number;
+    expense: number;
+    productCost: number;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IProductSaleGraphDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.label = _data["label"];
+            this.text = _data["text"];
+            this.sale = _data["sale"];
+            this.profit = _data["profit"];
+            this.expense = _data["expense"];
+            this.productCost = _data["productCost"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ProductSaleGraphDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductSaleGraphDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["label"] = this.label;
+        data["text"] = this.text;
+        data["sale"] = this.sale;
+        data["profit"] = this.profit;
+        data["expense"] = this.expense;
+        data["productCost"] = this.productCost;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): ProductSaleGraphDto {
+        const json = this.toJSON();
+        let result = new ProductSaleGraphDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProductSaleGraphDto {
+    label: string | undefined;
+    text: string | undefined;
+    sale: number;
+    profit: number;
+    expense: number;
+    productCost: number;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class SaleDto implements ISaleDto {
+    today: number;
+    yesterday: number;
+    thisWeek: number;
+    thisMonth: number;
+    thisYear: number;
+
+    constructor(data?: ISaleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.today = _data["today"];
+            this.yesterday = _data["yesterday"];
+            this.thisWeek = _data["thisWeek"];
+            this.thisMonth = _data["thisMonth"];
+            this.thisYear = _data["thisYear"];
+        }
+    }
+
+    static fromJS(data: any): SaleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["today"] = this.today;
+        data["yesterday"] = this.yesterday;
+        data["thisWeek"] = this.thisWeek;
+        data["thisMonth"] = this.thisMonth;
+        data["thisYear"] = this.thisYear;
+        return data; 
+    }
+
+    clone(): SaleDto {
+        const json = this.toJSON();
+        let result = new SaleDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISaleDto {
+    today: number;
+    yesterday: number;
+    thisWeek: number;
+    thisMonth: number;
+    thisYear: number;
+}
+
+export class DashboardListDto implements IDashboardListDto {
+    sale: SaleDto;
+    costing: SaleDto;
+    expenses: SaleDto;
+    profit: SaleDto;
+
+    constructor(data?: IDashboardListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sale = _data["sale"] ? SaleDto.fromJS(_data["sale"]) : <any>undefined;
+            this.costing = _data["costing"] ? SaleDto.fromJS(_data["costing"]) : <any>undefined;
+            this.expenses = _data["expenses"] ? SaleDto.fromJS(_data["expenses"]) : <any>undefined;
+            this.profit = _data["profit"] ? SaleDto.fromJS(_data["profit"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DashboardListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sale"] = this.sale ? this.sale.toJSON() : <any>undefined;
+        data["costing"] = this.costing ? this.costing.toJSON() : <any>undefined;
+        data["expenses"] = this.expenses ? this.expenses.toJSON() : <any>undefined;
+        data["profit"] = this.profit ? this.profit.toJSON() : <any>undefined;
+        return data; 
+    }
+
+    clone(): DashboardListDto {
+        const json = this.toJSON();
+        let result = new DashboardListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDashboardListDto {
+    sale: SaleDto;
+    costing: SaleDto;
+    expenses: SaleDto;
+    profit: SaleDto;
+}
+
 export class CreateExpenseDto implements ICreateExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateExpenseDto) {
@@ -4547,6 +4881,7 @@ export class CreateExpenseDto implements ICreateExpenseDto {
             this.name = _data["name"];
             this.description = _data["description"];
             this.cost = _data["cost"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -4563,6 +4898,7 @@ export class CreateExpenseDto implements ICreateExpenseDto {
         data["name"] = this.name;
         data["description"] = this.description;
         data["cost"] = this.cost;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -4579,6 +4915,7 @@ export interface ICreateExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     id: number;
 }
 
@@ -4722,8 +5059,11 @@ export interface IExpenseDtoPagedResultDto {
 
 export class CreateProductSaleDto implements ICreateProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     shopProductId: number;
+    quantity: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateProductSaleDto) {
@@ -4738,8 +5078,11 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     init(_data?: any) {
         if (_data) {
             this.status = _data["status"];
+            this.description = _data["description"];
             this.sellingRate = _data["sellingRate"];
             this.shopProductId = _data["shopProductId"];
+            this.quantity = _data["quantity"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -4754,8 +5097,11 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
+        data["description"] = this.description;
         data["sellingRate"] = this.sellingRate;
         data["shopProductId"] = this.shopProductId;
+        data["quantity"] = this.quantity;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -4770,19 +5116,24 @@ export class CreateProductSaleDto implements ICreateProductSaleDto {
 
 export interface ICreateProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     shopProductId: number;
+    quantity: number | undefined;
+    tenantId: number;
     id: number;
 }
 
 export class ProductSaleDto implements IProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     productName: string | undefined;
     companyName: string | undefined;
     productType: string | undefined;
     profit: number;
     shopProductId: number;
+    quantity: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4804,12 +5155,14 @@ export class ProductSaleDto implements IProductSaleDto {
     init(_data?: any) {
         if (_data) {
             this.status = _data["status"];
+            this.description = _data["description"];
             this.sellingRate = _data["sellingRate"];
             this.productName = _data["productName"];
             this.companyName = _data["companyName"];
             this.productType = _data["productType"];
             this.profit = _data["profit"];
             this.shopProductId = _data["shopProductId"];
+            this.quantity = _data["quantity"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4831,12 +5184,14 @@ export class ProductSaleDto implements IProductSaleDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["status"] = this.status;
+        data["description"] = this.description;
         data["sellingRate"] = this.sellingRate;
         data["productName"] = this.productName;
         data["companyName"] = this.companyName;
         data["productType"] = this.productType;
         data["profit"] = this.profit;
         data["shopProductId"] = this.shopProductId;
+        data["quantity"] = this.quantity;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4858,12 +5213,14 @@ export class ProductSaleDto implements IProductSaleDto {
 
 export interface IProductSaleDto {
     status: string | undefined;
+    description: string | undefined;
     sellingRate: number;
     productName: string | undefined;
     companyName: string | undefined;
     productType: string | undefined;
     profit: number;
     shopProductId: number;
+    quantity: number | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4929,104 +5286,11 @@ export interface IProductSaleDtoPagedResultDto {
     items: ProductSaleDto[] | undefined;
 }
 
-export class ProductSaleGraphDto implements IProductSaleGraphDto {
-    label: string | undefined;
-    text: string | undefined;
-    sale: number;
-    profit: number;
-    expense: number;
-    productCost: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
-
-    constructor(data?: IProductSaleGraphDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.label = _data["label"];
-            this.text = _data["text"];
-            this.sale = _data["sale"];
-            this.profit = _data["profit"];
-            this.expense = _data["expense"];
-            this.productCost = _data["productCost"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): ProductSaleGraphDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductSaleGraphDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["label"] = this.label;
-        data["text"] = this.text;
-        data["sale"] = this.sale;
-        data["profit"] = this.profit;
-        data["expense"] = this.expense;
-        data["productCost"] = this.productCost;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): ProductSaleGraphDto {
-        const json = this.toJSON();
-        let result = new ProductSaleGraphDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IProductSaleGraphDto {
-    label: string | undefined;
-    text: string | undefined;
-    sale: number;
-    profit: number;
-    expense: number;
-    productCost: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
-}
-
 export class CreateProductDto implements ICreateProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateProductDto) {
@@ -5041,7 +5305,9 @@ export class CreateProductDto implements ICreateProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -5056,7 +5322,9 @@ export class CreateProductDto implements ICreateProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -5071,12 +5339,15 @@ export class CreateProductDto implements ICreateProductDto {
 
 export interface ICreateProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
+    tenantId: number;
     id: number;
 }
 
 export class ProductDto implements IProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
     isDeleted: boolean;
@@ -5100,6 +5371,7 @@ export class ProductDto implements IProductDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
             this.subTypeName = _data["subTypeName"];
             this.isDeleted = _data["isDeleted"];
@@ -5123,6 +5395,7 @@ export class ProductDto implements IProductDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
         data["subTypeName"] = this.subTypeName;
         data["isDeleted"] = this.isDeleted;
@@ -5146,6 +5419,7 @@ export class ProductDto implements IProductDto {
 
 export interface IProductDto {
     name: string | undefined;
+    description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
     isDeleted: boolean;
@@ -6028,12 +6302,14 @@ export interface IGetCurrentLoginInformationsOutput {
 }
 
 export class CreateShopProductDto implements ICreateShopProductDto {
+    description: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
     productId: number;
     companyId: number | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateShopProductDto) {
@@ -6047,12 +6323,14 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.wholeSaleRate = _data["wholeSaleRate"];
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
             this.retailPrice = _data["retailPrice"];
             this.productId = _data["productId"];
             this.companyId = _data["companyId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -6066,12 +6344,14 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["wholeSaleRate"] = this.wholeSaleRate;
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
         data["retailPrice"] = this.retailPrice;
         data["productId"] = this.productId;
         data["companyId"] = this.companyId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -6085,12 +6365,14 @@ export class CreateShopProductDto implements ICreateShopProductDto {
 }
 
 export interface ICreateShopProductDto {
+    description: string | undefined;
     wholeSaleRate: number;
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
     productId: number;
     companyId: number | undefined;
+    tenantId: number;
     id: number;
 }
 
@@ -6099,6 +6381,7 @@ export class ShopProductDto implements IShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    description: string | undefined;
     productId: number;
     companyId: number | undefined;
     productName: string | undefined;
@@ -6127,6 +6410,7 @@ export class ShopProductDto implements IShopProductDto {
             this.quantity = _data["quantity"];
             this.companyRate = _data["companyRate"];
             this.retailPrice = _data["retailPrice"];
+            this.description = _data["description"];
             this.productId = _data["productId"];
             this.companyId = _data["companyId"];
             this.productName = _data["productName"];
@@ -6155,6 +6439,7 @@ export class ShopProductDto implements IShopProductDto {
         data["quantity"] = this.quantity;
         data["companyRate"] = this.companyRate;
         data["retailPrice"] = this.retailPrice;
+        data["description"] = this.description;
         data["productId"] = this.productId;
         data["companyId"] = this.companyId;
         data["productName"] = this.productName;
@@ -6183,6 +6468,7 @@ export interface IShopProductDto {
     quantity: number;
     companyRate: number | undefined;
     retailPrice: number | undefined;
+    description: string | undefined;
     productId: number;
     companyId: number | undefined;
     productName: string | undefined;
@@ -6253,8 +6539,10 @@ export interface IShopProductDtoPagedResultDto {
 }
 
 export class CreateSubTypeDto implements ICreateSubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeId: number;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateSubTypeDto) {
@@ -6268,8 +6556,10 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.name = _data["name"];
             this.productTypeId = _data["productTypeId"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -6283,8 +6573,10 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["name"] = this.name;
         data["productTypeId"] = this.productTypeId;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -6298,12 +6590,15 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 }
 
 export interface ICreateSubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeId: number;
+    tenantId: number;
     id: number;
 }
 
 export class SubTypeDto implements ISubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
@@ -6327,6 +6622,7 @@ export class SubTypeDto implements ISubTypeDto {
 
     init(_data?: any) {
         if (_data) {
+            this.description = _data["description"];
             this.name = _data["name"];
             this.productTypeName = _data["productTypeName"];
             this.productTypeId = _data["productTypeId"];
@@ -6350,6 +6646,7 @@ export class SubTypeDto implements ISubTypeDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
         data["name"] = this.name;
         data["productTypeName"] = this.productTypeName;
         data["productTypeId"] = this.productTypeId;
@@ -6373,6 +6670,7 @@ export class SubTypeDto implements ISubTypeDto {
 }
 
 export interface ISubTypeDto {
+    description: string | undefined;
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
@@ -7001,6 +7299,8 @@ export interface IExternalAuthenticateResultModel {
 
 export class CreateTypeDto implements ICreateTypeDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number;
     id: number;
 
     constructor(data?: ICreateTypeDto) {
@@ -7015,6 +7315,8 @@ export class CreateTypeDto implements ICreateTypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
     }
@@ -7029,6 +7331,8 @@ export class CreateTypeDto implements ICreateTypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
     }
@@ -7043,11 +7347,14 @@ export class CreateTypeDto implements ICreateTypeDto {
 
 export interface ICreateTypeDto {
     name: string | undefined;
+    description: string | undefined;
+    tenantId: number;
     id: number;
 }
 
 export class TypeDto implements ITypeDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -7069,6 +7376,7 @@ export class TypeDto implements ITypeDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.description = _data["description"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -7090,6 +7398,7 @@ export class TypeDto implements ITypeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["description"] = this.description;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -7111,6 +7420,7 @@ export class TypeDto implements ITypeDto {
 
 export interface ITypeDto {
     name: string | undefined;
+    description: string | undefined;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

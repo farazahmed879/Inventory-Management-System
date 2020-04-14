@@ -61,6 +61,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
       .getPaginatedAll(
         request.keyword,
         this.selectedType,
+        this.appSession.tenantId,
         request.skipCount,
         request.maxResultCount
       )
@@ -107,7 +108,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
   }
 
   getTypes() {
-    this._typeService.getAll().subscribe(result => {
+    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.types = result;
     });
     console.log(this.types);

@@ -13,7 +13,8 @@ namespace InventoryManagementSystem.Expenses
         Task<ExpenseDto> GetById(long expenseId);
 
         Task<ResponseMessagesDto> DeleteAsync(long expenseId);
-        Task<List<ExpenseDto>> GetAll();
+
+        Task<List<ExpenseDto>> GetAll(long? tenantId);
 
         Task<PagedResultDto<ExpenseDto>> GetPaginatedAllAsync(PagedExpenseResultRequestDto input);
     }

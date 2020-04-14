@@ -44,7 +44,9 @@ namespace InventoryManagementSystem.SubTypes
             var result = await _subTypeRepository.InsertAsync(new SubType()
             {
                 Name = subTypeDto.Name,
-                ProductTypeId = subTypeDto.ProductTypeId
+                Description = subTypeDto.Description,
+                ProductTypeId = subTypeDto.ProductTypeId,
+                TenantId = subTypeDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -74,6 +76,7 @@ namespace InventoryManagementSystem.SubTypes
             {
                 Id = subTypeDto.Id,
                 Name = subTypeDto.Name,
+                Description = subTypeDto.Description,
                 ProductTypeId = subTypeDto.ProductTypeId
             });
 
@@ -95,6 +98,7 @@ namespace InventoryManagementSystem.SubTypes
                 Error = true,
             };
         }
+
         public async Task<SubTypeDto> GetById(long subTypeId)
         {
             var result = await _subTypeRepository.GetAll()
@@ -104,19 +108,18 @@ namespace InventoryManagementSystem.SubTypes
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     ProductTypeId = i.ProductTypeId
                 })
                 .FirstOrDefaultAsync();
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long subTypeId)
         {
-            await _subTypeRepository.DeleteAsync(new SubType()
-            {
-                Id = subTypeId
-            });
+            var model = await _subTypeRepository.GetAll().Where(i => i.Id == subTypeId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _subTypeRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -127,22 +130,26 @@ namespace InventoryManagementSystem.SubTypes
             };
         }
 
-        public async Task<List<SubTypeDto>> GetAll()
+        public async Task<List<SubTypeDto>> GetAll(long? tenantId)
         {
-            var result = await _subTypeRepository.GetAll().Select(i => new SubTypeDto()
-            {
-                Id = i.Id,
-                Name = i.Name,
-                ProductTypeId = i.ProductTypeId,
-                CreatorUserId = i.CreatorUserId,
-                CreationTime = i.CreationTime,
-                LastModificationTime = i.LastModificationTime
-            }).ToListAsync();
+            var result = await _subTypeRepository.GetAll()
+                .Where(i => i.IsDeleted == false && i.TenantId == tenantId).Select(i => new SubTypeDto()
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Description = i.Description,
+                    ProductTypeId = i.ProductTypeId,
+                    CreatorUserId = i.CreatorUserId,
+                    CreationTime = i.CreationTime,
+                    LastModificationTime = i.LastModificationTime
+                }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input)
         {
             var filteredSubTypes = _subTypeRepository.GetAll()
+                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name) || !string.IsNullOrWhiteSpace(input.ProductType),
                     x => x.Name.Contains(input.Name) || x.ProductType.Name.Contains(input.ProductType));
 
@@ -158,6 +165,7 @@ namespace InventoryManagementSystem.SubTypes
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     ProductTypeId = i.ProductTypeId,
                     ProductTypeName = i.ProductType.Name
                 })

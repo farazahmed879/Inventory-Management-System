@@ -38,6 +38,7 @@ export class CreateTypeDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
+    this.type.tenantId = this.appSession.tenantId;
 
     this._typeService
       .createOrEdit(this.type)

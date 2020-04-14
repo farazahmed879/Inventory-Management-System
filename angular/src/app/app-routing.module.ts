@@ -24,8 +24,7 @@ import { ExpenseComponent } from './expense/expense.component';
                 path: '',
                 component: AppComponent,
                 children: [
-                    { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
-                    { path: 'productSaleDashboard', component: SaleDashboardComponent,  canActivate: [AppRouteGuard] },
+                    { path: 'dashboard', component: SaleDashboardComponent,  canActivate: [AppRouteGuard] },
                     { path: 'expense', component: ExpenseComponent,  canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'type', component: TypeComponent, canActivate: [AppRouteGuard] },

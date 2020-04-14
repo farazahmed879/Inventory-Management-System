@@ -6,12 +6,20 @@
         <mat-form-field>
           <input
             matInput
-            name="type"
-            [placeholder]="'Type' | localize"
+            name="name"
+            [placeholder]="'Name' | localize"
             [(ngModel)]="type.name"
             required
             minlength="2"
             maxlength="64"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="description"
+            [placeholder]="'Description' | localize"
+            [(ngModel)]="type.description"
           />
         </mat-form-field>
       </div>

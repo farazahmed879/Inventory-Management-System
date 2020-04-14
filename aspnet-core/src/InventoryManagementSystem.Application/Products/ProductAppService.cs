@@ -14,11 +14,11 @@ namespace InventoryManagementSystem.Products
     public class ProductService : AbpServiceBase, IProductService
     {
         private readonly IRepository<Product, long> _productRepository;
+
         public ProductService(IRepository<Product, long> productRepository)
         {
             _productRepository = productRepository;
         }
-
 
         public async Task<ResponseMessagesDto> CreateOrEditAsync(CreateProductDto productDto)
         {
@@ -39,7 +39,9 @@ namespace InventoryManagementSystem.Products
             var result = await _productRepository.InsertAsync(new Product()
             {
                 Name = productDto.Name,
-                ProductSubTypeId = productDto.SubTypeId
+                Description = productDto.Description,
+                ProductSubTypeId = productDto.SubTypeId,
+                TenantId = productDto.TenantId
             });
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -69,6 +71,7 @@ namespace InventoryManagementSystem.Products
             {
                 Id = productDto.Id,
                 Name = productDto.Name,
+                Description = productDto.Description,
                 ProductSubTypeId = productDto.SubTypeId
             });
 
@@ -90,6 +93,7 @@ namespace InventoryManagementSystem.Products
                 Error = true,
             };
         }
+
         public async Task<ProductDto> GetById(long productId)
         {
             var result = await _productRepository.GetAll()
@@ -99,19 +103,18 @@ namespace InventoryManagementSystem.Products
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     SubTypeId = i.ProductSubTypeId.Value
                 })
                 .FirstOrDefaultAsync();
             return result;
         }
 
-
         public async Task<ResponseMessagesDto> DeleteAsync(long productId)
         {
-            await _productRepository.DeleteAsync(new Product()
-            {
-                Id = productId
-            });
+            var model = await _productRepository.GetAll().Where(i => i.Id == productId).FirstOrDefaultAsync();
+            model.IsDeleted = true;
+            var result = await _productRepository.UpdateAsync(model);
 
             return new ResponseMessagesDto()
             {
@@ -122,12 +125,13 @@ namespace InventoryManagementSystem.Products
             };
         }
 
-        public async Task<List<ProductDto>> GetAll()
+        public async Task<List<ProductDto>> GetAll(long? tenantId)
         {
-            var result = await _productRepository.GetAll().Select(i => new ProductDto()
+            var result = await _productRepository.GetAll().Where(i=> i.IsDeleted == false && i.TenantId == tenantId).Select(i => new ProductDto()
             {
                 Id = i.Id,
                 Name = i.Name,
+                Description = i.Description,
                 SubTypeId = i.ProductSubTypeId.Value,
                 SubTypeName = i.ProductSubType.Name,
                 CreatorUserId = i.CreatorUserId,
@@ -136,12 +140,14 @@ namespace InventoryManagementSystem.Products
             }).ToListAsync();
             return result;
         }
+
         public async Task<PagedResultDto<ProductDto>> GetPaginatedAllAsync(PagedProductResultRequestDto input)
         {
             var filteredProducts = _productRepository.GetAll()
+                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
-                    x => x.Name.Contains(input.Name) ||
-                         x.ProductSubTypeId.Value == input.SubTypeId);
+                    x => x.Name.Contains(input.Name))
+            .WhereIf(input.SubTypeId.HasValue, x=> x.ProductSubTypeId == input.SubTypeId);
 
             var pagedAndFilteredProducts = filteredProducts
                 .OrderBy(i => i.Name)
@@ -155,6 +161,7 @@ namespace InventoryManagementSystem.Products
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    Description = i.Description,
                     SubTypeId = i.ProductSubTypeId.Value,
                     SubTypeName = i.ProductSubType.Name
                 })

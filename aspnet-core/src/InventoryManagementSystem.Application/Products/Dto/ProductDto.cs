@@ -8,6 +8,7 @@ namespace InventoryManagementSystem.Products.Dto
    public class ProductDto : FullAuditedEntity<long>
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public long SubTypeId { get; set; }
         public string SubTypeName { get; set; }
     }
