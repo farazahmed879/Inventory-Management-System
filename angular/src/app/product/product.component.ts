@@ -47,8 +47,8 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
   }
 
   ngOnInit() {
+    this.getDataPage(1);
     this.getSubtypes();
-    this.list(null, 0, undefined);
   }
 
   list(

@@ -191,7 +191,7 @@ namespace InventoryManagementSystem.ProductSales
                 .OrderByDescending(i => i.Id)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredProductSells.CountAsync();
+            var totalCount = filteredProductSells.Count();
 
             return new PagedResultDto<ProductSaleDto>(
                 totalCount: totalCount,

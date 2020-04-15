@@ -31,6 +31,7 @@ class PagedExpenseRequestDto extends PagedRequestDto {
 export class ExpenseComponent extends PagedListingComponentBase<ExpenseDto> {
     expenses: ExpenseDto[] = [];
     keyword = '';
+    pageSize: number = 10;
 
     constructor(
         injector: Injector,
@@ -44,7 +45,7 @@ export class ExpenseComponent extends PagedListingComponentBase<ExpenseDto> {
         request: PagedExpenseRequestDto,
         pageNumber: number,
         finishedCallback: Function
-    ): void {
+): void {
 
         request.keyword = this.keyword;
 

@@ -47,7 +47,7 @@ export class SubTypeComponent extends PagedListingComponentBase<SubTypeDto> {
   }
   ngOnInit() {
     this.getTypes();
-    this.list(undefined, 1, undefined);
+    this.getDataPage(1);
   }
 
   list(

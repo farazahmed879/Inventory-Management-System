@@ -81,6 +81,7 @@
         <div class="abp-pagination-controls-wrapper" *ngIf="totalItems > pageSize">
           <abp-pagination-controls (pageChange)="getDataPage($event)" id="server">
           </abp-pagination-controls>
+          <!-- <p-paginator [rows]="10" [totalRecords]="100" pageLinkSize="3"></p-paginator> -->
         </div>
         <button mat-mini-fab color="primary" class="pull-right" (click)="createExpense()">
           <mat-icon>add</mat-icon>

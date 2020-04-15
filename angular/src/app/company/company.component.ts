@@ -51,6 +51,8 @@ export class CompanyComponent extends PagedListingComponentBase<CompanyDto> {
             )
             .subscribe((result: CompanyDtoPagedResultDto) => {
                 this.companies = result.items;
+                debugger
+                this.totalItems = result.totalCount;
                 this.showPaging(result, pageNumber);
             });
     }

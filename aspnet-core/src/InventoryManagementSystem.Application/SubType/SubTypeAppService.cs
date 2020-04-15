@@ -157,7 +157,7 @@ namespace InventoryManagementSystem.SubTypes
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredTypes.CountAsync();
+            var totalCount =  filteredSubTypes.Count();
 
             return new PagedResultDto<SubTypeDto>(
                 totalCount: totalCount,

@@ -148,7 +148,7 @@ namespace InventoryManagementSystem.Companies
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredCompanys.CountAsync();
+            var totalCount = filteredCompanys.Count();
 
             return new PagedResultDto<CompanyDto>(
                 totalCount: totalCount,

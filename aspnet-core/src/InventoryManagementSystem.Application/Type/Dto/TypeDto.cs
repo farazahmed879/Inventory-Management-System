@@ -6,5 +6,6 @@ namespace InventoryManagementSystem.Types.Dto
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public int TenantId { get; set; }
     }
 }

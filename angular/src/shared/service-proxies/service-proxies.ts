@@ -2198,6 +2198,67 @@ export class ShopProductServiceServiceProxy {
     }
 
     /**
+     * @param min (optional) 
+     * @param max (optional) 
+     * @return Success
+     */
+    randomNumber(min: number | undefined, max: number | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/ShopProductService/RandomNumber?";
+        if (min === null)
+            throw new Error("The parameter 'min' cannot be null.");
+        else if (min !== undefined)
+            url_ += "min=" + encodeURIComponent("" + min) + "&"; 
+        if (max === null)
+            throw new Error("The parameter 'max' cannot be null.");
+        else if (max !== undefined)
+            url_ += "max=" + encodeURIComponent("" + max) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRandomNumber(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRandomNumber(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRandomNumber(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+
+    /**
      * @param shopProductId (optional) 
      * @return Success
      */
@@ -4923,6 +4984,7 @@ export class ExpenseDto implements IExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -4946,6 +5008,7 @@ export class ExpenseDto implements IExpenseDto {
             this.name = _data["name"];
             this.description = _data["description"];
             this.cost = _data["cost"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -4969,6 +5032,7 @@ export class ExpenseDto implements IExpenseDto {
         data["name"] = this.name;
         data["description"] = this.description;
         data["cost"] = this.cost;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -4992,6 +5056,7 @@ export interface IExpenseDto {
     name: string | undefined;
     description: string | undefined;
     cost: number;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5134,6 +5199,7 @@ export class ProductSaleDto implements IProductSaleDto {
     profit: number;
     shopProductId: number;
     quantity: number | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5163,6 +5229,7 @@ export class ProductSaleDto implements IProductSaleDto {
             this.profit = _data["profit"];
             this.shopProductId = _data["shopProductId"];
             this.quantity = _data["quantity"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -5192,6 +5259,7 @@ export class ProductSaleDto implements IProductSaleDto {
         data["profit"] = this.profit;
         data["shopProductId"] = this.shopProductId;
         data["quantity"] = this.quantity;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5221,6 +5289,7 @@ export interface IProductSaleDto {
     profit: number;
     shopProductId: number;
     quantity: number | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5350,6 +5419,7 @@ export class ProductDto implements IProductDto {
     description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -5374,6 +5444,7 @@ export class ProductDto implements IProductDto {
             this.description = _data["description"];
             this.subTypeId = _data["subTypeId"];
             this.subTypeName = _data["subTypeName"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -5398,6 +5469,7 @@ export class ProductDto implements IProductDto {
         data["description"] = this.description;
         data["subTypeId"] = this.subTypeId;
         data["subTypeName"] = this.subTypeName;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -5422,6 +5494,7 @@ export interface IProductDto {
     description: string | undefined;
     subTypeId: number;
     subTypeName: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -6386,6 +6459,7 @@ export class ShopProductDto implements IShopProductDto {
     companyId: number | undefined;
     productName: string | undefined;
     companyName: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -6415,6 +6489,7 @@ export class ShopProductDto implements IShopProductDto {
             this.companyId = _data["companyId"];
             this.productName = _data["productName"];
             this.companyName = _data["companyName"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -6444,6 +6519,7 @@ export class ShopProductDto implements IShopProductDto {
         data["companyId"] = this.companyId;
         data["productName"] = this.productName;
         data["companyName"] = this.companyName;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -6473,6 +6549,7 @@ export interface IShopProductDto {
     companyId: number | undefined;
     productName: string | undefined;
     companyName: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -6602,6 +6679,7 @@ export class SubTypeDto implements ISubTypeDto {
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -6626,6 +6704,7 @@ export class SubTypeDto implements ISubTypeDto {
             this.name = _data["name"];
             this.productTypeName = _data["productTypeName"];
             this.productTypeId = _data["productTypeId"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -6650,6 +6729,7 @@ export class SubTypeDto implements ISubTypeDto {
         data["name"] = this.name;
         data["productTypeName"] = this.productTypeName;
         data["productTypeId"] = this.productTypeId;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -6674,6 +6754,7 @@ export interface ISubTypeDto {
     name: string | undefined;
     productTypeName: string | undefined;
     productTypeId: number;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -7355,6 +7436,7 @@ export interface ICreateTypeDto {
 export class TypeDto implements ITypeDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;
@@ -7377,6 +7459,7 @@ export class TypeDto implements ITypeDto {
         if (_data) {
             this.name = _data["name"];
             this.description = _data["description"];
+            this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
@@ -7399,6 +7482,7 @@ export class TypeDto implements ITypeDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["description"] = this.description;
+        data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -7421,6 +7505,7 @@ export class TypeDto implements ITypeDto {
 export interface ITypeDto {
     name: string | undefined;
     description: string | undefined;
+    tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
     deletionTime: moment.Moment | undefined;

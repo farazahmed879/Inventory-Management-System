@@ -80,9 +80,8 @@
             </tr>
           </tbody>
         </table>
-        <div
+        <div  *ngIf="totalItems > pageSize"
           class="abp-pagination-controls-wrapper"
-          *ngIf="totalItems > pageSize"
         >
           <abp-pagination-controls
             (pageChange)="getDataPage($event)"

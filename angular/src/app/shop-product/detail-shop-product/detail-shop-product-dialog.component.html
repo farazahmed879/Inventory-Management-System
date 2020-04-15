@@ -1,0 +1,22 @@
+<form autocomplete="off" #editShopProductForm="ngForm">
+  <h1 mat-dialog-title>Product Detail</h1>
+  <mat-dialog-content>
+    <div class="row-fluid">
+      <div class="col-md-12">
+        <div class="col-md-6">
+          <ngx-barcode  class="" [bc-value]="barcode" [bc-display-value]="true" [bc-format]="'CODE128'">
+          </ngx-barcode>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions align="end">
+    <button mat-button shopProduct="button" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>
+
+  </div>
+</form>

@@ -20,3 +20,8 @@ export class TopBarComponent extends AppComponentBase {
     //     this.sidebar.hide();
     // }
 }
+
+export class PrimefacesDropDownObject {
+    label: string;
+    value: number;
+}

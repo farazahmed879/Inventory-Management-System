@@ -13,6 +13,6 @@ namespace InventoryManagementSystem.ShopProducts.Dto
         public long? CompanyId { get; set; }
         public string ProductName { get; set; }
         public string CompanyName { get; set; }
-
+        public int TenantId { get; set; }
     }
 }

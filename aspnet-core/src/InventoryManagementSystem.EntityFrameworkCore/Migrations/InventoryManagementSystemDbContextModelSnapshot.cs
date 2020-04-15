@@ -1810,6 +1810,9 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<long>("UniqueCode")
+                        .HasColumnType("bigint");
+
                     b.Property<double?>("WholeSaleRate")
                         .HasColumnType("float");
 

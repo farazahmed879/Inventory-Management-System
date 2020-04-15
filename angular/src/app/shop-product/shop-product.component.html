@@ -38,14 +38,18 @@
                       </mat-form-field>
                   </div> -->
               <div class="col-md-3">
-                <mat-form-field>
+                <!-- <mat-form-field>
                   <mat-label>Select Company</mat-label>
                   <mat-select [(ngModel)]="selectedCompany" name="Company">
                     <mat-option *ngFor="let company of companies" [value]="company.id">
                       {{company.name}}
                     </mat-option>
                   </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
+                <p-dropdown class="dropdown"
+                  [options]="companyArrayObj" [(ngModel)]="selectedCompany" filter="true"
+                  optionLabel="label" placeholder="Please select a class">
+                </p-dropdown>
               </div>
               <div class="col-md-3">
                 <mat-form-field>
@@ -68,10 +72,11 @@
                 </mat-form-field>
               </div>
               <div class="col-md-12 text-right p-r-25">
-                
-                <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>{{" "}}
+
                 <button mat-raised-button color="primary"
-                (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button> 
+                  (click)="getDataPage(1)">{{ 'Search' | localize }}</button>{{" "}}
+                <button mat-raised-button color="primary"
+                  (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button>
               </div>
             </div>
           </form>
@@ -119,6 +124,10 @@
                     <mat-icon>delete</mat-icon>
                     <span>{{ "Delete" | localize }}</span>
                   </button>
+                  <button mat-menu-item (click)="generateBarCode(shopProduct)">
+                    <mat-icon>delete</mat-icon>
+                    <span>{{ "Barcode" | localize }}</span>
+                  </button>
                 </mat-menu>
               </td>
             </tr>
@@ -131,7 +140,9 @@
         <button mat-mini-fab color="primary" class="pull-right" (click)="createShopProduct()">
           <mat-icon>add</mat-icon>
         </button>
+
       </div>
     </div>
   </div>
+
 </div>

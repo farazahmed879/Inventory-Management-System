@@ -150,7 +150,7 @@ namespace InventoryManagementSystem.Expenses
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredExpenses.CountAsync();
+            var totalCount = filteredExpenses.Count();
 
             return new PagedResultDto<ExpenseDto>(
                 totalCount: totalCount,

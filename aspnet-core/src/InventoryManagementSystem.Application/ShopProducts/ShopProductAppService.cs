@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
@@ -35,8 +37,15 @@ namespace InventoryManagementSystem.ShopProducts
             return result;
         }
 
+        public int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
+
         private async Task<ResponseMessagesDto> CreateShopProductAsync(CreateShopProductDto shopProductDto)
         {
+           
             var result = await _shopProductRepository.InsertAsync(new ShopProduct()
             {
                 WholeSaleRate = shopProductDto.WholeSaleRate,
@@ -49,6 +58,8 @@ namespace InventoryManagementSystem.ShopProducts
                 TenantId = shopProductDto.TenantId
 
             });
+
+            var uniqueNumber = RandomNumber(Convert.ToInt32(result.Id), 8);
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
 
@@ -168,7 +179,7 @@ namespace InventoryManagementSystem.ShopProducts
                 .OrderByDescending(i => i.Id)
                 .PageBy(input);
 
-            var totalCount = await pagedAndFilteredShopProducts.CountAsync();
+            var totalCount =  filteredShopProducts.Count();
 
             return new PagedResultDto<ShopProductDto>(
                 totalCount: totalCount,
@@ -180,7 +191,8 @@ namespace InventoryManagementSystem.ShopProducts
                     CompanyName = i.Company.Name,
                     WholeSaleRate = i.WholeSaleRate.Value,
                     Quantity = i.Quantity.Value,
-                    RetailPrice = i.RetailPrice
+                    RetailPrice = i.RetailPrice,
+                    CreationTime = i.CreationTime
 
                 })
                     .ToListAsync());

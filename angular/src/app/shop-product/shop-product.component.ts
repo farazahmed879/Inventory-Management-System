@@ -21,7 +21,11 @@ import {
 } from "@shared/service-proxies/service-proxies";
 import { CreateShopProductDialogComponent } from "./create-shop-product/create-shop-product-dialog.component";
 import { EditShopProductDialogComponent } from "./edit-shop-product/edit-shop-product-dialog.component";
+import { DetailShopProductDialogComponent } from "./detail-shop-product/detail-shop-product-dialog.component";
 import { timingSafeEqual } from "crypto";
+import {SelectItem} from 'primeng/api';
+import {SelectItemGroup} from 'primeng/api';
+import { PrimefacesDropDownObject } from "@app/layout/topbar.component";
 
 class PagedShopProductRequestDto extends PagedRequestDto {
   keyword: string;
@@ -39,7 +43,7 @@ class PagedShopProductRequestDto extends PagedRequestDto {
   ]
 })
 export class ShopProductComponent extends PagedListingComponentBase<
-  ShopProductDto
+ShopProductDto
 > {
   shopProducts: ShopProductDto[] = [];
   keyword = "";
@@ -51,6 +55,10 @@ export class ShopProductComponent extends PagedListingComponentBase<
   selectedType: number;
   subTypes: SubTypeDto[] = [];
   selectedSubType: number;
+  barcode: any;
+  showBarCode:  boolean;
+  companyArrayObj: PrimefacesDropDownObject[];
+  request: PagedShopProductRequestDto;
 
   constructor(
     injector: Injector,
@@ -65,6 +73,7 @@ export class ShopProductComponent extends PagedListingComponentBase<
   }
 
   ngOnInit() {
+    this.getDataPage(1);
     this.getAllShopProducts();
     this.getCompanies();
     this.getTypes();
@@ -80,6 +89,11 @@ export class ShopProductComponent extends PagedListingComponentBase<
   getCompanies() {
     this._companyService.getAll(this.appSession.tenantId).subscribe(result => {
       this.companies = result;
+      this.companyArrayObj = result.map(item =>
+        ({
+          label: item.name,
+          value: item.id
+        }));
     });
   }
 
@@ -99,12 +113,17 @@ export class ShopProductComponent extends PagedListingComponentBase<
     request: PagedShopProductRequestDto,
     pageNumber: number,
     finishedCallback: Function
-  ): void {
-    request.keyword = this.keyword;
+  ) {
+    // debugger;
+    //  if(request == undefined){
+    //   var request = new PagedShopProductRequestDto;
+    //  }
+     request.keyword = this.keyword;
+
 
     this._shopProductService
       .getPaginatedAll(
-        request.keyword,
+        this.keyword,
         this.selectedCompany,
         this.selectedType,
         this.selectedSubType,
@@ -137,10 +156,36 @@ export class ShopProductComponent extends PagedListingComponentBase<
                 this.refresh();
               })
             )
-            .subscribe(() => {});
+            .subscribe(() => { });
         }
       }
     );
+  }
+
+  generateBarCode(shopProduct: ShopProductDto) {
+    this.showDetailShopProductDialog(shopProduct.id);
+  }
+
+  showDetailShopProductDialog(id?: number){
+    let detailShopProductDialog;
+    if (id === undefined || id <= 0) {
+      detailShopProductDialog = this._dialog.open(
+        DetailShopProductDialogComponent
+      );
+    } else {
+      detailShopProductDialog = this._dialog.open(
+        DetailShopProductDialogComponent,
+        {
+          data: id
+        }
+      );
+    }
+
+    detailShopProductDialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.refresh();
+      }
+    });
   }
 
   createShopProduct(): void {
@@ -173,7 +218,7 @@ export class ShopProductComponent extends PagedListingComponentBase<
     });
   }
 
-  clearFilters(){
+  clearFilters() {
     this.selectedSubType = null;
     this.selectedType = null;
     this.selectedCompany = null;

@@ -49,6 +49,7 @@ import { EditProductDialogComponent } from '@app/product/edit-product/edit-produ
 import { ShopProductComponent } from './shop-product/shop-product.component';
 import { EditShopProductDialogComponent } from './shop-product/edit-shop-product/edit-shop-product-dialog.component';
 import { CreateShopProductDialogComponent } from './shop-product/create-shop-product/create-shop-product-dialog.component';
+import { DetailShopProductDialogComponent } from './shop-product/detail-shop-product/detail-shop-product-dialog.component';
 // Product Sale
 import { ProductSaleComponent } from './product-sale/product-sale.component';
 import { CreateProductSaleDialogComponent } from './product-sale/create-product-sale/create-product-sale-dialog.component';
@@ -65,6 +66,8 @@ import { SubTypeTypeLookupTableModalComponent } from './subType/subType-type-loo
 //PrimeNg
 import { ChartModule } from 'primeng/chart';
 import { DropdownModule } from 'primeng/dropdown';
+//import {PaginatorModule} from 'primeng/paginator'
+import { NgxBarcodeModule } from 'ngx-barcode';
 //Services
 import {
   ShopProductServiceServiceProxy,
@@ -80,6 +83,8 @@ import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.componen
 import { ExpenseComponent } from './expense/expense.component';
 import { CreateExpenseDialogComponent } from './expense/create-expense/create-expense-dialog.component';
 import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-dialog.component';
+
+
 
 
 @NgModule({
@@ -124,6 +129,7 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     ShopProductComponent,
     CreateShopProductDialogComponent,
     EditShopProductDialogComponent,
+    DetailShopProductDialogComponent,
     //ProductSale
     ProductSaleComponent,
     CreateProductSaleDialogComponent,
@@ -154,7 +160,9 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     SharedModule,
     NgxPaginationModule,
     DropdownModule,
-    ChartModule
+    ChartModule,
+    //PaginatorModule,
+    NgxBarcodeModule
   ],
   providers: [
     ShopProductServiceServiceProxy,
@@ -164,7 +172,7 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     ProductServiceServiceProxy,
     ExpenseServiceServiceProxy,
     ProductSaleServiceServiceProxy,
-    DashboardServiceServiceProxy
+    DashboardServiceServiceProxy,
   ],
   entryComponents: [
     // tenants
@@ -193,6 +201,7 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     ShopProductComponent,
     CreateShopProductDialogComponent,
     EditShopProductDialogComponent,
+    DetailShopProductDialogComponent,
     //ProductSale
     ProductSaleComponent,
     CreateProductSaleDialogComponent,
