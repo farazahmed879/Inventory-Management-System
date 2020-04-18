@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.Migrations
 {
-    public partial class InitialcreateDb : Migration
+    public partial class initial_CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -440,7 +440,8 @@ namespace InventoryManagementSystem.Migrations
                     DeleterUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: true)
+                    Description = table.Column<string>(maxLength: 100, nullable: true),
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -462,7 +463,8 @@ namespace InventoryManagementSystem.Migrations
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
-                    Cost = table.Column<double>(nullable: false)
+                    Cost = table.Column<double>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -470,7 +472,7 @@ namespace InventoryManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Types",
+                name: "SubTypes",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -484,11 +486,11 @@ namespace InventoryManagementSystem.Migrations
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
-                    TenantId = table.Column<long>(nullable: false)
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Types", x => x.Id);
+                    table.PrimaryKey("PK_SubTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -777,7 +779,7 @@ namespace InventoryManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubTypes",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -791,17 +793,18 @@ namespace InventoryManagementSystem.Migrations
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
-                    ProductTypeId = table.Column<long>(nullable: false)
+                    ProductSubTypeId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubTypes", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubTypes_Types_ProductTypeId",
-                        column: x => x.ProductTypeId,
-                        principalTable: "Types",
+                        name: "FK_Products_SubTypes_ProductSubTypeId",
+                        column: x => x.ProductSubTypeId,
+                        principalTable: "SubTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -885,34 +888,6 @@ namespace InventoryManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 100, nullable: true),
-                    ProductSubTypeId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_SubTypes_ProductSubTypeId",
-                        column: x => x.ProductSubTypeId,
-                        principalTable: "SubTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShopProducts",
                 columns: table => new
                 {
@@ -931,7 +906,8 @@ namespace InventoryManagementSystem.Migrations
                     CompanyRate = table.Column<double>(nullable: true),
                     RetailPrice = table.Column<double>(nullable: true),
                     ProductId = table.Column<long>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: true)
+                    CompanyId = table.Column<long>(nullable: true),
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -966,7 +942,8 @@ namespace InventoryManagementSystem.Migrations
                     Status = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
                     SellingRate = table.Column<double>(nullable: false),
-                    ShopProductId = table.Column<long>(nullable: false)
+                    ShopProductId = table.Column<long>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1314,11 +1291,6 @@ namespace InventoryManagementSystem.Migrations
                 name: "IX_ShopProducts_ProductId",
                 table: "ShopProducts",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubTypes_ProductTypeId",
-                table: "SubTypes",
-                column: "ProductTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1433,9 +1405,6 @@ namespace InventoryManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubTypes");
-
-            migrationBuilder.DropTable(
-                name: "Types");
         }
     }
 }

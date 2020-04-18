@@ -16,7 +16,6 @@ namespace InventoryManagementSystem.EntityFrameworkCore
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Type> Types { get; set; }
         public DbSet<SubType> SubTypes { get; set; }
         public DbSet<ShopProduct> ShopProducts { get; set; }
         public DbSet<ProductSell> ProductSells { get; set; }

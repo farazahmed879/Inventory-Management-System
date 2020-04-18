@@ -4,9 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   SubTypeServiceServiceProxy,
-  TypeServiceServiceProxy,
-  CreateSubTypeDto,
-  TypeDto
+  CreateSubTypeDto
 } from '@shared/service-proxies/service-proxies';
 //import { SubTypeTypeLookupTableModalComponent } from '../subType-type-lookup-modal/subType-type-lookup-table-modal.component';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -32,8 +30,6 @@ export class CreateSubTypeDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   subType: CreateSubTypeDto = new CreateSubTypeDto();
-  type = '';
-  types: TypeDto[];
 
   //@ViewChild('subTypeTypeLookupTableModalComponent', { static: true }) subTypeTypeLookupTableModalComponent: SubTypeTypeLookupTableModalComponent;
   //@ViewChild('createOrEditModal', { static: true }) modal: ModalDirective;
@@ -42,21 +38,14 @@ export class CreateSubTypeDialogComponent extends AppComponentBase
     injector: Injector,
 
     public _subTypeService: SubTypeServiceServiceProxy,
-    public _typeService: TypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<CreateSubTypeDialogComponent>
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this.getAllProductType();
   }
 
-  getAllProductType() {
-    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
-      this.types = result;
-    });
-  }
 
   save(): void {
     this.saving = true;

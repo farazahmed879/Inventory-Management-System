@@ -41,13 +41,14 @@
               [(ngModel)]="shopProduct.description"
             />
           </mat-form-field>
-        </div>
-        <div class="col-md-6">
-
           <mat-form-field>
             <input matInput name="wholeSaleRate" [placeholder]="'Wholesale Rate' | localize"
               [(ngModel)]="shopProduct.wholeSaleRate" required type="number" minlength="0" maxlength="64" />
           </mat-form-field>
+        </div>
+        <div class="col-md-6">
+
+          
           <mat-form-field>
             <input matInput name="retailPrice" [placeholder]="'Retail Price' | localize"
               [(ngModel)]="shopProduct.retailPrice" required type="number" minlength="0" maxlength="64" />

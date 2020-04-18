@@ -14,14 +14,11 @@ namespace InventoryManagementSystem.SubTypes
     public class SubTypeService : AbpServiceBase, ISubTypeService
     {
         private readonly IRepository<SubType, long> _subTypeRepository;
-        private readonly IRepository<Type, long> _typeRepository;
         public SubTypeService(
-            IRepository<SubType, long> subTypeRepository,
-            IRepository<Type, long> typeRepository
+            IRepository<SubType, long> subTypeRepository
             )
         {
             _subTypeRepository = subTypeRepository;
-            _typeRepository = typeRepository;
         }
 
 
@@ -45,7 +42,6 @@ namespace InventoryManagementSystem.SubTypes
             {
                 Name = subTypeDto.Name,
                 Description = subTypeDto.Description,
-                ProductTypeId = subTypeDto.ProductTypeId,
                 TenantId = subTypeDto.TenantId
             });
 
@@ -77,7 +73,6 @@ namespace InventoryManagementSystem.SubTypes
                 Id = subTypeDto.Id,
                 Name = subTypeDto.Name,
                 Description = subTypeDto.Description,
-                ProductTypeId = subTypeDto.ProductTypeId
             });
 
             if (result != null)
@@ -108,8 +103,7 @@ namespace InventoryManagementSystem.SubTypes
                 {
                     Id = i.Id,
                     Name = i.Name,
-                    Description = i.Description,
-                    ProductTypeId = i.ProductTypeId
+                    Description = i.Description
                 })
                 .FirstOrDefaultAsync();
             return result;
@@ -138,7 +132,6 @@ namespace InventoryManagementSystem.SubTypes
                     Id = i.Id,
                     Name = i.Name,
                     Description = i.Description,
-                    ProductTypeId = i.ProductTypeId,
                     CreatorUserId = i.CreatorUserId,
                     CreationTime = i.CreationTime,
                     LastModificationTime = i.LastModificationTime
@@ -150,14 +143,14 @@ namespace InventoryManagementSystem.SubTypes
         {
             var filteredSubTypes = _subTypeRepository.GetAll()
                 .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Name) || !string.IsNullOrWhiteSpace(input.ProductType),
-                    x => x.Name.Contains(input.Name) || x.ProductType.Name.Contains(input.ProductType));
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Name),
+                    x => x.Name.Contains(input.Name));
 
             var pagedAndFilteredTypes = filteredSubTypes
                 .OrderBy(i => i.Name)
                 .PageBy(input);
 
-            var totalCount =  filteredSubTypes.Count();
+            var totalCount = filteredSubTypes.Count();
 
             return new PagedResultDto<SubTypeDto>(
                 totalCount: totalCount,
@@ -165,40 +158,9 @@ namespace InventoryManagementSystem.SubTypes
                 {
                     Id = i.Id,
                     Name = i.Name,
-                    Description = i.Description,
-                    ProductTypeId = i.ProductTypeId,
-                    ProductTypeName = i.ProductType.Name
+                    Description = i.Description
                 })
                     .ToListAsync());
-        }
-
-        public async Task<PagedResultDto<TypeLookupTableDto>> GetAllQuestionTypeForLookupTable(GetAllForLookupTableInput input)
-        {
-            var query = _typeRepository.GetAll().WhereIf(
-                   !string.IsNullOrWhiteSpace(input.Filter),
-                  e => e.Name.ToString().Contains(input.Filter)
-               );
-
-            var totalCount = await query.CountAsync();
-
-            var typeList = await query
-                .PageBy(input)
-                .ToListAsync();
-
-            var lookupTableDtoList = new List<TypeLookupTableDto>();
-            foreach (var type in typeList)
-            {
-                lookupTableDtoList.Add(new TypeLookupTableDto
-                {
-                    Id = type.Id,
-                    Name = type.Name?.ToString()
-                });
-            }
-
-            return new PagedResultDto<TypeLookupTableDto>(
-                totalCount,
-                lookupTableDtoList
-            );
         }
     }
 }

@@ -14,8 +14,6 @@ import {
   ProductDto,
   CompanyDto,
   CompanyServiceServiceProxy,
-  TypeDto,
-  TypeServiceServiceProxy,
   SubTypeDto,
   SubTypeServiceServiceProxy
 } from "@shared/service-proxies/service-proxies";
@@ -23,8 +21,8 @@ import { CreateShopProductDialogComponent } from "./create-shop-product/create-s
 import { EditShopProductDialogComponent } from "./edit-shop-product/edit-shop-product-dialog.component";
 import { DetailShopProductDialogComponent } from "./detail-shop-product/detail-shop-product-dialog.component";
 import { timingSafeEqual } from "crypto";
-import {SelectItem} from 'primeng/api';
-import {SelectItemGroup} from 'primeng/api';
+import { SelectItem } from 'primeng/api';
+import { SelectItemGroup } from 'primeng/api';
 import { PrimefacesDropDownObject } from "@app/layout/topbar.component";
 
 class PagedShopProductRequestDto extends PagedRequestDto {
@@ -50,13 +48,12 @@ ShopProductDto
   shopProductsFilter: ShopProductDto[] = [];
   selectedProduct: number;
   companies: CompanyDto[] = [];
-  selectedCompany: number;
-  types: TypeDto[] = [];
+  selectedCompany: any;
   selectedType: number;
   subTypes: SubTypeDto[] = [];
   selectedSubType: number;
   barcode: any;
-  showBarCode:  boolean;
+  showBarCode: boolean;
   companyArrayObj: PrimefacesDropDownObject[];
   request: PagedShopProductRequestDto;
 
@@ -66,7 +63,6 @@ ShopProductDto
     private _dialog: MatDialog,
     private _productService: ProductServiceServiceProxy,
     private _companyService: CompanyServiceServiceProxy,
-    private _typeService: TypeServiceServiceProxy,
     private _subTypeService: SubTypeServiceServiceProxy
   ) {
     super(injector);
@@ -76,7 +72,6 @@ ShopProductDto
     this.getDataPage(1);
     this.getAllShopProducts();
     this.getCompanies();
-    this.getTypes();
     this.getSubTypes();
   }
 
@@ -97,12 +92,6 @@ ShopProductDto
     });
   }
 
-  getTypes() {
-    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
-      this.types = result;
-    });
-  }
-
   getSubTypes() {
     this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
@@ -114,17 +103,13 @@ ShopProductDto
     pageNumber: number,
     finishedCallback: Function
   ) {
-    // debugger;
-    //  if(request == undefined){
-    //   var request = new PagedShopProductRequestDto;
-    //  }
-     request.keyword = this.keyword;
-
-
+    this.selectedCompany;
+    debugger;
+    request.keyword = this.keyword;
     this._shopProductService
       .getPaginatedAll(
         this.keyword,
-        this.selectedCompany,
+        this.selectedCompany ? this.selectedCompany.value : undefined,
         this.selectedType,
         this.selectedSubType,
         this.appSession.tenantId,
@@ -166,7 +151,7 @@ ShopProductDto
     this.showDetailShopProductDialog(shopProduct.id);
   }
 
-  showDetailShopProductDialog(id?: number){
+  showDetailShopProductDialog(id?: number) {
     let detailShopProductDialog;
     if (id === undefined || id <= 0) {
       detailShopProductDialog = this._dialog.open(

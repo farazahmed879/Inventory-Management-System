@@ -8,7 +8,6 @@ import { UsersComponent } from './users/users.component';
 import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
-import { TypeComponent } from './type/type.component';
 import { ProductComponent } from './product/product.component';
 import { CompanyComponent } from './company/company.component';
 import { ProductSaleComponent } from './product-sale/product-sale.component';
@@ -27,7 +26,6 @@ import { ExpenseComponent } from './expense/expense.component';
                     { path: 'dashboard', component: SaleDashboardComponent,  canActivate: [AppRouteGuard] },
                     { path: 'expense', component: ExpenseComponent,  canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
-                    { path: 'type', component: TypeComponent, canActivate: [AppRouteGuard] },
                     { path: 'product', component: ProductComponent, canActivate: [AppRouteGuard] },
                     { path: 'company', component: CompanyComponent, canActivate: [AppRouteGuard] },
                     { path: 'productSale', component: ProductSaleComponent, canActivate: [AppRouteGuard] },

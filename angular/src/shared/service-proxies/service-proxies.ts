@@ -2758,22 +2758,17 @@ export class SubTypeServiceServiceProxy {
 
     /**
      * @param name (optional) 
-     * @param productType (optional) 
      * @param tenantId (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
      * @return Success
      */
-    getPaginatedAll(name: string | undefined, productType: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
+    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<SubTypeDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetPaginatedAll?";
         if (name === null)
             throw new Error("The parameter 'name' cannot be null.");
         else if (name !== undefined)
             url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
-        if (productType === null)
-            throw new Error("The parameter 'productType' cannot be null.");
-        else if (productType !== undefined)
-            url_ += "ProductType=" + encodeURIComponent("" + productType) + "&"; 
         if (tenantId === null)
             throw new Error("The parameter 'tenantId' cannot be null.");
         else if (tenantId !== undefined)
@@ -2830,77 +2825,6 @@ export class SubTypeServiceServiceProxy {
             }));
         }
         return _observableOf<SubTypeDtoPagedResultDto>(<any>null);
-    }
-
-    /**
-     * @param filter (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
-     * @return Success
-     */
-    getAllQuestionTypeForLookupTable(filter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeLookupTableDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/SubTypeService/GetAllQuestionTypeForLookupTable?";
-        if (filter === null)
-            throw new Error("The parameter 'filter' cannot be null.");
-        else if (filter !== undefined)
-            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
-        if (sorting === null)
-            throw new Error("The parameter 'sorting' cannot be null.");
-        else if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
-        if (skipCount === null)
-            throw new Error("The parameter 'skipCount' cannot be null.");
-        else if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        if (maxResultCount === null)
-            throw new Error("The parameter 'maxResultCount' cannot be null.");
-        else if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllQuestionTypeForLookupTable(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllQuestionTypeForLookupTable(<any>response_);
-                } catch (e) {
-                    return <Observable<TypeLookupTableDtoPagedResultDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TypeLookupTableDtoPagedResultDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllQuestionTypeForLookupTable(response: HttpResponseBase): Observable<TypeLookupTableDtoPagedResultDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TypeLookupTableDtoPagedResultDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TypeLookupTableDtoPagedResultDto>(<any>null);
     }
 }
 
@@ -3383,317 +3307,6 @@ export class TokenAuthServiceProxy {
             }));
         }
         return _observableOf<ExternalAuthenticateResultModel>(<any>null);
-    }
-}
-
-@Injectable()
-export class TypeServiceServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createOrEdit(body: CreateTypeDto | undefined): Observable<ResponseMessagesDto> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/CreateOrEdit";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json", 
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateOrEdit(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateOrEdit(<any>response_);
-                } catch (e) {
-                    return <Observable<ResponseMessagesDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ResponseMessagesDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreateOrEdit(response: HttpResponseBase): Observable<ResponseMessagesDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResponseMessagesDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ResponseMessagesDto>(<any>null);
-    }
-
-    /**
-     * @param typeId (optional) 
-     * @return Success
-     */
-    getById(typeId: number | undefined): Observable<TypeDto> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/GetById?";
-        if (typeId === null)
-            throw new Error("The parameter 'typeId' cannot be null.");
-        else if (typeId !== undefined)
-            url_ += "typeId=" + encodeURIComponent("" + typeId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetById(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetById(<any>response_);
-                } catch (e) {
-                    return <Observable<TypeDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TypeDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetById(response: HttpResponseBase): Observable<TypeDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TypeDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TypeDto>(<any>null);
-    }
-
-    /**
-     * @param typeId (optional) 
-     * @return Success
-     */
-    delete(typeId: number | undefined): Observable<ResponseMessagesDto> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/Delete?";
-        if (typeId === null)
-            throw new Error("The parameter 'typeId' cannot be null.");
-        else if (typeId !== undefined)
-            url_ += "typeId=" + encodeURIComponent("" + typeId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDelete(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processDelete(<any>response_);
-                } catch (e) {
-                    return <Observable<ResponseMessagesDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ResponseMessagesDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processDelete(response: HttpResponseBase): Observable<ResponseMessagesDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResponseMessagesDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ResponseMessagesDto>(<any>null);
-    }
-
-    /**
-     * @param tenantId (optional) 
-     * @return Success
-     */
-    getAll(tenantId: number | undefined): Observable<TypeDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/GetAll?";
-        if (tenantId === null)
-            throw new Error("The parameter 'tenantId' cannot be null.");
-        else if (tenantId !== undefined)
-            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAll(<any>response_);
-                } catch (e) {
-                    return <Observable<TypeDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TypeDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAll(response: HttpResponseBase): Observable<TypeDto[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(TypeDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TypeDto[]>(<any>null);
-    }
-
-    /**
-     * @param name (optional) 
-     * @param tenantId (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
-     * @return Success
-     */
-    getPaginatedAll(name: string | undefined, tenantId: number | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TypeDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/TypeService/GetPaginatedAll?";
-        if (name === null)
-            throw new Error("The parameter 'name' cannot be null.");
-        else if (name !== undefined)
-            url_ += "Name=" + encodeURIComponent("" + name) + "&"; 
-        if (tenantId === null)
-            throw new Error("The parameter 'tenantId' cannot be null.");
-        else if (tenantId !== undefined)
-            url_ += "TenantId=" + encodeURIComponent("" + tenantId) + "&"; 
-        if (skipCount === null)
-            throw new Error("The parameter 'skipCount' cannot be null.");
-        else if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        if (maxResultCount === null)
-            throw new Error("The parameter 'maxResultCount' cannot be null.");
-        else if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetPaginatedAll(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetPaginatedAll(<any>response_);
-                } catch (e) {
-                    return <Observable<TypeDtoPagedResultDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TypeDtoPagedResultDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetPaginatedAll(response: HttpResponseBase): Observable<TypeDtoPagedResultDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TypeDtoPagedResultDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TypeDtoPagedResultDto>(<any>null);
     }
 }
 
@@ -6618,7 +6231,6 @@ export interface IShopProductDtoPagedResultDto {
 export class CreateSubTypeDto implements ICreateSubTypeDto {
     description: string | undefined;
     name: string | undefined;
-    productTypeId: number;
     tenantId: number;
     id: number;
 
@@ -6635,7 +6247,6 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
         if (_data) {
             this.description = _data["description"];
             this.name = _data["name"];
-            this.productTypeId = _data["productTypeId"];
             this.tenantId = _data["tenantId"];
             this.id = _data["id"];
         }
@@ -6652,7 +6263,6 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["name"] = this.name;
-        data["productTypeId"] = this.productTypeId;
         data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         return data; 
@@ -6669,7 +6279,6 @@ export class CreateSubTypeDto implements ICreateSubTypeDto {
 export interface ICreateSubTypeDto {
     description: string | undefined;
     name: string | undefined;
-    productTypeId: number;
     tenantId: number;
     id: number;
 }
@@ -6677,8 +6286,6 @@ export interface ICreateSubTypeDto {
 export class SubTypeDto implements ISubTypeDto {
     description: string | undefined;
     name: string | undefined;
-    productTypeName: string | undefined;
-    productTypeId: number;
     tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
@@ -6702,8 +6309,6 @@ export class SubTypeDto implements ISubTypeDto {
         if (_data) {
             this.description = _data["description"];
             this.name = _data["name"];
-            this.productTypeName = _data["productTypeName"];
-            this.productTypeId = _data["productTypeId"];
             this.tenantId = _data["tenantId"];
             this.isDeleted = _data["isDeleted"];
             this.deleterUserId = _data["deleterUserId"];
@@ -6727,8 +6332,6 @@ export class SubTypeDto implements ISubTypeDto {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["name"] = this.name;
-        data["productTypeName"] = this.productTypeName;
-        data["productTypeId"] = this.productTypeId;
         data["tenantId"] = this.tenantId;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
@@ -6752,8 +6355,6 @@ export class SubTypeDto implements ISubTypeDto {
 export interface ISubTypeDto {
     description: string | undefined;
     name: string | undefined;
-    productTypeName: string | undefined;
-    productTypeId: number;
     tenantId: number;
     isDeleted: boolean;
     deleterUserId: number | undefined;
@@ -6818,136 +6419,6 @@ export class SubTypeDtoPagedResultDto implements ISubTypeDtoPagedResultDto {
 export interface ISubTypeDtoPagedResultDto {
     totalCount: number;
     items: SubTypeDto[] | undefined;
-}
-
-export class TypeLookupTableDto implements ITypeLookupTableDto {
-    id: number;
-    name: string | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-
-    constructor(data?: ITypeLookupTableDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-        }
-    }
-
-    static fromJS(data: any): TypeLookupTableDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TypeLookupTableDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        return data; 
-    }
-
-    clone(): TypeLookupTableDto {
-        const json = this.toJSON();
-        let result = new TypeLookupTableDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITypeLookupTableDto {
-    id: number;
-    name: string | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-}
-
-export class TypeLookupTableDtoPagedResultDto implements ITypeLookupTableDtoPagedResultDto {
-    totalCount: number;
-    items: TypeLookupTableDto[] | undefined;
-
-    constructor(data?: ITypeLookupTableDtoPagedResultDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(TypeLookupTableDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TypeLookupTableDtoPagedResultDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TypeLookupTableDtoPagedResultDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): TypeLookupTableDtoPagedResultDto {
-        const json = this.toJSON();
-        let result = new TypeLookupTableDtoPagedResultDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITypeLookupTableDtoPagedResultDto {
-    totalCount: number;
-    items: TypeLookupTableDto[] | undefined;
 }
 
 export class CreateTenantDto implements ICreateTenantDto {
@@ -7376,199 +6847,6 @@ export interface IExternalAuthenticateResultModel {
     encryptedAccessToken: string | undefined;
     expireInSeconds: number;
     waitingForActivation: boolean;
-}
-
-export class CreateTypeDto implements ICreateTypeDto {
-    name: string | undefined;
-    description: string | undefined;
-    tenantId: number;
-    id: number;
-
-    constructor(data?: ICreateTypeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.tenantId = _data["tenantId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateTypeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateTypeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["tenantId"] = this.tenantId;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): CreateTypeDto {
-        const json = this.toJSON();
-        let result = new CreateTypeDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICreateTypeDto {
-    name: string | undefined;
-    description: string | undefined;
-    tenantId: number;
-    id: number;
-}
-
-export class TypeDto implements ITypeDto {
-    name: string | undefined;
-    description: string | undefined;
-    tenantId: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
-
-    constructor(data?: ITypeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.tenantId = _data["tenantId"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): TypeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TypeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["tenantId"] = this.tenantId;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone(): TypeDto {
-        const json = this.toJSON();
-        let result = new TypeDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITypeDto {
-    name: string | undefined;
-    description: string | undefined;
-    tenantId: number;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    id: number;
-}
-
-export class TypeDtoPagedResultDto implements ITypeDtoPagedResultDto {
-    totalCount: number;
-    items: TypeDto[] | undefined;
-
-    constructor(data?: ITypeDtoPagedResultDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalCount = _data["totalCount"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(TypeDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TypeDtoPagedResultDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TypeDtoPagedResultDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): TypeDtoPagedResultDto {
-        const json = this.toJSON();
-        let result = new TypeDtoPagedResultDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITypeDtoPagedResultDto {
-    totalCount: number;
-    items: TypeDto[] | undefined;
 }
 
 export class CreateUserDto implements ICreateUserDto {

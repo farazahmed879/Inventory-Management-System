@@ -20,7 +20,6 @@
       <div class="body table-responsive">
         <!--query start-->
         <div class="row clearfix">
-          <form>
             <div class="row">
               <div class="col-md-3">
                 <mat-form-field>
@@ -47,19 +46,9 @@
                   </mat-select>
                 </mat-form-field> -->
                 <p-dropdown class="dropdown"
-                  [options]="companyArrayObj" [(ngModel)]="selectedCompany" filter="true"
+                  [options]="companyArrayObj" [(ngModel)]="selectedCompany"  filter="true"
                   optionLabel="label" placeholder="Please select a class">
                 </p-dropdown>
-              </div>
-              <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Select Shop</mat-label>
-                  <mat-select [(ngModel)]="selectedType" name="Type">
-                    <mat-option *ngFor="let type of types" [value]="type.id">
-                      {{type.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
               </div>
               <div class="col-md-3">
                 <mat-form-field>
@@ -79,7 +68,6 @@
                   (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button>
               </div>
             </div>
-          </form>
         </div>
         <!--query end-->
         <table class="table table-hover table-striped" [busy]="isTableLoading">

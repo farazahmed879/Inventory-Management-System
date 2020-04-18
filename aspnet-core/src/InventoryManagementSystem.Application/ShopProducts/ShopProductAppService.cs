@@ -37,12 +37,6 @@ namespace InventoryManagementSystem.ShopProducts
             return result;
         }
 
-        public int RandomNumber(int min, int max)
-        {
-            Random random = new Random();
-            return random.Next(min, max);
-        }
-
         private async Task<ResponseMessagesDto> CreateShopProductAsync(CreateShopProductDto shopProductDto)
         {
            
@@ -59,7 +53,6 @@ namespace InventoryManagementSystem.ShopProducts
 
             });
 
-            var uniqueNumber = RandomNumber(Convert.ToInt32(result.Id), 8);
 
             await UnitOfWorkManager.Current.SaveChangesAsync();
 
@@ -172,7 +165,6 @@ namespace InventoryManagementSystem.ShopProducts
                .Where(i => i.IsDeleted == false && (!input.TenantId.HasValue || i.TenantId == input.TenantId))
                 .WhereIf(!string.IsNullOrWhiteSpace(input.ProductName), x => x.Product.Name.Contains(input.ProductName))
                 .WhereIf(input.CompanyId.HasValue, x => x.CompanyId == input.CompanyId)
-                .WhereIf(input.TypeId.HasValue, x => x.Product.ProductSubType.ProductType.Id == input.TypeId)
                 .WhereIf(input.SubTypeId.HasValue, x => x.Product.ProductSubTypeId == input.SubTypeId);
 
             var pagedAndFilteredShopProducts = filteredShopProducts

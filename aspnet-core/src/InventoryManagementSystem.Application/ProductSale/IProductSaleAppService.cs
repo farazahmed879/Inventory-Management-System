@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using InventoryManagementSystem.ProductSales.Dto;
-using InventoryManagementSystem.Types.Dto;
 
 namespace InventoryManagementSystem.ProductSales
 {

@@ -9,10 +9,8 @@ import {
   CompanyServiceServiceProxy,
   CompanyDto,
   ProductDto,
-  TypeServiceServiceProxy,
   SubTypeServiceServiceProxy,
   SubTypeDto,
-  TypeDto
 } from "@shared/service-proxies/service-proxies";
 
 @Component({
@@ -34,7 +32,6 @@ export class EditShopProductDialogComponent extends AppComponentBase
   shopProduct: ShopProductDto = new ShopProductDto();
   companies: CompanyDto[];
   products: ProductDto[];
-  types: TypeDto[] = [];
   subTypes: SubTypeDto[] = [];
   selectedTypeId: string;
   selectedSubTypeId: string;
@@ -44,7 +41,6 @@ export class EditShopProductDialogComponent extends AppComponentBase
     public _shopProductService: ShopProductServiceServiceProxy,
     public _productService: ProductServiceServiceProxy,
     public _companyService: CompanyServiceServiceProxy,
-    private _typeService: TypeServiceServiceProxy,
     private _subTypeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditShopProductDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
@@ -60,7 +56,6 @@ export class EditShopProductDialogComponent extends AppComponentBase
       });
     this.getAllCompany();
     this.getAllProduct();
-    this.getAllTypes();
     this.getAllSubTypes();
   }
   getAllCompany() {
@@ -72,12 +67,6 @@ export class EditShopProductDialogComponent extends AppComponentBase
   getAllProduct() {
     this._productService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
-    });
-  }
-
-  getAllTypes() {
-    this._typeService.getAll(this.appSession.tenantId).subscribe(result => {
-      this.types = result;
     });
   }
 

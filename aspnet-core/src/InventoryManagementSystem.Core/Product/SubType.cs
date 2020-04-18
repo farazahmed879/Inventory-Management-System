@@ -17,11 +17,6 @@ namespace InventoryManagementSystem.Products
         [StringLength(100)]
         public string Description { get; set; }
 
-        [ForeignKey("ProductTypeId")]
-        public Type ProductType { get; set; }
-
-        public long ProductTypeId { get; set; }
-
         public int? TenantId { get; set; }
     }
 }

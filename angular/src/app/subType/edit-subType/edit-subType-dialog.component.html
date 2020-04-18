@@ -4,12 +4,6 @@
     <div class="row-fluid">
       <div class="col-md-12">
         <mat-form-field>
-          <mat-select [placeholder]="l('Select Shop')" required [(ngModel)]="subType.productTypeId" name="isActive">
-              <mat-option value="">{{ 'Choose Shop' | localize }}</mat-option>
-              <mat-option *ngFor="let type of types" [value]="type.id">{{ type.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
           <input matInput name="subType" [placeholder]="'Catagory' | localize" [(ngModel)]="subType.name" required
             minlength="2" maxlength="64" />
         </mat-form-field>
@@ -18,7 +12,7 @@
               matInput
               name="description"
               [placeholder]="'Description' | localize"
-              [(ngModel)]="shopProduct.description"
+              [(ngModel)]="subType.description"
             />
           </mat-form-field>
       </div>

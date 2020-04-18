@@ -37,10 +37,7 @@ import { CreateUserDialogComponent } from '@app/users/create-user/create-user-di
 import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { ResetPasswordDialogComponent } from './users/reset-password/reset-password.component';
-// Type
-import { TypeComponent } from '@app/type/type.component';
-import { CreateTypeDialogComponent } from '@app/type/create-type/create-type-dialog.component';
-import { EditTypeDialogComponent } from '@app/type/edit-type/edit-type-dialog.component';
+
 // Product
 import { ProductComponent } from '@app/product/product.component';
 import { CreateProductDialogComponent } from '@app/product/create-product/create-product-dialog.component';
@@ -62,7 +59,6 @@ import { EditCompanyDialogComponent } from './company/edit-company/edit-company-
 import { SubTypeComponent } from './subType/subType.component';
 import { CreateSubTypeDialogComponent } from './subType/create-subType/create-subType-dialog.component';
 import { EditSubTypeDialogComponent } from './subType/edit-subType/edit-subType-dialog.component';
-import { SubTypeTypeLookupTableModalComponent } from './subType/subType-type-lookup-modal/subType-type-lookup-table-modal.component';
 //PrimeNg
 import { ChartModule } from 'primeng/chart';
 import { DropdownModule } from 'primeng/dropdown';
@@ -74,7 +70,6 @@ import {
   SubTypeServiceServiceProxy,
   ProductServiceServiceProxy,
   CompanyServiceServiceProxy,
-  TypeServiceServiceProxy,
   ExpenseServiceServiceProxy,
   ProductSaleServiceServiceProxy,
   DashboardServiceServiceProxy
@@ -112,10 +107,7 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     EditUserDialogComponent,
     ChangePasswordComponent,
     ResetPasswordDialogComponent,
-    // type
-    TypeComponent,
-    CreateTypeDialogComponent,
-    EditTypeDialogComponent,
+
     //SubType
     SubTypeComponent,
     CreateSubTypeDialogComponent,
@@ -167,7 +159,6 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
   providers: [
     ShopProductServiceServiceProxy,
     CompanyServiceServiceProxy,
-    TypeServiceServiceProxy,
     SubTypeServiceServiceProxy,
     ProductServiceServiceProxy,
     ExpenseServiceServiceProxy,
@@ -185,10 +176,6 @@ import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-
     CreateUserDialogComponent,
     EditUserDialogComponent,
     ResetPasswordDialogComponent,
-    //Type
-    TypeComponent,
-    CreateTypeDialogComponent,
-    EditTypeDialogComponent,
     //SubType
     SubTypeComponent,
     CreateSubTypeDialogComponent,

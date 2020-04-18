@@ -17,7 +17,5 @@ namespace InventoryManagementSystem.SubTypes
         Task<List<SubTypeDto>> GetAll(long? tenantId);
 
         Task<PagedResultDto<SubTypeDto>> GetPaginatedAllAsync(PagedSubTypeResultRequestDto input);
-
-        Task<PagedResultDto<TypeLookupTableDto>> GetAllQuestionTypeForLookupTable(GetAllForLookupTableInput input);
     }
 }

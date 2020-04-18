@@ -9,16 +9,38 @@
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#navbar-collapse" aria-expanded="false"></a>
             <a href="javascript:void(0);" class="bars"></a>
             <a routerLink="/app/home" class="navbar-brand"><i class="fa fa-cubes"></i> I M S</a>
         </div>
-        
-        <!-- <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
+        <div style="float: right;     margin-top: 20px">
+            <a (click)="logout()"><span class="material-icons">
+                    power_settings_new
+                </span></a>
+        </div>
+        <div class="btn-group user-helper-dropdown" style="float: right; margin-top: 20px; margin-right: 10px;">
+            <div class="name" data-toggle="dropdown" aria-haspopup="true">{{shownLoginName}}
+                <i class="material-icons">keyboard_arrow_down</i>
+            </div>
+            <!-- <i class="material-icons" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="true">keyboard_arrow_down</i> -->
+            <ul class="dropdown-menu pull-right">
+                <li>
+                    <div class="email">{{appSession.user.emailAddress}}</div>
+                </li>
+                <li><a [routerLink]="['/app/update-password']"><i
+                            class="material-icons">lock</i>{{ 'UpdatePassword' | localize }}</a></li>
+
+            </ul>
+        </div>
+
+        <!-- <div class="collapse navbar-collapse" id="navbar-collapse" >
+            <ul class="dropdown-menu navbar-right">
                 <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                 <topbar-languageswitch></topbar-languageswitch>
                 <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
+                <a [routerLink]="['/app/update-password']"><i class="material-icons">lock</i>{{ 'UpdatePassword' | localize }}</a>
             </ul>
         </div> -->
     </div>

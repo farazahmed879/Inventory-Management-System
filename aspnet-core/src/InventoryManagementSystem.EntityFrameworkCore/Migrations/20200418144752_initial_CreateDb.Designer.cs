@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemDbContext))]
-    [Migration("20200407211453_TypeImayhave tenant")]
-    partial class TypeImayhavetenant
+    [Migration("20200418144752_initial_CreateDb")]
+    partial class initial_CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1445,6 +1445,9 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
@@ -1489,6 +1492,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1598,6 +1604,9 @@ namespace InventoryManagementSystem.Migrations
                     b.Property<long?>("ProductSubTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductSubTypeId");
@@ -1642,59 +1651,12 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<long>("ProductTypeId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.ToTable("SubTypes");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Products.Type", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types");
+                    b.ToTable("SubTypes");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Shop.ProductSell", b =>
@@ -1739,6 +1701,9 @@ namespace InventoryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1793,6 +1758,9 @@ namespace InventoryManagementSystem.Migrations
 
                     b.Property<double?>("RetailPrice")
                         .HasColumnType("float");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.Property<double?>("WholeSaleRate")
                         .HasColumnType("float");
@@ -1999,15 +1967,6 @@ namespace InventoryManagementSystem.Migrations
                     b.HasOne("InventoryManagementSystem.Products.SubType", "ProductSubType")
                         .WithMany()
                         .HasForeignKey("ProductSubTypeId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Products.SubType", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.Products.Type", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Shop.ProductSell", b =>
