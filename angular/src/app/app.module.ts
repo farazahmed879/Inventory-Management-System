@@ -1,208 +1,210 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientJsonpModule } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientJsonpModule} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 
-import { ModalModule } from 'ngx-bootstrap';
-import { NgxPaginationModule } from 'ngx-pagination';
+import {ModalModule} from 'ngx-bootstrap';
+import {NgxPaginationModule} from 'ngx-pagination';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 
-import { AbpModule } from '@abp/abp.module';
+import {AbpModule} from '@abp/abp.module';
 
-import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
-import { SharedModule } from '@shared/shared.module';
+import {ServiceProxyModule} from '@shared/service-proxies/service-proxy.module';
+import {SharedModule} from '@shared/shared.module';
 
-import { HomeComponent } from '@app/home/home.component';
-import { AboutComponent } from '@app/about/about.component';
-import { TopBarComponent } from '@app/layout/topbar.component';
-import { TopBarLanguageSwitchComponent } from '@app/layout/topbar-languageswitch.component';
-import { SideBarUserAreaComponent } from '@app/layout/sidebar-user-area.component';
-import { SideBarNavComponent } from '@app/layout/sidebar-nav.component';
-import { SideBarFooterComponent } from '@app/layout/sidebar-footer.component';
-import { RightSideBarComponent } from '@app/layout/right-sidebar.component';
+import {HomeComponent} from '@app/home/home.component';
+import {AboutComponent} from '@app/about/about.component';
+import {TopBarComponent} from '@app/layout/topbar.component';
+import {TopBarLanguageSwitchComponent} from '@app/layout/topbar-languageswitch.component';
+import {SideBarUserAreaComponent} from '@app/layout/sidebar-user-area.component';
+import {SideBarNavComponent} from '@app/layout/sidebar-nav.component';
+import {SideBarFooterComponent} from '@app/layout/sidebar-footer.component';
+import {RightSideBarComponent} from '@app/layout/right-sidebar.component';
 // tenants
-import { TenantsComponent } from '@app/tenants/tenants.component';
-import { CreateTenantDialogComponent } from './tenants/create-tenant/create-tenant-dialog.component';
-import { EditTenantDialogComponent } from './tenants/edit-tenant/edit-tenant-dialog.component';
+import {TenantsComponent} from '@app/tenants/tenants.component';
+import {CreateTenantDialogComponent} from './tenants/create-tenant/create-tenant-dialog.component';
+import {EditTenantDialogComponent} from './tenants/edit-tenant/edit-tenant-dialog.component';
 // roles
-import { RolesComponent } from '@app/roles/roles.component';
-import { CreateRoleDialogComponent } from './roles/create-role/create-role-dialog.component';
-import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.component';
+import {RolesComponent} from '@app/roles/roles.component';
+import {CreateRoleDialogComponent} from './roles/create-role/create-role-dialog.component';
+import {EditRoleDialogComponent} from './roles/edit-role/edit-role-dialog.component';
 // users
-import { UsersComponent } from '@app/users/users.component';
-import { CreateUserDialogComponent } from '@app/users/create-user/create-user-dialog.component';
-import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
-import { ChangePasswordComponent } from './users/change-password/change-password.component';
-import { ResetPasswordDialogComponent } from './users/reset-password/reset-password.component';
+import {UsersComponent} from '@app/users/users.component';
+import {CreateUserDialogComponent} from '@app/users/create-user/create-user-dialog.component';
+import {EditUserDialogComponent} from '@app/users/edit-user/edit-user-dialog.component';
+import {ChangePasswordComponent} from './users/change-password/change-password.component';
+import {ResetPasswordDialogComponent} from './users/reset-password/reset-password.component';
 
 // Product
-import { ProductComponent } from '@app/product/product.component';
-import { CreateProductDialogComponent } from '@app/product/create-product/create-product-dialog.component';
-import { EditProductDialogComponent } from '@app/product/edit-product/edit-product-dialog.component';
+import {ProductComponent} from '@app/product/product.component';
+import {CreateProductDialogComponent} from '@app/product/create-product/create-product-dialog.component';
+import {EditProductDialogComponent} from '@app/product/edit-product/edit-product-dialog.component';
 // Shop Product
-import { ShopProductComponent } from './shop-product/shop-product.component';
-import { EditShopProductDialogComponent } from './shop-product/edit-shop-product/edit-shop-product-dialog.component';
-import { CreateShopProductDialogComponent } from './shop-product/create-shop-product/create-shop-product-dialog.component';
-import { DetailShopProductDialogComponent } from './shop-product/detail-shop-product/detail-shop-product-dialog.component';
+import {ShopProductComponent} from './shop-product/shop-product.component';
+import {EditShopProductDialogComponent} from './shop-product/edit-shop-product/edit-shop-product-dialog.component';
+import {CreateShopProductDialogComponent} from './shop-product/create-shop-product/create-shop-product-dialog.component';
+import {DetailShopProductDialogComponent} from './shop-product/detail-shop-product/detail-shop-product-dialog.component';
 // Product Sale
-import { ProductSaleComponent } from './product-sale/product-sale.component';
-import { CreateProductSaleDialogComponent } from './product-sale/create-product-sale/create-product-sale-dialog.component';
-import { EditProductSaleDialogComponent } from './product-sale/edit-product-sale/edit-product-sale-dialog.component';
+import {ProductSaleComponent} from './product-sale/product-sale.component';
+import {CreateProductSaleDialogComponent} from './product-sale/create-product-sale/create-product-sale-dialog.component';
+import {EditProductSaleDialogComponent} from './product-sale/edit-product-sale/edit-product-sale-dialog.component';
 // Company
-import { CompanyComponent } from './company/company.component';
-import { CreateCompanyDialogComponent } from './company/create-company/create-company-dialog.component';
-import { EditCompanyDialogComponent } from './company/edit-company/edit-company-dialog.component';
+import {CompanyComponent} from './company/company.component';
+import {CreateCompanyDialogComponent} from './company/create-company/create-company-dialog.component';
+import {EditCompanyDialogComponent} from './company/edit-company/edit-company-dialog.component';
 // Sub Type
-import { SubTypeComponent } from './subType/subType.component';
-import { CreateSubTypeDialogComponent } from './subType/create-subType/create-subType-dialog.component';
-import { EditSubTypeDialogComponent } from './subType/edit-subType/edit-subType-dialog.component';
+import {SubTypeComponent} from './subType/subType.component';
+import {CreateSubTypeDialogComponent} from './subType/create-subType/create-subType-dialog.component';
+import {EditSubTypeDialogComponent} from './subType/edit-subType/edit-subType-dialog.component';
 //PrimeNg
-import { ChartModule } from 'primeng/chart';
-import { DropdownModule } from 'primeng/dropdown';
+import {ChartModule} from 'primeng/chart';
 //import {PaginatorModule} from 'primeng/paginator'
-import { NgxBarcodeModule } from 'ngx-barcode';
+import {NgxBarcodeModule} from 'ngx-barcode';
 //Services
 import {
-  ShopProductServiceServiceProxy,
-  SubTypeServiceServiceProxy,
-  ProductServiceServiceProxy,
-  CompanyServiceServiceProxy,
-  ExpenseServiceServiceProxy,
-  ProductSaleServiceServiceProxy,
-  DashboardServiceServiceProxy
+    ShopProductServiceServiceProxy,
+    SubTypeServiceServiceProxy,
+    ProductServiceServiceProxy,
+    CompanyServiceServiceProxy,
+    ExpenseServiceServiceProxy,
+    ProductSaleServiceServiceProxy,
+    DashboardServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
-import { SaleDashboardComponent } from './sale-dashboard/sale-dashboard.component';
-import { ExpenseComponent } from './expense/expense.component';
-import { CreateExpenseDialogComponent } from './expense/create-expense/create-expense-dialog.component';
-import { EditExpenseDialogComponent } from './expense/edit-expense/edit-expense-dialog.component';
+import {SaleDashboardComponent} from './sale-dashboard/sale-dashboard.component';
+import {ExpenseComponent} from './expense/expense.component';
+import {CreateExpenseDialogComponent} from './expense/create-expense/create-expense-dialog.component';
+import {EditExpenseDialogComponent} from './expense/edit-expense/edit-expense-dialog.component';
 
-
+import {DropdownModule} from 'primeng/dropdown';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserModule} from "@node_modules/@angular/platform-browser";
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    AboutComponent,
-    TopBarComponent,
-    TopBarLanguageSwitchComponent,
-    SideBarUserAreaComponent,
-    SideBarNavComponent,
-    SideBarFooterComponent,
-    RightSideBarComponent,
-    // tenants
-    TenantsComponent,
-    CreateTenantDialogComponent,
-    EditTenantDialogComponent,
-    // roles
-    RolesComponent,
-    CreateRoleDialogComponent,
-    EditRoleDialogComponent,
-    // users
-    UsersComponent,
-    CreateUserDialogComponent,
-    EditUserDialogComponent,
-    ChangePasswordComponent,
-    ResetPasswordDialogComponent,
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        AboutComponent,
+        TopBarComponent,
+        TopBarLanguageSwitchComponent,
+        SideBarUserAreaComponent,
+        SideBarNavComponent,
+        SideBarFooterComponent,
+        RightSideBarComponent,
+        // tenants
+        TenantsComponent,
+        CreateTenantDialogComponent,
+        EditTenantDialogComponent,
+        // roles
+        RolesComponent,
+        CreateRoleDialogComponent,
+        EditRoleDialogComponent,
+        // users
+        UsersComponent,
+        CreateUserDialogComponent,
+        EditUserDialogComponent,
+        ChangePasswordComponent,
+        ResetPasswordDialogComponent,
 
-    //SubType
-    SubTypeComponent,
-    CreateSubTypeDialogComponent,
-    EditSubTypeDialogComponent,
-    //SubTypeTypeLookupTableModalComponent,
-    //Product
-    ProductComponent,
-    CreateProductDialogComponent,
-    EditProductDialogComponent,
-    //ShopProduct
-    ShopProductComponent,
-    CreateShopProductDialogComponent,
-    EditShopProductDialogComponent,
-    DetailShopProductDialogComponent,
-    //ProductSale
-    ProductSaleComponent,
-    CreateProductSaleDialogComponent,
-    EditProductSaleDialogComponent,
-    //Company
-    CompanyComponent,
-    CreateCompanyDialogComponent,
-    EditCompanyDialogComponent,
-    //SaleDashboard
-    SaleDashboardComponent,
-    //Expenses
-    ExpenseComponent,
-    CreateExpenseDialogComponent,
-    EditExpenseDialogComponent
+        //SubType
+        SubTypeComponent,
+        CreateSubTypeDialogComponent,
+        EditSubTypeDialogComponent,
+        //SubTypeTypeLookupTableModalComponent,
+        //Product
+        ProductComponent,
+        CreateProductDialogComponent,
+        EditProductDialogComponent,
+        //ShopProduct
+        ShopProductComponent,
+        CreateShopProductDialogComponent,
+        EditShopProductDialogComponent,
+        DetailShopProductDialogComponent,
+        //ProductSale
+        ProductSaleComponent,
+        CreateProductSaleDialogComponent,
+        EditProductSaleDialogComponent,
+        //Company
+        CompanyComponent,
+        CreateCompanyDialogComponent,
+        EditCompanyDialogComponent,
+        //SaleDashboard
+        SaleDashboardComponent,
+        //Expenses
+        ExpenseComponent,
+        CreateExpenseDialogComponent,
+        EditExpenseDialogComponent
 
 
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
-    ModalModule.forRoot(),
-    AbpModule,
-    AppRoutingModule,
-    ServiceProxyModule,
-    SharedModule,
-    NgxPaginationModule,
-    DropdownModule,
-    ChartModule,
-    //PaginatorModule,
-    NgxBarcodeModule
-  ],
-  providers: [
-    ShopProductServiceServiceProxy,
-    CompanyServiceServiceProxy,
-    SubTypeServiceServiceProxy,
-    ProductServiceServiceProxy,
-    ExpenseServiceServiceProxy,
-    ProductSaleServiceServiceProxy,
-    DashboardServiceServiceProxy,
-  ],
-  entryComponents: [
-    // tenants
-    CreateTenantDialogComponent,
-    EditTenantDialogComponent,
-    // roles
-    CreateRoleDialogComponent,
-    EditRoleDialogComponent,
-    // users
-    CreateUserDialogComponent,
-    EditUserDialogComponent,
-    ResetPasswordDialogComponent,
-    //SubType
-    SubTypeComponent,
-    CreateSubTypeDialogComponent,
-    EditSubTypeDialogComponent,
-    //Product
-    ProductComponent,
-    CreateProductDialogComponent,
-    EditProductDialogComponent,
-    //ShopProduct
-    ShopProductComponent,
-    CreateShopProductDialogComponent,
-    EditShopProductDialogComponent,
-    DetailShopProductDialogComponent,
-    //ProductSale
-    ProductSaleComponent,
-    CreateProductSaleDialogComponent,
-    EditProductSaleDialogComponent,
-    //Company
-    CompanyComponent,
-    CreateCompanyDialogComponent,
-    EditCompanyDialogComponent,
-    //SaleDashboard
-    SaleDashboardComponent,
-    //Expenses
-    ExpenseComponent,
-    CreateExpenseDialogComponent,
-    EditExpenseDialogComponent
-  ]
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        HttpClientJsonpModule,
+        ModalModule.forRoot(),
+        AbpModule,
+        AppRoutingModule,
+        ServiceProxyModule,
+        SharedModule,
+        NgxPaginationModule,
+        DropdownModule,
+        ChartModule,
+        //PaginatorModule,
+        NgxBarcodeModule,
+    ],
+    providers: [
+        ShopProductServiceServiceProxy,
+        CompanyServiceServiceProxy,
+        SubTypeServiceServiceProxy,
+        ProductServiceServiceProxy,
+        ExpenseServiceServiceProxy,
+        ProductSaleServiceServiceProxy,
+        DashboardServiceServiceProxy,
+    ],
+    entryComponents: [
+        // tenants
+        CreateTenantDialogComponent,
+        EditTenantDialogComponent,
+        // roles
+        CreateRoleDialogComponent,
+        EditRoleDialogComponent,
+        // users
+        CreateUserDialogComponent,
+        EditUserDialogComponent,
+        ResetPasswordDialogComponent,
+        //SubType
+        SubTypeComponent,
+        CreateSubTypeDialogComponent,
+        EditSubTypeDialogComponent,
+        //Product
+        ProductComponent,
+        CreateProductDialogComponent,
+        EditProductDialogComponent,
+        //ShopProduct
+        ShopProductComponent,
+        CreateShopProductDialogComponent,
+        EditShopProductDialogComponent,
+        DetailShopProductDialogComponent,
+        //ProductSale
+        ProductSaleComponent,
+        CreateProductSaleDialogComponent,
+        EditProductSaleDialogComponent,
+        //Company
+        CompanyComponent,
+        CreateCompanyDialogComponent,
+        EditCompanyDialogComponent,
+        //SaleDashboard
+        SaleDashboardComponent,
+        //Expenses
+        ExpenseComponent,
+        CreateExpenseDialogComponent,
+        EditExpenseDialogComponent
+    ]
 })
-export class AppModule { }
+export class AppModule {
+}
