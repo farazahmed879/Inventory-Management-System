@@ -56,16 +56,6 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
     companyArrayObj: PrimefacesDropDownObject[];
     request: PagedShopProductRequestDto;
 
-    cars: SelectItem[];
-
-    selectedCar1: string;
-
-    selectedCar2: string = 'BMW';
-
-    selectedCar3: string;
-
-    groupedCars: SelectItemGroup[];
-
     items: SelectItem[];
 
     item: string;
@@ -80,18 +70,7 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
     ) {
         super(injector);
 
-        this.cars = [
-            {label: 'Audi', value: 'Audi'},
-            {label: 'BMW', value: 'BMW'},
-            {label: 'Fiat', value: 'Fiat'},
-            {label: 'Ford', value: 'Ford'},
-            {label: 'Honda', value: 'Honda'},
-            {label: 'Jaguar', value: 'Jaguar'},
-            {label: 'Mercedes', value: 'Mercedes'},
-            {label: 'Renault', value: 'Renault'},
-            {label: 'VW', value: 'VW'},
-            {label: 'Volvo', value: 'Volvo'}
-        ];
+
     }
 
     ngOnInit() {

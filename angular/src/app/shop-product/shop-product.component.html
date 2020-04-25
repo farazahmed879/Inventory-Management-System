@@ -30,14 +30,10 @@
 
 
                         <div class="col-md-3">
-                            <mat-form-field>
-                                <mat-label>Select Catagory</mat-label>
-                                <mat-select [(ngModel)]="selectedSubType" name="SubType">
-                                    <mat-option *ngFor="let subType of subTypes" [value]="subType.id">
-                                        {{subType.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <p-dropdown class="dropdown"
+                                        [options]="subTypes" [(ngModel)]="selectedSubType" filter="true"
+                                        optionLabel="label" placeholder="Please select a Company">
+                            </p-dropdown>
                         </div>
                         <div class="col-md-3">
                             <p-dropdown class="dropdown"
