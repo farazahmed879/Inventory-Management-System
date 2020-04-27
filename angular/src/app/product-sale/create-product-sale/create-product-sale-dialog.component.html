@@ -1,73 +1,105 @@
 <form autocomplete="off" #createProductSaleForm="ngForm">
-  <h1 mat-dialog-title>New Sale</h1>
-  <mat-dialog-content>
-    <div class="row-fluid">
-      <div class="col-md-12">
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-select [placeholder]="l('Chooose Product')" [(ngModel)]="productSale.shopProductId" required name="productSale.shopProductId">
-              <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>
-              <mat-option *ngFor="let product of products" [value]="product.id">{{ product.productName}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              name="description"
-              [placeholder]="'Description' | localize"
-              [(ngModel)]="productSale.description"
-              minlength="2"
-              maxlength="64"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              name="productSale"
-              [placeholder]="'Selling Rate' | localize"
-              [(ngModel)]="productSale.sellingRate"
-              required
-              minlength="2"
-              maxlength="64"
-            />
-          </mat-form-field>
+    <h1 mat-dialog-title>New Sale</h1>
+    <mat-dialog-content>
+        <div class="row-fluid">
+            <div class="col-md-12">
+                <div class="col-md-6">
+<!--                    <mat-form-field>-->
+<!--                        <mat-select [placeholder]="l('Chooose Product')" [(ngModel)]="productSale.shopProductId"-->
+<!--                                    required name="productSale.shopProductId">-->
+<!--                            <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>-->
+<!--                            <mat-option *ngFor="let product of products"-->
+<!--                                        [value]="product.id">{{ product.productName}}</mat-option>-->
+<!--                        </mat-select>-->
+<!--                    </mat-form-field>-->
+                    <p-dropdown class="dropdown"
+                                [options]="products" [(ngModel)]="productSale.shopProductId" filter="true"
+                                optionLabel="label" placeholder="Please Chooose a Product">
+                    </p-dropdown>
+
+                    <!--          <mat-form-field>-->
+                    <!--            <input-->
+                    <!--              matInput-->
+                    <!--              name="description"-->
+                    <!--              [placeholder]="'Description' | localize"-->
+                    <!--              [(ngModel)]="productSale.description"-->
+                    <!--              minlength="2"-->
+                    <!--              maxlength="64"-->
+                    <!--            />-->
+                    <!--          </mat-form-field>-->
+                    <span class="ui-float-label">
+                        <input id="float-input" type="text" pInputText [(ngModel)]="productSale.description"
+                               name="description">
+                        <label for="float-input">Description</label>
+                  </span>
+
+                    <!--                    <mat-form-field>-->
+                    <!--                        <input-->
+                    <!--                                matInput-->
+                    <!--                                name="productSale"-->
+                    <!--                                [placeholder]="'Selling Rate' | localize"-->
+                    <!--                                [(ngModel)]="productSale.sellingRate"-->
+                    <!--                                required-->
+                    <!--                                minlength="2"-->
+                    <!--                                maxlength="64"-->
+                    <!--                        />-->
+                    <!--                    </mat-form-field>-->
+
+                    <span class="ui-float-label">
+                        <input id="float-input" type="text" pInputText [(ngModel)]="productSale.sellingRate"
+                               name="productSale">
+                        <label for="float-input">Selling Rate</label>
+                  </span>
+                </div>
+                <div class="col-md-6">
+<!--                    <mat-form-field>-->
+<!--                        <mat-select [placeholder]="l('Select status')" [(ngModel)]="productSale.status"-->
+<!--                                    name="productSale.status">-->
+<!--                            <mat-option value="">{{ 'Select status' | localize }}</mat-option>-->
+<!--                            <mat-option *ngFor="let status of statuses"-->
+<!--                                        [value]="status.value">{{ status.name}}</mat-option>-->
+<!--                        </mat-select>-->
+<!--                    </mat-form-field>-->
+                    <p-dropdown class="dropdown"
+                                [options]="statuses" [(ngModel)]="productSale.status" filter="true"
+                                optionLabel="label" placeholder="Please Select a status">
+                    </p-dropdown>
+
+                    <!--                    <mat-form-field>-->
+                    <!--                        <input-->
+                    <!--                                matInput-->
+                    <!--                                name="Quantity"-->
+                    <!--                                [placeholder]="'Quantity' | localize"-->
+                    <!--                                [(ngModel)]="productSale.quantity"-->
+                    <!--                                minlength="0"-->
+                    <!--                                maxlength="64"-->
+                    <!--                        />-->
+                    <!--                    </mat-form-field>-->
+
+                    <span class="ui-float-label">
+                        <input id="float-input" type="text" pInputText [(ngModel)]="productSale.quantity"
+                               name="Quantity">
+                        <label for="float-input">Quantity</label>
+                  </span>
+                </div>
+
+
+            </div>
         </div>
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-select [placeholder]="l('Select status')" [(ngModel)]="productSale.status" name="productSale.status">
-              <mat-option value="">{{ 'Select status' | localize }}</mat-option>
-              <mat-option *ngFor="let status of statuses" [value]="status.value">{{ status.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              name="Quantity"
-              [placeholder]="'Quantity' | localize"
-              [(ngModel)]="productSale.quantity"
-              minlength="0"
-              maxlength="64"
-            />
-          </mat-form-field>
-        </div>
-        
-        
-      </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions align="end">
+        <button mat-button productSale="button" [disabled]="saving" (click)="close(false)">
+            {{ "Cancel" | localize }}
+        </button>
+        <button
+                mat-flat-button
+                productSale="submit"
+                flex="15"
+                color="primary"
+                [disabled]="!createProductSaleForm.form.valid || saving"
+                (click)="save()"
+        >
+            {{ "Save" | localize }}
+        </button>
     </div>
-  </mat-dialog-content>
-  <div mat-dialog-actions align="end">
-    <button mat-button productSale="button" [disabled]="saving" (click)="close(false)">
-      {{ "Cancel" | localize }}
-    </button>
-    <button
-      mat-flat-button
-      productSale="submit"
-      flex="15"
-      color="primary"
-      [disabled]="!createProductSaleForm.form.valid || saving"
-      (click)="save()"
-    >
-      {{ "Save" | localize }}
-    </button>
-  </div>
 </form>

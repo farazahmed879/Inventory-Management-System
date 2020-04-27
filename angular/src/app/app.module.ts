@@ -79,6 +79,7 @@ import {CreateExpenseDialogComponent} from './expense/create-expense/create-expe
 import {EditExpenseDialogComponent} from './expense/edit-expense/edit-expense-dialog.component';
 
 import {DropdownModule} from 'primeng/dropdown';
+import {InputTextModule} from 'primeng/inputtext';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from "@node_modules/@angular/platform-browser";
 
@@ -156,6 +157,7 @@ import {BrowserModule} from "@node_modules/@angular/platform-browser";
         ChartModule,
         //PaginatorModule,
         NgxBarcodeModule,
+        InputTextModule
     ],
     providers: [
         ShopProductServiceServiceProxy,
