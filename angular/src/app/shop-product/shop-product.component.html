@@ -22,17 +22,23 @@
                 <!--query start-->
                 <div class="row clearfix">
                     <div class="row">
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <mat-form-field>
                                 <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
                             </mat-form-field>
+                        </div> -->
+                        <div class="col-md-3">
+                            <span class="ui-float-label">
+                                <input id="float-input" type="text"  pInputText [(ngModel)]="keyword"
+                                    name="keyword">
+                                <label for="float-input">Filter</label>
+                            </span>
                         </div>
-
 
                         <div class="col-md-3">
                             <p-dropdown class="dropdown"
-                                        [options]="subTypes" [(ngModel)]="selectedSubType" filter="true"
-                                        optionLabel="label" placeholder="Please select a Company">
+                                        [options]="subTypeArrayObj" [(ngModel)]="selectedSubType" filter="true"
+                                        optionLabel="label" placeholder="Please select a catagory">
                             </p-dropdown>
                         </div>
                         <div class="col-md-3">

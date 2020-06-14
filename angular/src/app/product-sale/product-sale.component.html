@@ -6,7 +6,7 @@
                 <ul class="header-dropdown m-r--5">
                     <li>
                         <button mat-icon-button [matMenuTriggerFor]="headerMenu"
-                                class="header-dropdown-mat-icon-button">
+                            class="header-dropdown-mat-icon-button">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #headerMenu="matMenu">
@@ -24,17 +24,18 @@
                     <form>
                         <div class="row">
                             <div class="col-md-6">
-                  <span class="ui-float-label">
-                        <input id="float-input" type="text" size="40" pInputText [(ngModel)]="keyword" name="keyword">
-                        <label for="float-input">Filter</label>
-                  </span>
+                                <span class="ui-float-label">
+                                    <input id="float-input" type="text" size="40" pInputText [(ngModel)]="keyword"
+                                        name="keyword">
+                                    <label for="float-input">Filter</label>
+                                </span>
                             </div>
                             <div class="col-md-12 text-right p-r-25">
                                 <button mat-raised-button color="primary"
-                                        (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
+                                    (click)="getDataPage(1)">{{ 'Search' | localize }}</button>
                                 {{" "}}
                                 <button mat-raised-button color="primary"
-                                        (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button>
+                                    (click)="clearFilters()">{{ 'Clear Filters' | localize }}</button>
                             </div>
                         </div>
                     </form>
@@ -42,19 +43,19 @@
                 <!--query end-->
                 <table class="table table-hover table-striped" [busy]="isTableLoading">
                     <thead>
-                    <tr>
-                        <th>{{ "Product" | localize }}</th>
-                        <th>{{ "Company" | localize }}</th>
-                        <th>{{ "Description" | localize }}</th>
-                        <th>{{ "Selling Rate" | localize }}</th>
-                        <th>{{ "Type" | localize }}</th>
-                        <th>{{ "Status" | localize }}</th>
-                        <th>{{ "Profit" | localize }}</th>
-                        <th>{{ "Actions" | localize }}</th>
-                    </tr>
+                        <tr>
+                            <th>{{ "Product" | localize }}</th>
+                            <th>{{ "Company" | localize }}</th>
+                            <th>{{ "Description" | localize }}</th>
+                            <th>{{ "Selling Rate" | localize }}</th>
+                            <th>{{ "Type" | localize }}</th>
+                            <th>{{ "Status" | localize }}</th>
+                            <th>{{ "Profit" | localize }}</th>
+                            <th>{{ "Actions" | localize }}</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="
+                        <tr *ngFor="
                 let productSale of (productSales
                   | paginate
                     : {
@@ -64,29 +65,31 @@
                         totalItems: totalItems
                       })
               ">
-                        <td>{{ productSale.productName }}</td>
-                        <td>{{ productSale.companyName }}</td>
-                        <td>{{ productSale.description }}</td>
-                        <td>{{ productSale.sellingRate }}</td>
-                        <td>{{ productSale.productType }}</td>
-                        <td>{{ productSale.status }}</td>
-                        <td [ngStyle]="productSale.profit < 0 ? {'background-color':'red', color: 'white'} : {'background-color':'green',color: 'white'}">{{ productSale.profit }}</td>
-                        <td>
-                            <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
-                                <mat-icon>menu</mat-icon>
-                            </button>
-                            <mat-menu #actionsMenu="matMenu">
-                                <button mat-menu-item (click)="editProductSale(productSale)">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>{{ "Edit" | localize }}</span>
+                            <td>{{ productSale.productName }}</td>
+                            <td>{{ productSale.companyName }}</td>
+                            <td>{{ productSale.description }}</td>
+                            <td>{{ productSale.sellingRate }}</td>
+                            <td>{{ productSale.productType }}</td>
+                            <td>{{ productSale.status }}</td>
+                            <td
+                                [ngStyle]="productSale.profit < 0 ? {'background-color':'red', color: 'white'} : {'background-color':'green',color: 'white'}">
+                                {{ productSale.profit }}</td>
+                            <td>
+                                <button class="action-button" mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                                    <mat-icon>menu</mat-icon>
                                 </button>
-                                <button mat-menu-item (click)="delete(productSale)">
-                                    <mat-icon>delete</mat-icon>
-                                    <span>{{ "Delete" | localize }}</span>
-                                </button>
-                            </mat-menu>
-                        </td>
-                    </tr>
+                                <mat-menu #actionsMenu="matMenu">
+                                    <button mat-menu-item (click)="editProductSale(productSale)">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>{{ "Edit" | localize }}</span>
+                                    </button>
+                                    <button mat-menu-item (click)="delete(productSale)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>{{ "Delete" | localize }}</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="abp-pagination-controls-wrapper" *ngIf="totalItems > pageSize">

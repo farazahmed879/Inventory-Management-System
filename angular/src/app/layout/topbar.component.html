@@ -19,7 +19,7 @@
                     power_settings_new
                 </span></a>
         </div>
-        <div class="btn-group user-helper-dropdown" style="float: right; margin-top: 20px; margin-right: 10px;">
+        <div class="user-helper-dropdown" style="float: right; margin-top: 20px; margin-right: 10px;">
             <div class="name" data-toggle="dropdown" aria-haspopup="true">{{shownLoginName}}
                 <i class="material-icons">keyboard_arrow_down</i>
             </div>
@@ -27,7 +27,8 @@
                 aria-expanded="true">keyboard_arrow_down</i> -->
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <div class="email">{{appSession.user.emailAddress}}</div>
+                    <a href="javascript()" class="email"><i
+                        class="material-icons">alternate_email</i>{{ appSession.user.emailAddress}}</a>
                 </li>
                 <li><a [routerLink]="['/app/update-password']"><i
                             class="material-icons">lock</i>{{ 'UpdatePassword' | localize }}</a></li>

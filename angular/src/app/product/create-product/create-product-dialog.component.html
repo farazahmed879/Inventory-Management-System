@@ -7,12 +7,15 @@
           <input matInput name="name" [placeholder]="'Product' | localize" [(ngModel)]="product.name" required
             minlength="2" maxlength="64" />
         </mat-form-field>
-        <mat-form-field>
+        <p-dropdown class="dropdown" [options]="subTypes" name="product.subTypeId'22" [(ngModel)]="product.subTypeId" filter="true"
+          optionLabel="label" placeholder="Choose Type">
+        </p-dropdown>
+        <!-- <mat-form-field>
           <mat-select [placeholder]="l('Chooose Type')" [(ngModel)]="product.subTypeId" name="product.subTypeId">
             <mat-option value="">{{ 'Choose Catagory' | localize }}</mat-option>
             <mat-option *ngFor="let subType of subTypes" [value]="subType.id">{{ subType.name}}</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
       </div>
     </div>
   </mat-dialog-content>
@@ -21,8 +24,7 @@
       {{ "Cancel" | localize }}
     </button>
     <button mat-flat-button product="submit" flex="15" color="primary"
-      [disabled]="!createProductForm.form.valid || saving"
-      (click)="save()">
+      [disabled]="!createProductForm.form.valid || saving" (click)="save()">
       {{ "Save" | localize }}
     </button>
   </div>

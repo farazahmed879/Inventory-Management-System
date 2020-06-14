@@ -12,6 +12,7 @@ import {
   SubTypeServiceServiceProxy,
   SubTypeDto,
 } from "@shared/service-proxies/service-proxies";
+import { PrimefacesDropDownObject } from "@app/layout/topbar.component";
 
 @Component({
   templateUrl: "create-shop-product-dialog.component.html",
@@ -35,6 +36,9 @@ export class CreateShopProductDialogComponent extends AppComponentBase
   subTypes: SubTypeDto[] = [];
   selectedSubTypeId: string;
   selectedTypeId: string;
+  companyArrayObj: PrimefacesDropDownObject[];
+  subTypeArrayObj: PrimefacesDropDownObject[];
+  productArrayObj: PrimefacesDropDownObject[];
 
   constructor(
     injector: Injector,
@@ -56,18 +60,33 @@ export class CreateShopProductDialogComponent extends AppComponentBase
   getAllCompany() {
     this._companyService.getAll(this.appSession.tenantId).subscribe(result => {
       this.companies = result;
+      this.companyArrayObj = result.map(item =>
+        ({
+            label: item.name,
+            value: item.id
+        }));
     });
   }
 
   getAllProduct() {
     this._productService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
+      this.productArrayObj = result.map(item =>
+        ({
+            label: item.name,
+            value: item.id
+        }));
     });
   }
 
   getAllSubTypes() {
     this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
+      this.subTypeArrayObj = result.map(item =>
+        ({
+            label: item.name,
+            value: item.id
+        }));
     });
   }
 

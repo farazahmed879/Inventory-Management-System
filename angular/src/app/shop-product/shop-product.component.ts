@@ -54,6 +54,7 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
     barcode: any;
     showBarCode: boolean;
     companyArrayObj: PrimefacesDropDownObject[];
+    subTypeArrayObj: PrimefacesDropDownObject[];
     request: PagedShopProductRequestDto;
 
     items: SelectItem[];
@@ -100,6 +101,11 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
     getSubTypes() {
         this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
             this.subTypes = result;
+            this.subTypeArrayObj = result.map(item =>
+                ({
+                    label: item.name,
+                    value: item.id
+                }));
         });
     }
 
