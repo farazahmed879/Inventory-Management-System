@@ -4,60 +4,53 @@
     <div class="row-fluid">
       <div class="col-md-12">
         <div class="col-md-6">
-          <!-- <mat-form-field>
-            <mat-select [placeholder]="l('Choose Shop')" [(ngModel)]="selectedTypeId" name="selectedTypeId">
-              <mat-option value="">{{ 'Choose Shop' | localize }}</mat-option>
-              <mat-option *ngFor="let type of types" [value]="type.id">{{ type.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select [placeholder]="l('Choose Catagory')" [(ngModel)]="selectedSubTypeId" name="selectedSubTypeId">
-              <mat-option value="">{{ 'Choose Catagory' | localize }}</mat-option>
-              <mat-option *ngFor="let subType of subTypes" [value]="subType.id">{{ subType.name}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-          <mat-form-field>
-            <mat-select [placeholder]="l('Choose Product')" required [(ngModel)]="shopProduct.productId"
-              name="shopProduct.productId">
-              <mat-option value="">{{ 'Choose Product' | localize }}</mat-option>
-              <mat-option *ngFor="let product of products" [value]="product.id">{{ product.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select [placeholder]="l('Choose Company')" required [(ngModel)]="shopProduct.companyId"
-              name="shopProduct.companyId">
-              <mat-option value="">{{ 'Choose Company' | localize }}</mat-option>
-              <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              name="description"
-              [placeholder]="'Description' | localize"
-              [(ngModel)]="shopProduct.description"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput name="wholeSaleRate" [placeholder]="'Wholesale Rate' | localize"
-              [(ngModel)]="shopProduct.wholeSaleRate" required type="number" minlength="0" maxlength="64" />
-          </mat-form-field>
+          <div class="marginTop20">
+            <p-dropdown class="dropdown" [options]="productArrayObj" [(ngModel)]="selectedProductObj" filter="true"
+              optionLabel="label" placeholder="Choose Product" name="product">
+            </p-dropdown>
+          </div>
+          <div class="marginTop20">
+            <p-dropdown class="dropdown" [options]="companyArrayObj" [(ngModel)]="selectedCompanyObj" filter="true"
+              optionLabel="label" placeholder="Choose Companies" name = "company">
+            </p-dropdown>
+          </div>
+
+          <div class="marginTop20">
+            <span class="ui-float-label">
+              <input id="float-input" type="text" pInputText [(ngModel)]="shopProduct.description" name="keyword">
+              <label for="float-input">Description</label>
+            </span>
+          </div>
+          <div class="marginTop20">
+            <span class="ui-float-label">
+              <input id="float-input" type="text" pInputText [(ngModel)]="shopProduct.wholeSaleRate"
+                name="Wholesale Rate">
+              <label for="float-input">Wholesale Rate</label>
+            </span>
+          </div>
         </div>
         <div class="col-md-6">
-          <mat-form-field>
-            <input matInput name="retailPrice" [placeholder]="'Retail Price' | localize"
-              [(ngModel)]="shopProduct.retailPrice" required type="number" minlength="0" maxlength="64" />
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput name="companyRate" [placeholder]="'Company Rate' | localize"
-              [(ngModel)]="shopProduct.companyRate" type="number" minlength="0" maxlength="64" />
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput name="quantity" [placeholder]="'Quantity' | localize" [(ngModel)]="shopProduct.quantity"
-              required type="number" minlength="0" maxlength="64" />
-          </mat-form-field>
+          <div class="marginTop20">
+            <span class="ui-float-label">
+              <input id="float-input" type="text" pInputText [(ngModel)]="shopProduct.retailPrice"
+                name="retailPrice">
+              <label for="float-input">Retail Price</label>
+            </span>
+          </div>
+          <div class="marginTop20">
+            <span class="ui-float-label">
+              <input id="float-input" type="text" pInputText [(ngModel)]="shopProduct.companyRate"
+                name="companyRate">
+              <label for="float-input">Company Rate</label>
+            </span>
+          </div>
+          <div class="marginTop20">
+            <span class="ui-float-label">
+              <input id="float-input" type="text" pInputText [(ngModel)]="shopProduct.quantity"
+                name="Quantity">
+              <label for="float-input">Quantity</label>
+            </span>
+          </div>
         </div>
       </div>
     </div>

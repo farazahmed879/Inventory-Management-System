@@ -17,6 +17,9 @@ a{cursor: pointer;
     text-decoration: none;
     transition: none 86ms ease-out;
 }
+.marginTop20{
+  margin-top: 20px !important;
+}
 
 .ngx-pagination {
   text-align: center;

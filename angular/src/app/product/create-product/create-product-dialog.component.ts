@@ -8,25 +8,19 @@ import {
     SubTypeServiceServiceProxy,
     SubTypeDto
 } from '@shared/service-proxies/service-proxies';
+import { PrimefacesDropDownObject } from '@app/layout/topbar.component';
+
 
 @Component({
   templateUrl: 'create-product-dialog.component.html',
-    styles: [
-            `
-            mat-form-field {
-                width: 100%;
-            }
-            mat-checkbox {
-                padding-bottom: 5px;
-            }
-        `
-    ]
 })
 export class CreateProductDialogComponent extends AppComponentBase
   implements OnInit {
   saving = false;
   product: CreateProductDto = new CreateProductDto();
   subTypes: SubTypeDto[];
+  subTypeArrayObj: PrimefacesDropDownObject[];
+  selectedSubType: PrimefacesDropDownObject;
 
   constructor(
     injector: Injector,
@@ -44,10 +38,16 @@ export class CreateProductDialogComponent extends AppComponentBase
   getAllProductType() {
     this._subTYpeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
+      this.subTypeArrayObj = result.map(item =>
+        ({
+            label: item.name,
+            value: item.id
+        }));
       console.log("subTypes",this.subTypes);
     });
   }
   save(): void {
+    this.product.subTypeId =  this.selectedSubType.value;
     this.saving = true;
     this.product.tenantId = this.appSession.tenantId;
 

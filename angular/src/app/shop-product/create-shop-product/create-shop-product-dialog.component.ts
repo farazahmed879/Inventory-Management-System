@@ -37,15 +37,15 @@ export class CreateShopProductDialogComponent extends AppComponentBase
   selectedSubTypeId: string;
   selectedTypeId: string;
   companyArrayObj: PrimefacesDropDownObject[];
-  subTypeArrayObj: PrimefacesDropDownObject[];
   productArrayObj: PrimefacesDropDownObject[];
+  selectedCompanyObj: PrimefacesDropDownObject;
+  selectedProductObj: PrimefacesDropDownObject;
 
   constructor(
     injector: Injector,
     public _shopProductService: ShopProductServiceServiceProxy,
     public _productService: ProductServiceServiceProxy,
     public _companyService: CompanyServiceServiceProxy,
-    private _subTypeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<CreateShopProductDialogComponent>
   ) {
     super(injector);
@@ -54,7 +54,6 @@ export class CreateShopProductDialogComponent extends AppComponentBase
   ngOnInit(): void {
     this.getAllProduct();
     this.getAllCompany();
-    this.getAllSubTypes();
   }
 
   getAllCompany() {
@@ -79,21 +78,11 @@ export class CreateShopProductDialogComponent extends AppComponentBase
     });
   }
 
-  getAllSubTypes() {
-    this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
-      this.subTypes = result;
-      this.subTypeArrayObj = result.map(item =>
-        ({
-            label: item.name,
-            value: item.id
-        }));
-    });
-  }
-
   save(): void {
     this.saving = true;
     this.shopProduct.tenantId = this.appSession.tenantId;
-
+    this.shopProduct.companyId =  this.selectedCompanyObj.value;
+    this.shopProduct.productId = this.selectedProductObj.value;
     this._shopProductService
       .createOrEdit(this.shopProduct)
       .pipe(

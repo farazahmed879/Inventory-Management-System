@@ -25,11 +25,13 @@
          <!--query start-->
          <div class="row clearfix">
              <form>
-                 <div class="row">
+                 <div class="row-fluid">
                      <div class="col-md-6">
-                         <mat-form-field>
-                             <input matInput [placeholder]="l('Filter')" [(ngModel)]="keyword" name="keyword">
-                         </mat-form-field>
+                         <span class="ui-float-label">
+                          <input id="float-input" type="text" size="40" pInputText [(ngModel)]="keyword" name="keyword"
+                            required>
+                          <label for="float-input">Company</label>
+                        </span>
                      </div>
                      <div class="col-md-12 text-right p-r-25">
                          <button mat-raised-button color="primary" (click)="getDataPage(1)">{{ 'Search' | localize }}</button>

@@ -5,9 +5,10 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
     ProductSaleDto, ProductSaleServiceServiceProxy, ShopProductDto, ShopProductServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
+import { PrimefacesDropDownObject } from '@app/layout/topbar.component';
 
 interface Status {
-  name: string;
+  label: string;
   value: string;
 }
 @Component({
@@ -29,6 +30,8 @@ export class EditProductSaleDialogComponent extends AppComponentBase
   productSale: ProductSaleDto = new ProductSaleDto();
   statuses: Status[];
   products: ShopProductDto[];
+  productArrayObj : PrimefacesDropDownObject[];
+  selectedProductObj : PrimefacesDropDownObject;
 
   constructor(
     injector: Injector,
@@ -40,8 +43,8 @@ export class EditProductSaleDialogComponent extends AppComponentBase
     super(injector);
 
     this.statuses = [
-      { name: 'Sold', value: 'Sold' },
-      { name: 'Return', value: 'Return' },
+      { label: 'Sold', value: 'Sold' },
+      { label: 'Return', value: 'Return' },
     ];
   }
 
@@ -49,12 +52,19 @@ export class EditProductSaleDialogComponent extends AppComponentBase
     this._productSaleService.getById(this._id).subscribe((result: ProductSaleDto) => {
       this.productSale = result;
     });
+    
     this.getAllProduct();
   }
 
   getAllProduct() {
     this._shopProductService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
+      this.productArrayObj = result.map(item =>
+        ({
+            label: item.productName,
+            value: item.id
+        }));
+        this.selectedProductObj = this.productArrayObj.filter(i=> i.value == this.productSale.shopProductId)[0];
       console.log("shop products",result);
     });
   }

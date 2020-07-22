@@ -9,9 +9,10 @@ import {
   ShopProductServiceServiceProxy,
   ShopProductDto,
 } from '@shared/service-proxies/service-proxies';
+import { PrimefacesDropDownObject } from '@app/layout/topbar.component';
 
 interface Status {
-  name: string;
+  label: string;
   value: string;
 }
 
@@ -34,8 +35,9 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
   productSale: CreateProductSaleDto = new CreateProductSaleDto();
   statuses: Status[];
   products: ShopProductDto[];
-
-
+  productArrayObj : PrimefacesDropDownObject[];
+  selectedProductObj: PrimefacesDropDownObject;
+  selectedStatusObj: any;
   constructor(
     injector: Injector,
     public _productSaleService: ProductSaleServiceServiceProxy,
@@ -45,8 +47,8 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
     super(injector);
 
     this.statuses = [
-      { name: 'Sold', value: 'Sold' },
-      { name: 'Return', value: 'Return' },
+      { label: 'Sold', value: 'Sold' },
+      { label: 'Return', value: 'Return' },
     ];
 
   }
@@ -59,6 +61,11 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
   getAllProduct() {
     this._shopProductService.getAll(this.appSession.tenantId).subscribe(result => {
       this.products = result;
+      this.productArrayObj = result.map(item =>
+        ({
+            label: item.productName,
+            value: item.id
+        }));
       console.log("shop products",result);
     });
   }
@@ -66,7 +73,8 @@ export class CreateProductSaleDialogComponent extends AppComponentBase
   save(): void {
     this.saving = true;
     this.productSale.tenantId = this.appSession.tenantId;
-
+    this.productSale.shopProductId = this.selectedProductObj.value;
+    this.productSale.status = this.selectedStatusObj.value;
     this._productSaleService
       .createOrEdit(this.productSale)
       .pipe(

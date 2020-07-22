@@ -115,7 +115,6 @@ export class ShopProductComponent extends PagedListingComponentBase<ShopProductD
         finishedCallback: Function
     ) {
         this.selectedCompany;
-        debugger;
         request.keyword = this.keyword;
         this._shopProductService
             .getPaginatedAll(

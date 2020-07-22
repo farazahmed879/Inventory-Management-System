@@ -9,15 +9,7 @@ import {
 
 @Component({
   templateUrl: 'create-company-dialog.component.html',
-    styles: [
-            `
-            mat-form-field {
-                width: 100%;
-            }
-            mat-checkbox {
-                padding-bottom: 5px;
-            }
-        `
+    styles: ['./create-company-dialog.component.less'
     ]
 })
 export class CreateCompanyDialogComponent extends AppComponentBase

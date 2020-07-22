@@ -14,17 +14,8 @@ import { List } from 'lodash';
 
 
 @Component({
-  templateUrl: 'create-subType-dialog.component.html',
-  styles: [
-    `
-            mat-form-field {
-                width: 100%;
-            }
-            mat-checkbox {
-                padding-bottom: 5px;
-            }
-        `
-  ]
+  templateUrl: '/create-subType-dialog.component.html',
+  styles: ['./create-subType-dialog.component.less']
 })
 export class CreateSubTypeDialogComponent extends AppComponentBase
   implements OnInit {

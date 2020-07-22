@@ -41,7 +41,7 @@ export class EditExpenseDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
-
+    this.expense.tenantId = this.appSession.tenantId;
     this._expenseService
       .createOrEdit(this.expense)
       .pipe(

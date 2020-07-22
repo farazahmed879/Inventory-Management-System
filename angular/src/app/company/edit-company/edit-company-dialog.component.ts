@@ -3,20 +3,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    CompanyDto, CompanyServiceServiceProxy
+  CompanyDto, CompanyServiceServiceProxy
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
   templateUrl: 'edit-company-dialog.component.html',
-  styles: [
-    `
-      mat-form-field {
-        width: 100%;
-      }
-      mat-checkbox {
-        padding-bottom: 5px;
-      }
-    `
+  styles: ['./edit-company-dialog.component.less'
   ]
 })
 export class EditCompanyDialogComponent extends AppComponentBase
@@ -41,7 +33,7 @@ export class EditCompanyDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
-
+    this.company.tenantId = this.appSession.tenantId;
     this._companyService
       .createOrEdit(this.company)
       .pipe(

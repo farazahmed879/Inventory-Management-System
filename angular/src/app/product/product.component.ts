@@ -15,6 +15,7 @@ import {
 } from "@shared/service-proxies/service-proxies";
 import { CreateProductDialogComponent } from "./create-product/create-product-dialog.component";
 import { EditProductDialogComponent } from "./edit-product/edit-product-dialog.component";
+import { PrimefacesDropDownObject } from "@app/layout/topbar.component";
 
 class PagedProductRequestDto extends PagedRequestDto {
   keyword: string;
@@ -36,6 +37,8 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
   keyword = "";
   subTypes: SubTypeDto[] = [];
   selectedSubType: number;
+  subTypeArrayObj: PrimefacesDropDownObject[];
+  selectedSubTypeObj: PrimefacesDropDownObject;
 
   constructor(
     injector: Injector,
@@ -57,6 +60,9 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    if (this.selectedSubTypeObj) {
+      this.selectedSubType = this.selectedSubTypeObj.value;
+    }
 
     this._productService
       .getPaginatedAll(
@@ -91,7 +97,7 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
                 this.refresh();
               })
             )
-            .subscribe(() => {});
+            .subscribe(() => { });
         }
       }
     );
@@ -108,6 +114,11 @@ export class ProductComponent extends PagedListingComponentBase<ProductDto> {
   getSubtypes() {
     this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
       this.subTypes = result;
+      this.subTypeArrayObj = result.map(item =>
+        ({
+          label: item.name,
+          value: item.id
+        }));
     });
   }
 

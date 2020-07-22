@@ -42,28 +42,28 @@ export class SaleDashboardComponent extends AppComponentBase implements AfterVie
             datasets: [
                 {
                     //Sale
-                    label: label,
+                    label: "Sale",
                     backgroundColor: '#42A5F5',
                     borderColor: '#1E88E5',
                     data: []
                 },
                 {
                     //Profit
-                    label: label,
+                    label: "Profit",
                     backgroundColor: '#9CCC65',
                     borderColor: '#7CB342',
                     data: []
                 },
                 {
                     //Expense
-                    label: label,
+                    label: "Cost",
                     backgroundColor: '	#FF6347 ',
                     borderColor: '#800000',
                     data: []
                 },
                 {
                     //Other Expenses
-                    label: label,
+                    label: "Expenses",
                     backgroundColor: '	#FF0000 ',
                     borderColor: '#8B0000',
                     data: []

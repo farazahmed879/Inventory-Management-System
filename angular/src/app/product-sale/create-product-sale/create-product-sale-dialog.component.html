@@ -4,41 +4,37 @@
         <div class="row-fluid">
             <div class="col-md-12">
                 <div class="col-md-6">
-                    <p-dropdown class="dropdown"
-                                [options]="products" [(ngModel)]="productSale.shopProductId"
-                                name="productSale.shopProductId" filter="true"
-                                optionLabel="label" placeholder="Please Chooose a Product">
+                    <p-dropdown class="dropdown" [options]="productArrayObj" [(ngModel)]="selectedProductObj"
+                        name="productSale.shopProductId" filter="true" optionLabel="label"
+                        placeholder="Choose Product">
                     </p-dropdown>
                     <div style="margin-top: 20px">
-                    <span class="ui-float-label">
-                        <input id="float-input" type="text" minlength="2" maxlength="64" pInputText
-                               [(ngModel)]="productSale.description"
-                               name="description">
-                        <label for="float-input">Description</label>
-                  </span>
+                        <span class="ui-float-label">
+                            <input id="float-input" type="text" minlength="2" maxlength="64" pInputText
+                                [(ngModel)]="productSale.description" name="description">
+                            <label for="float-input">Description</label>
+                        </span>
                     </div>
                     <div style="margin-top: 20px">
-                    <span class="ui-float-label">
-                        <input id="float-input" type="text" pInputText [(ngModel)]="productSale.sellingRate"
-                               name="productSale" required minlength="2" maxlength="64">
-                        <label for="float-input">Selling Rate</label>
-                  </span>
+                        <span class="ui-float-label">
+                            <input id="float-input" type="text" pInputText [(ngModel)]="productSale.sellingRate"
+                                name="productSale" required minlength="2" maxlength="64">
+                            <label for="float-input">Selling Rate</label>
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <p-dropdown class="dropdown"
-                                [options]="statuses" [(ngModel)]="productSale.status" name="productSale.status"
-                                filter="true"
-                                optionLabel="label" placeholder="Please Select a status">
+                    <p-dropdown class="dropdown" [options]="statuses" [(ngModel)]="selectedStatusObj"
+                        name="productSale.status" filter="true" optionLabel="label"
+                        placeholder="Choose Status">
                     </p-dropdown>
 
                     <div style="margin-top: 20px">
-                    <span class="ui-float-label">
-                        <input id="float-input" type="text" pInputText [(ngModel)]="productSale.quantity" minlength="0"
-                               maxlength="64"
-                               name="Quantity">
-                        <label for="float-input">Quantity</label>
-                  </span>
+                        <span class="ui-float-label">
+                            <input id="float-input" type="text" pInputText [(ngModel)]="productSale.quantity"
+                                minlength="0" maxlength="64" name="Quantity">
+                            <label for="float-input">Quantity</label>
+                        </span>
                     </div>
                 </div>
 
@@ -50,14 +46,8 @@
         <button mat-button productSale="button" [disabled]="saving" (click)="close(false)">
             {{ "Cancel" | localize }}
         </button>
-        <button
-                mat-flat-button
-                productSale="submit"
-                flex="15"
-                color="primary"
-                [disabled]="!createProductSaleForm.form.valid || saving"
-                (click)="save()"
-        >
+        <button mat-flat-button productSale="submit" flex="15" color="primary"
+            [disabled]="!createProductSaleForm.form.valid || saving" (click)="save()">
             {{ "Save" | localize }}
         </button>
     </div>

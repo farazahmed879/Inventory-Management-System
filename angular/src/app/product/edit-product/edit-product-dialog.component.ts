@@ -8,6 +8,7 @@ import {
     SubTypeServiceServiceProxy,
     SubTypeDto
 } from '@shared/service-proxies/service-proxies';
+import { PrimefacesDropDownObject } from '@app/layout/topbar.component';
 
 @Component({
   templateUrl: 'edit-product-dialog.component.html',
@@ -27,12 +28,14 @@ export class EditProductDialogComponent extends AppComponentBase
   saving = false;
   product: ProductDto = new ProductDto();
   subTypes: SubTypeDto[];
-
+  subTypeArrayObj: PrimefacesDropDownObject[];
+  selectedSubType: PrimefacesDropDownObject;
   constructor(
     injector: Injector,
     public _productService: ProductServiceServiceProxy,
     public _subTypeService: SubTypeServiceServiceProxy,
     private _dialogRef: MatDialogRef<EditProductDialogComponent>,
+    
     @Optional() @Inject(MAT_DIALOG_DATA) private _id: number
   ) {
     super(injector);
@@ -41,17 +44,23 @@ export class EditProductDialogComponent extends AppComponentBase
   ngOnInit(): void {
     this._productService.getById(this._id).subscribe((result: ProductDto) => {
       this.product = result;
+      
     });
     this.getAllProductType();
   }
   getAllProductType() {
     this._subTypeService.getAll(this.appSession.tenantId).subscribe(result => {
-      this.subTypes = result;
+      this.subTypeArrayObj = result.map(item =>
+        ({
+            label: item.name,
+            value: item.id
+        }));
+        this.selectedSubType = this.subTypeArrayObj.filter(i=> i.value == this.product.subTypeId)[0];
     });
   }
   save(): void {
     this.saving = true;
-
+    this.product.tenantId = this.appSession.tenantId;
     this._productService
       .createOrEdit(this.product)
       .pipe(
