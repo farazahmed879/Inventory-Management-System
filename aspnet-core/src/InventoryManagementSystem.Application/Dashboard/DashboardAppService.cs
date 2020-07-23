@@ -75,10 +75,6 @@ namespace InventoryManagementSystem.Dashboards
 
 
         }
-
-
-
-
         public async Task<DashboardListDto> GetDashboardList()
         {
             var dashboardList = new DashboardListDto();
@@ -136,11 +132,19 @@ namespace InventoryManagementSystem.Dashboards
             var today = DateTime.Now.Date;
 
             var result = new ProductSaleGraphDto();
-            result.Sale = product.Where(i => i.CreationTime.Date == today).Sum(i => i.SellingRate);
-            result.Profit = product.Where(i => i.CreationTime.Date == today).Sum(i => i.SellingRate) -
-                product.Where(i => i.CreationTime.Date == today).Sum(i => i.ShopProduct.WholeSaleRate.Value) ;
+            var todayProdutcs = product.Where(i => i.CreationTime.Date == today).ToList();
+            var saleProductIds = todayProdutcs.Select(i => i.ShopProductId).ToList();
+            var productCostingList = new List<ShopProduct>();
+            foreach (var item in saleProductIds)
+            {
+                var costProduct = productCost.Where(i => i.Id == item).SingleOrDefault();
+                productCostingList.Add(costProduct);
+            }
+            result.Sale = todayProdutcs.Sum(i => i.SellingRate);
+            result.Profit = todayProdutcs.Sum(i => i.SellingRate) -
+                productCostingList.Sum(i => i.WholeSaleRate.Value);
             result.Expense = expense.Where(i => i.CreationTime.Date == today).Sum(i => i.Cost);
-            result.ProductCost = productCost.Where(i => i.CreationTime.Date == today).Sum(i => i.WholeSaleRate.Value);
+            result.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
             return result;
         }
 
@@ -149,11 +153,19 @@ namespace InventoryManagementSystem.Dashboards
             var yesterday = DateTime.Today.AddDays(-1).Date;
 
             var result = new ProductSaleGraphDto();
-            result.Sale = product.Where(i => i.CreationTime.Date == yesterday).Sum(i => i.SellingRate);
-            result.Profit = product.Where(i => i.CreationTime.Date == yesterday).Sum(i => i.SellingRate) -
-                product.Where(i => i.CreationTime.Date == yesterday).Sum(i => i.ShopProduct.WholeSaleRate.Value); ;
+            var yesterdayProduct = product.Where(i => i.CreationTime.Date == yesterday).ToList();
+            var saleProductIds = yesterdayProduct.Select(i => i.ShopProductId).ToList();
+            var productCostingList = new List<ShopProduct>();
+            foreach (var item in saleProductIds)
+            {
+                var costProduct = productCost.Where(i => i.Id == item).SingleOrDefault();
+                productCostingList.Add(costProduct);
+            }
+            result.Sale = yesterdayProduct.Sum(i => i.SellingRate);
+            result.Profit = yesterdayProduct.Sum(i => i.SellingRate) -
+                productCostingList.Sum(i => i.WholeSaleRate.Value); ;
             result.Expense = expense.Where(i => i.CreationTime.Date == yesterday).Sum(i => i.Cost);
-            result.ProductCost = productCost.Where(i => i.CreationTime.Date == yesterday).Sum(i => i.WholeSaleRate.Value);
+            result.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
             return result;
         }
 
@@ -215,12 +227,21 @@ namespace InventoryManagementSystem.Dashboards
             foreach (var item in dateList)
             {
                 var sale = new ProductSaleGraphDto();
+
+                var thisDayProduct = product.Where(i => i.CreationTime.Date == item.Date).ToList();
+                var saleProductIds = thisDayProduct.Select(i => i.ShopProductId).ToList();
+                var productCostingList = new List<ShopProduct>();
+                foreach (var x in saleProductIds)
+                {
+                    var costProduct = productCost.Where(i => i.Id == x).SingleOrDefault();
+                    productCostingList.Add(costProduct);
+                }
                 sale.Label = item.DayOfWeek.ToString();
-                sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
-                sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                    product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value); ;
+                sale.Sale = thisDayProduct.Sum(i => i.SellingRate);
+                sale.Profit = thisDayProduct.Sum(i => i.SellingRate) -
+                    productCostingList.Sum(i => i.WholeSaleRate.Value);
                 sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
-                sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
+                sale.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
                 result.Add(sale);
             }
             return result;
@@ -245,14 +266,23 @@ namespace InventoryManagementSystem.Dashboards
             foreach (var item in dateList)
             {
                 var sale = new ProductSaleGraphDto();
+                var thisDayProduct = product.Where(i => i.CreationTime.Date == item.Date).ToList();
+                var saleProductIds = thisDayProduct.Select(i => i.ShopProductId).ToList();
+                var productCostingList = new List<ShopProduct>();
+                foreach (var x in saleProductIds)
+                {
+                    var costProduct = productCost.Where(i => i.Id == x).SingleOrDefault();
+                    productCostingList.Add(costProduct);
+                }
+
                 sale.Label = item.Day.ToString();
                 sale.Text = item.DayOfWeek.ToString();
-                sale.Sale = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate);
-                sale.Profit = product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.SellingRate) -
-                    product.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.ShopProduct.WholeSaleRate.Value);
+                sale.Sale = thisDayProduct.Sum(i => i.SellingRate);
+                sale.Profit = thisDayProduct.Sum(i => i.SellingRate) -
+                    productCostingList.Sum(i => i.WholeSaleRate.Value);
                 sale.Expense = expense.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.Cost);
+                sale.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
                 result.Add(sale);
-                sale.ProductCost = productCost.Where(i => i.CreationTime.Date == item.Date).Sum(i => i.WholeSaleRate.Value);
             }
             return result;
         }
@@ -275,13 +305,20 @@ namespace InventoryManagementSystem.Dashboards
             foreach (var month in monthList)
             {
                 var sale = new ProductSaleGraphDto();
+                var thisMonthProduct = product.Where(i => i.CreationTime.Month == month.Value).ToList();
+                var saleProductIds = thisMonthProduct.Select(i => i.ShopProductId).ToList();
+                var productCostingList = new List<ShopProduct>();
+                foreach (var item in saleProductIds)
+                {
+                    var costProduct = productCost.Where(i => i.Id == item).SingleOrDefault();
+                    productCostingList.Add(costProduct);
+                }
                 sale.Label = month.Label;
-                sale.Sale = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate);
-                sale.Profit = product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.SellingRate) -
-                    product.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.ShopProduct.WholeSaleRate.Value);
+                sale.Sale = thisMonthProduct.Sum(i => i.SellingRate);
+                sale.Profit = thisMonthProduct.Sum(i => i.SellingRate) -
+                    productCostingList.Sum(i => i.WholeSaleRate.Value);
                 sale.Expense = expense.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.Cost);
-                result.Add(sale);
-                sale.ProductCost = productCost.Where(i => i.CreationTime.Month == month.Value).Sum(i => i.WholeSaleRate.Value);
+                sale.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
                 result.Add(sale);
             }
             return result;
@@ -299,14 +336,24 @@ namespace InventoryManagementSystem.Dashboards
             }
             foreach (var year in yearList)
             {
+                var thisYearProducts = product.Where(i => i.CreationTime.Year == year).ToList();
+                var saleProductIds = thisYearProducts.Select(i => i.ShopProductId).ToList();
+
+                var productCostingList = new List<ShopProduct>();
+                foreach (var item in saleProductIds)
+                {
+                    var costProduct = productCost.Where(i => i.Id == item).SingleOrDefault();
+                    productCostingList.Add(costProduct);
+                }
+
                 var sale = new ProductSaleGraphDto();
                 sale.Label = year.ToString();
-                sale.Sale = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate);
-                sale.Profit = product.Where(i => i.CreationTime.Year == year).Sum(i => i.SellingRate) -
-                    product.Where(i => i.CreationTime.Year == year).Sum(i => i.ShopProduct.WholeSaleRate.Value);
+                sale.Sale = thisYearProducts.Sum(i => i.SellingRate);
+                sale.ProductCost = productCostingList.Sum(i => i.WholeSaleRate.Value);
+                sale.Profit = thisYearProducts.Sum(i => i.SellingRate) -
+                    productCostingList.Sum(i => i.WholeSaleRate.Value);
                 sale.Expense = expense.Where(i => i.CreationTime.Year == year).Sum(i => i.Cost);
-                result.Add(sale);
-                sale.ProductCost = productCost.Where(i => i.CreationTime.Year == year).Sum(i => i.WholeSaleRate.Value);
+
                 result.Add(sale);
             }
             return result;

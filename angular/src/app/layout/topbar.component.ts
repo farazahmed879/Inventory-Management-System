@@ -29,6 +29,10 @@ export class TopBarComponent extends AppComponentBase implements OnInit {
         this._authService.logout();
     }
 
+    toggleSidebar(){
+        
+    }
+
     // closeClick() {
     //     this.sidebar.hide();
     // }
